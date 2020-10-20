@@ -171,9 +171,9 @@ public class MusicListActivity extends AppCompatActivity{
             public void onClick(int position) {
 
                 songEntityList.get(position).setActive(true);
+                songEntityList.get(position).setSongPriority(activeSongEntityList.size());
 
                 activeSongEntityList.add(songEntityList.get(position));
-                //songEntityList.get(position).setSongTitle("JODFJOSDF");
                 songRecyclerViewAdapter.notifyDataSetChanged();
 
                 Toast.makeText(MusicListActivity.this, "title - " +

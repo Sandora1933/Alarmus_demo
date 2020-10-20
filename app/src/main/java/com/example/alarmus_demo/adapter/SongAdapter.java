@@ -1,13 +1,10 @@
 package com.example.alarmus_demo.adapter;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,10 +13,8 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.alarmus_demo.R;
-import com.example.alarmus_demo.activity.MusicListActivity;
 import com.example.alarmus_demo.model.SongEntity;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,14 +34,14 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
     public static class SongViewHolder extends RecyclerView.ViewHolder{
 
         TextView songTitleTextView, singerTextView;
-        EditText songPriorityEditText;
+        TextView songPriorityTextView;
         ImageView songIsActiveImageView;
 
         public SongViewHolder(@NonNull View itemView, final OnSongItemClickListener listener) {
             super(itemView);
             songTitleTextView = itemView.findViewById(R.id.songTitleTextView);
             singerTextView = itemView.findViewById(R.id.singerTextView);
-            songPriorityEditText = itemView.findViewById(R.id.songPriorityEditText);
+            songPriorityTextView = itemView.findViewById(R.id.songPriorityTextView);
             songIsActiveImageView = itemView.findViewById(R.id.songIsActiveImageView);
 
             songIsActiveImageView.setOnClickListener(new View.OnClickListener() {
@@ -82,7 +77,27 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
     public void onBindViewHolder(@NonNull SongViewHolder holder, int position) {
         holder.songTitleTextView.setText(songEntityList.get(position).getSongTitle());
         holder.singerTextView.setText(songEntityList.get(position).getSingerTitle());
-        holder.songPriorityEditText.setText(String.valueOf(songEntityList.get(position).getSongNumber()));
+        //holder.songPriorityEditText.setText(String.valueOf(songEntityList.get(position).getSongPriority()));
+
+        //that is the position in normal list but not on activeSongList
+        //We should find the position of song in activeSongList
+
+        SongEntity currentSongEntity0 = songEntityList.get(position);
+
+        int nPosition = -1, i = 0;
+        for (SongEntity song : songEntityActiveList){
+            if (song.getSongTitle().equals(currentSongEntity0.getSongTitle())){
+                nPosition = i;
+                holder.songPriorityTextView.setText(String.valueOf(songEntityActiveList.get(nPosition).getSongPriority()));
+            }
+            else {
+                i++;
+            }
+        }
+
+        //We found the appropriate position of such element but in activeSongList<>
+
+
         //holder.songIsActiveImageView.setBackgroundResource(R.drawable.ic_round_lens_24_blue);
         //Need to set a color for circle -> to do that go through songActiveListFull and if
         //current song (var:currentSongEntity) present in songActiveListFull then set its color to blue
