@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/colorMainBackground"
+    android:padding="10dp"
+    tools:context=".activity.MainActivity">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/colorWidgetBackground"
+        app:cardCornerRadius="6dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/alarmButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:background="@color/colorWidgetBackground"
+                android:fontFamily="@font/roboto"
+                android:paddingTop="10dp"
+                android:text="alarm"
+                android:textAllCaps="false"
+                android:textColor="@color/colorSelectedTextAndIcon"
+                android:textSize="19sp" />
+
+            <Button
+                android:id="@+id/musicButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:background="@color/colorWidgetBackground"
+                android:fontFamily="@font/roboto"
+                android:paddingTop="10dp"
+                android:text="music"
+                android:textAllCaps="false"
+                android:textColor="@color/colorRowTextAndIcon"
+                android:textSize="19sp"
+                android:onClick="musicMenuButtonClicked"/>
+
+            <Button
+                android:id="@+id/infoButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:background="@color/colorWidgetBackground"
+                android:fontFamily="@font/roboto"
+                android:paddingTop="10dp"
+                android:text="info"
+                android:textAllCaps="false"
+                android:textColor="@color/colorRowTextAndIcon"
+                android:textSize="19sp"
+                android:onClick="infoMenuButtonClicked"/>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="65dp"
+        app:cardBackgroundColor="@color/colorWidgetBackground"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView">
+
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:background="@color/colorWidgetBackground"-->
+<!--            android:fontFamily="@font/roboto"-->
+<!--            android:paddingStart="30dp"-->
+<!--            android:paddingTop="20dp"-->
+<!--            android:paddingEnd="30dp"-->
+<!--            android:paddingBottom="20dp"-->
+<!--            android:text="88 : 88"-->
+<!--            android:textColor="@color/colorRowTextAndIcon"-->
+<!--            android:textSize="32sp" />-->
+
+                <EditText android:id="@+id/clockEditText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorWidgetBackground"
+                    android:fontFamily="@font/roboto"
+                    android:paddingStart="30dp"
+                    android:paddingTop="20dp"
+                    android:paddingEnd="30dp"
+                    android:paddingBottom="20dp"
+                    android:text="88 : 88"
+                    android:inputType="number"
+                    android:cursorVisible="false"
+                    android:textColor="@color/colorRowTextAndIcon"
+                    android:textSize="32sp"
+                    android:hint="" />
+
+    </androidx.cardview.widget.CardView>
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="45dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/cardView5"
+        tools:layout_editor_absoluteX="10dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="SET TIME"
+            android:textColor="@color/colorSelectedTextAndIcon"
+            android:textSize="26sp" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="right">
+
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical" />
+<!--                android:textOff="off"-->
+<!--                android:textOn="on"-->
+<!--                android:thumb="@drawable/switch_thumb"-->
+<!--                android:track="@drawable/switch_track"-->
+
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="37dp"
+        android:fontFamily="@font/roboto"
+        android:text="Volume"
+        android:textColor="@color/colorRowTextAndIcon"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/volumeSeekBarCardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        app:cardBackgroundColor="@color/colorWidgetBackground"
+        app:cardCornerRadius="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        tools:layout_editor_absoluteX="10dp">
+
+        <SeekBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp" />
+
+    </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+        android:id="@+id/alarmPeriodsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/volumeSeekBarCardView"
+        tools:layout_editor_absoluteX="10dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:fontFamily="@font/roboto"
+            android:text="Gradually increasing volume"
+            android:textColor="@color/colorRowTextAndIcon"
+            android:textSize="12sp" />
+
+        <LinearLayout
+            android:id="@+id/buttons"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="55dp"
+                android:layout_height="35dp"
+                android:background="@drawable/button_never_selected"
+                android:text="Never"
+                android:textAllCaps="false"
+                android:textColor="@color/colorSelectedTextAndIcon"
+                android:textSize="12sp"
+                android:layout_marginStart="7dp"
+                android:layout_marginLeft="7dp"
+                android:onClick="neverClicked"/>
+
+            <Button
+                android:layout_width="40dp"
+                android:layout_height="35dp"
+                android:background="@drawable/button_increase_alarm_unselected"
+                android:text="30s"
+                android:textAllCaps="false"
+                android:textColor="@color/colorRowTextAndIcon"
+                android:textSize="12sp"
+                android:layout_marginStart="11dp"
+                android:layout_marginLeft="11dp" />
+
+            <Button
+                android:layout_width="40dp"
+                android:layout_height="35dp"
+                android:background="@drawable/button_increase_alarm_unselected"
+                android:text="..."
+                android:textAllCaps="false"
+                android:textColor="@color/colorRowTextAndIcon"
+                android:textSize="12sp"
+                android:layout_marginStart="11dp"
+                android:layout_marginLeft="11dp"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="36dp"
+        android:fontFamily="@font/roboto"
+        android:text="Alarm mode"
+        android:textAllCaps="false"
+        android:textColor="@color/colorRowTextAndIcon"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/alarmPeriodsLayout" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        tools:layout_editor_absoluteX="10dp"
+        android:gravity="center_horizontal">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <Button android:id="@+id/soundAndVibroButton"
+                android:layout_width="98dp"
+                android:layout_height="40dp"
+                android:background="@drawable/button_alarmmode_sv_unselected"
+                android:drawableLeft="@drawable/ic_baseline_volume_up_24"
+                android:drawableRight="@drawable/ic_baseline_vibration_24"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/soundButton"
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="13dp"
+                android:layout_marginLeft="13dp"
+                android:background="@drawable/button_alarmmode_sv_unselected"
+                android:src="@drawable/ic_baseline_volume_up_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/soundAndVibroButton"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/vibroButton"
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="13dp"
+                android:layout_marginLeft="13dp"
+                android:background="@drawable/button_alarmmode_sv_unselected"
+                android:src="@drawable/ic_baseline_vibration_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/soundButton"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/nosoundButton"
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="13dp"
+                android:layout_marginLeft="13dp"
+                android:background="@drawable/button_alarmmode_sv_unselected"
+                android:src="@drawable/ic_baseline_volume_off_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/vibroButton"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView4"
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        android:layout_marginTop="17dp"
+        app:cardBackgroundColor="@color/colorWidgetBackground"
+        app:cardCornerRadius="15dp"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+        tools:layout_editor_absoluteX="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp">
+
+            <Button
+                android:layout_width="28dp"
+                android:layout_height="37dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:background="@drawable/button_day_unselected"
+                android:text="MO"
+                android:textSize="13sp"
+                android:textColor="@color/colorRowTextAndIcon" />
+
+            <Button
+                android:layout_width="28dp"
+                android:layout_height="37dp"
+                android:layout_marginStart="19dp"
+                android:layout_marginLeft="19dp"
+                android:background="@color/colorWidgetBackground"
+                android:text="TU"
+                android:textSize="13sp"
+                android:textColor="@color/colorSelectedTextAndIcon" />
+
+            <Button
+                android:layout_width="28dp"
+                android:layout_height="37dp"
+                android:layout_marginStart="19dp"
+                android:layout_marginLeft="19dp"
+                android:background="@drawable/button_day_unselected"
+                android:text="WE"
+                android:textSize="13sp"
+                android:textColor="@color/colorRowTextAndIcon" />
+
+            <Button
+                android:layout_width="28dp"
+                android:layout_height="37dp"
+                android:layout_marginStart="19dp"
+                android:layout_marginLeft="19dp"
+                android:background="@drawable/button_day_unselected"
+                android:text="TH"
+                android:textSize="13sp"
+                android:textColor="@color/colorRowTextAndIcon" />
+
+            <Button
+                android:layout_width="28dp"
+                android:layout_height="37dp"
+                android:layout_marginStart="19dp"
+                android:layout_marginLeft="19dp"
+                android:background="@color/colorWidgetBackground"
+                android:text="FR"
+                android:textSize="13sp"
+                android:textColor="@color/colorSelectedTextAndIcon" />
+
+            <Button
+                android:layout_width="28dp"
+                android:layout_height="37dp"
+                android:layout_marginStart="19dp"
+                android:layout_marginLeft="19dp"
+                android:background="@color/colorWidgetBackground"
+                android:text="SA"
+                android:textSize="13sp"
+                android:textColor="@color/colorSelectedTextAndIcon" />
+
+            <Button
+                android:layout_width="28dp"
+                android:layout_height="37dp"
+                android:layout_marginStart="19dp"
+                android:layout_marginLeft="19dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/button_day_unselected"
+                android:text="SU"
+                android:textSize="13sp"
+                android:textColor="@color/colorRowTextAndIcon" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

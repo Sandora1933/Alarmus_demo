@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="47dp"
+    android:background="@color/colorMainBackground"
+    android:layout_margin="5dp">
+
+
+    <ImageView android:id="@+id/songIsActiveImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_round_lens_24"
+        android:clickable="true"
+        android:focusable="true"/>
+
+    <TextView android:id="@+id/songTitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="22dp"
+        android:layout_marginLeft="22dp"
+        android:layout_marginTop="10dp"
+        android:text="MelodyTitleTextView"
+        android:textColor="@color/colorRowTextAndIcon"
+        android:textSize="14sp"
+        app:fontFamily="@font/roboto"
+        app:layout_constraintStart_toEndOf="@+id/songIsActiveImageView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView android:id="@+id/singerTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="AuthorNameTextView"
+        android:textColor="#46484E"
+        android:textSize="8sp"
+        android:textAllCaps="true"
+        app:layout_constraintStart_toStartOf="@+id/songTitleTextView"
+        app:layout_constraintTop_toBottomOf="@+id/songTitleTextView" />
+
+    <EditText android:id="@+id/songPriorityEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="28dp"
+        android:layout_marginRight="28dp"
+        android:text="0"
+        android:maxLength="1"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
