@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/colorMainBackground"
     android:padding="10dp"
-    tools:context=".activity.MainActivity">
+    tools:context=".activity.AlarmActivity">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
@@ -219,8 +219,7 @@
                 android:textColor="@color/colorSelectedTextAndIcon"
                 android:textSize="12sp"
                 android:layout_marginStart="7dp"
-                android:layout_marginLeft="7dp"
-                android:onClick="neverClicked"/>
+                android:layout_marginLeft="7dp" />
 
             <Button
                 android:layout_width="40dp"
@@ -289,43 +288,47 @@
                 android:paddingEnd="15dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:onClick="soundPlusVibrateButtonClicked"/>
 
             <ImageButton
-                android:id="@+id/soundButton"
+                android:id="@+id/soundImageButton"
                 android:layout_width="60dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="13dp"
                 android:layout_marginLeft="13dp"
                 android:background="@drawable/button_alarmmode_sv_unselected"
-                android:src="@drawable/ic_baseline_volume_up_24"
+                app:srcCompat="@drawable/ic_baseline_volume_up_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/soundAndVibroButton"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:onClick="soundButtonClicked"/>
 
             <ImageButton
-                android:id="@+id/vibroButton"
+                android:id="@+id/vibroImageButton"
                 android:layout_width="60dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="13dp"
                 android:layout_marginLeft="13dp"
                 android:background="@drawable/button_alarmmode_sv_unselected"
-                android:src="@drawable/ic_baseline_vibration_24"
+                app:srcCompat="@drawable/ic_baseline_vibration_24"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/soundButton"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toEndOf="@id/soundImageButton"
+                app:layout_constraintTop_toTopOf="parent"
+                android:onClick="vibrateButtonClicked"/>
 
             <ImageButton
-                android:id="@+id/nosoundButton"
+                android:id="@+id/noSoundButton"
                 android:layout_width="60dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="13dp"
                 android:layout_marginLeft="13dp"
                 android:background="@drawable/button_alarmmode_sv_unselected"
-                android:src="@drawable/ic_baseline_volume_off_24"
+                app:srcCompat="@drawable/ic_baseline_volume_off_24"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/vibroButton"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toEndOf="@id/vibroImageButton"
+                app:layout_constraintTop_toTopOf="parent"
+                android:onClick="noSoundButtonClicked"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -350,7 +353,7 @@
             android:paddingTop="5dp"
             android:paddingBottom="5dp">
 
-            <Button
+            <Button android:id="@+id/mondayButton"
                 android:layout_width="28dp"
                 android:layout_height="37dp"
                 android:layout_marginStart="16dp"
@@ -358,9 +361,10 @@
                 android:background="@drawable/button_day_unselected"
                 android:text="MO"
                 android:textSize="13sp"
-                android:textColor="@color/colorRowTextAndIcon" />
+                android:textColor="@color/colorRowTextAndIcon"
+                android:onClick="mondayButtonClicked"/>
 
-            <Button
+            <Button android:id="@+id/tuesdayButton"
                 android:layout_width="28dp"
                 android:layout_height="37dp"
                 android:layout_marginStart="19dp"
@@ -368,9 +372,10 @@
                 android:background="@color/colorWidgetBackground"
                 android:text="TU"
                 android:textSize="13sp"
-                android:textColor="@color/colorSelectedTextAndIcon" />
+                android:textColor="@color/colorSelectedTextAndIcon"
+                android:onClick="tuesdayButtonClicked"/>
 
-            <Button
+            <Button android:id="@+id/wednesdayButton"
                 android:layout_width="28dp"
                 android:layout_height="37dp"
                 android:layout_marginStart="19dp"
@@ -378,9 +383,10 @@
                 android:background="@drawable/button_day_unselected"
                 android:text="WE"
                 android:textSize="13sp"
-                android:textColor="@color/colorRowTextAndIcon" />
+                android:textColor="@color/colorRowTextAndIcon"
+                android:onClick="wednesdayButtonClicked"/>
 
-            <Button
+            <Button android:id="@+id/thursdayButton"
                 android:layout_width="28dp"
                 android:layout_height="37dp"
                 android:layout_marginStart="19dp"
@@ -388,9 +394,10 @@
                 android:background="@drawable/button_day_unselected"
                 android:text="TH"
                 android:textSize="13sp"
-                android:textColor="@color/colorRowTextAndIcon" />
+                android:textColor="@color/colorRowTextAndIcon"
+                android:onClick="thursdayButtonClicked"/>
 
-            <Button
+            <Button android:id="@+id/fridayButton"
                 android:layout_width="28dp"
                 android:layout_height="37dp"
                 android:layout_marginStart="19dp"
@@ -398,9 +405,10 @@
                 android:background="@color/colorWidgetBackground"
                 android:text="FR"
                 android:textSize="13sp"
-                android:textColor="@color/colorSelectedTextAndIcon" />
+                android:textColor="@color/colorSelectedTextAndIcon"
+                android:onClick="fridayButtonClicked"/>
 
-            <Button
+            <Button android:id="@+id/saturdayButton"
                 android:layout_width="28dp"
                 android:layout_height="37dp"
                 android:layout_marginStart="19dp"
@@ -408,9 +416,10 @@
                 android:background="@color/colorWidgetBackground"
                 android:text="SA"
                 android:textSize="13sp"
-                android:textColor="@color/colorSelectedTextAndIcon" />
+                android:textColor="@color/colorSelectedTextAndIcon"
+                android:onClick="saturdayButtonClicked"/>
 
-            <Button
+            <Button android:id="@+id/sundayButton"
                 android:layout_width="28dp"
                 android:layout_height="37dp"
                 android:layout_marginStart="19dp"
@@ -420,7 +429,8 @@
                 android:background="@drawable/button_day_unselected"
                 android:text="SU"
                 android:textSize="13sp"
-                android:textColor="@color/colorRowTextAndIcon" />
+                android:textColor="@color/colorRowTextAndIcon"
+                android:onClick="sundayButtonClicked"/>
 
         </LinearLayout>
 

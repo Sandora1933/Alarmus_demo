@@ -13,7 +13,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -36,22 +35,27 @@ import java.util.List;
 
 public class MusicListActivity extends AppCompatActivity{
 
-    //Data
-    List<SongEntity> songEntityList;
-    List<SongEntity> activeSongEntityList;
+    //************  Views  ****************
+
+    EditText songEditText;  //Field for song search
 
     //RecyclerView - songs
     RecyclerView songRecyclerView;
     SongAdapter songRecyclerViewAdapter;
     RecyclerView.LayoutManager songRecyclerViewManager;
 
-    //Views
-    EditText songEditText;
-
-    SharedPreferences sharedPreferences;
+    //**************   Constants   *****************
 
     //Storage access permission code
     public static final int EXTERNAL_STORAGE_PERMISSION_REQUEST = 1;
+
+    //**************   Variables   *****************
+
+    //Data
+    List<SongEntity> songEntityList;    //Songs which retrieved from external storage
+    List<SongEntity> activeSongEntityList;  //Songs which are saved in our storage(sharedPref)
+
+    SharedPreferences sharedPreferences;    //Storage
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,15 +63,16 @@ public class MusicListActivity extends AppCompatActivity{
         setContentView(R.layout.activity_music_list);
 
         initViews();
+
         sharedPreferences = getSharedPreferences("active_songs", MODE_PRIVATE);
-        loadActiveSongList();
+
+        loadActiveSongList();   //Loading songs from our storage
         Toast.makeText(this, "kol-vo active - " + activeSongEntityList.size(), Toast.LENGTH_SHORT).show();
 
         songEntityList = new ArrayList<>();
-        //activeSongEntityList = new ArrayList<>();
-        //getMusicFromStorage();
         songRecyclerView = findViewById(R.id.songRecyclerView);
 
+        //Request permission for data retrieving
         if (ContextCompat.checkSelfPermission(MusicListActivity.this,
                 Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
             if (ActivityCompat.shouldShowRequestPermissionRationale(MusicListActivity.this,
@@ -84,6 +89,7 @@ public class MusicListActivity extends AppCompatActivity{
             setUpRecyclerView();
         }
 
+        //editText detector for searching songs
         songEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -106,38 +112,7 @@ public class MusicListActivity extends AppCompatActivity{
     @Override
     protected void onStop() {
         super.onStop();
-        saveActiveSongList(); //Saving activeSongList to storage(shared preferences)
-    }
-
-    private void filter(String text) {
-        ArrayList<SongEntity> filteredList = new ArrayList<>();
-        for (SongEntity song : songEntityList) {
-            if (song.getSongTitle().toLowerCase().contains(text.toLowerCase())) {
-                filteredList.add(song);
-            }
-        }
-        songRecyclerViewAdapter.filterList(filteredList);
-    }
-
-    private void initViews(){
-        songEditText = findViewById(R.id.songEditText);
-    }
-
-    private void getMusicFromStorage(){
-        ContentResolver contentResolver = getContentResolver();
-        Uri songUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        Cursor songCursor = contentResolver.query(songUri, null, null, null, null);
-
-        if (songCursor != null && songCursor.moveToFirst()){
-            int songTitle = songCursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
-            int songArtist = songCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST);
-
-            do {
-                String currentTitle = songCursor.getString(songTitle);
-                String currentArtist = songCursor.getString(songArtist);
-                songEntityList.add(new SongEntity(currentTitle, currentArtist, 0, false));
-            } while (songCursor.moveToNext());
-        }
+        saveActiveSongList(); //Saving activeSongList to out storage(sharedPref)
     }
 
     @Override
@@ -155,6 +130,57 @@ public class MusicListActivity extends AppCompatActivity{
                     Toast.makeText(this, "Permission denied!", Toast.LENGTH_SHORT).show();
                     finish();
                 }
+        }
+    }
+
+    private void initViews(){
+        songEditText = findViewById(R.id.songEditText);
+    }
+
+    //Filter for recyclerView
+    private void filter(String text) {
+        ArrayList<SongEntity> filteredList = new ArrayList<>();
+        for (SongEntity song : songEntityList) {
+            if (song.getSongTitle().toLowerCase().contains(text.toLowerCase())) {
+                filteredList.add(song);
+            }
+        }
+        songRecyclerViewAdapter.filterList(filteredList);
+    }
+
+    //Getting songs from external storage to our songList<>
+    private void getMusicFromStorage(){
+        ContentResolver contentResolver = getContentResolver();
+        Uri songUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        Cursor songCursor = contentResolver.query(songUri, null, null, null, null);
+
+        if (songCursor != null && songCursor.moveToFirst()){
+            int songTitle = songCursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
+            int songArtist = songCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST);
+
+            do {
+                String currentTitle = songCursor.getString(songTitle);
+                String currentArtist = songCursor.getString(songArtist);
+
+//                This info we may know after comparing with activeSongList<>
+//                If activeSongList<> contains any songs with such TITLE then it has priority
+//                And we are ready to assign priority variable, otherwise it is 0
+                int currentPriority = 0;
+                boolean isCurrentActive = false;
+
+                if (activeSongEntityList != null) {
+                    for (SongEntity song : activeSongEntityList){
+                        if (song.getSongTitle().equals(currentTitle)){
+                            //Such song exists in activeSongList<>
+                            currentPriority = song.getSongPriority();
+                            isCurrentActive = true;
+                        }
+                    }
+                }
+
+                songEntityList.add(new SongEntity(currentTitle, currentArtist,
+                        currentPriority, isCurrentActive));
+            } while (songCursor.moveToNext());
         }
     }
 
@@ -182,10 +208,10 @@ public class MusicListActivity extends AppCompatActivity{
         });
     }
 
-    //Activity transitions methods---------------
+    //********   activity transition   *********
 
     public void alarmMenuButtonClicked(View view){
-        Intent alarmMenuActivityIntent = new Intent(MusicListActivity.this, MainActivity.class);
+        Intent alarmMenuActivityIntent = new Intent(MusicListActivity.this, AlarmActivity.class);
         startActivity(alarmMenuActivityIntent);
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
@@ -196,7 +222,7 @@ public class MusicListActivity extends AppCompatActivity{
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
-    //--------------------------------------------
+    //-------------------------------------------
 
     //Saving activeSongList<> to storage(SharedPreferences)
     private void saveActiveSongList(){

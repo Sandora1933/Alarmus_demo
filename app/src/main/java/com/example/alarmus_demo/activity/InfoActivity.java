@@ -3,6 +3,7 @@ package com.example.alarmus_demo.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,12 +19,16 @@ import java.util.List;
 
 public class InfoActivity extends AppCompatActivity {
 
-    private List<CardInfoEntity> cardInfoEntityList;
+    //************  Views  ****************
 
-    //RecyclerView
+    //RecyclerView - infoCards
     RecyclerView cardInfoRecyclerView;
     InfoCardAdapter infoCardRecyclerViewAdapter;
     RecyclerView.LayoutManager infoCardRecyclerViewManager;
+
+    //**************   Variables   *****************
+
+    private List<CardInfoEntity> cardInfoEntityList;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,9 +37,9 @@ public class InfoActivity extends AppCompatActivity {
 
         cardInfoEntityList = new ArrayList<CardInfoEntity>();
         fillCardInfoListWithData();
-        cardInfoRecyclerView = findViewById(R.id.infoRecyclerView);
-        generateRecyclerView();
 
+        cardInfoRecyclerView = findViewById(R.id.infoRecyclerView);
+        setUpRecyclerView();
     }
 
     private void fillCardInfoListWithData(){
@@ -58,13 +63,16 @@ public class InfoActivity extends AppCompatActivity {
                 "http:'//helloworld.com/articles/why", "This is short info for the article, this is short info!"));
     }
 
-    private void generateRecyclerView() {
+    private void setUpRecyclerView() {
         infoCardRecyclerViewAdapter = new InfoCardAdapter(this, cardInfoEntityList);
         infoCardRecyclerViewManager = new LinearLayoutManager(this);
+
         cardInfoRecyclerView.setAdapter(infoCardRecyclerViewAdapter);
         cardInfoRecyclerView.setLayoutManager(infoCardRecyclerViewManager);
         cardInfoRecyclerView.setHasFixedSize(true);
     }
+
+    //********   activity transition   *********
 
     public void musicMenuButtonClicked(View view) {
         Intent musicListActivityIntent = new Intent(InfoActivity.this, MusicListActivity.class);
@@ -73,13 +81,14 @@ public class InfoActivity extends AppCompatActivity {
     }
 
     public void alarmMenuButtonClicked(View view){
-        Intent alarmMenuActivityIntent = new Intent(InfoActivity.this, MainActivity.class);
+        Intent alarmMenuActivityIntent = new Intent(InfoActivity.this, AlarmActivity.class);
         startActivity(alarmMenuActivityIntent);
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
+    //------------------------------------------
+
     public void telegramButtonClicked(View view) {
-        Intent testingActivityIntent = new Intent(InfoActivity.this, TestingActivity.class);
-        startActivity(testingActivityIntent);
+        Toast.makeText(this, "telegram clicked", Toast.LENGTH_SHORT).show();
     }
 }
