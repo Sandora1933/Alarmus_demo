@@ -184,69 +184,117 @@
 
     </androidx.cardview.widget.CardView>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/alarmPeriodsLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
-        android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@+id/volumeSeekBarCardView"
         tools:layout_editor_absoluteX="10dp">
 
-        <TextView
-            android:layout_width="0dp"
+        <TextView android:id="@+id/increaseVolumeTextView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_weight="1"
             android:fontFamily="@font/roboto"
             android:text="Gradually increasing volume"
             android:textColor="@color/colorRowTextAndIcon"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"/>
 
-        <LinearLayout
-            android:id="@+id/buttons"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="horizontal">
+        <Button android:id="@+id/neverVolumeTimersButton"
+            android:layout_width="55dp"
+            android:layout_height="35dp"
+            android:background="@drawable/button_never_selected"
+            android:text="Never"
+            android:textAllCaps="false"
+            android:textColor="@color/colorSelectedTextAndIcon"
+            android:textSize="12sp"
+            android:layout_marginStart="7dp"
+            android:layout_marginLeft="7dp"
+            android:layout_toLeftOf="@id/c30sVolumeTimersButton"
+            android:layout_toStartOf="@id/c30sVolumeTimersButton" />
 
-            <Button
-                android:layout_width="55dp"
-                android:layout_height="35dp"
-                android:background="@drawable/button_never_selected"
-                android:text="Never"
-                android:textAllCaps="false"
-                android:textColor="@color/colorSelectedTextAndIcon"
-                android:textSize="12sp"
-                android:layout_marginStart="7dp"
-                android:layout_marginLeft="7dp" />
+        <Button android:id="@+id/c30sVolumeTimersButton"
+            android:layout_width="40dp"
+            android:layout_height="35dp"
+            android:background="@drawable/button_increase_alarm_unselected"
+            android:text="30s"
+            android:textAllCaps="false"
+            android:textColor="@color/colorRowTextAndIcon"
+            android:textSize="12sp"
+            android:layout_marginStart="11dp"
+            android:layout_marginLeft="11dp"
+            android:layout_toLeftOf="@id/moreVolumeTimersButton"
+            android:layout_toStartOf="@id/moreVolumeTimersButton" />
 
-            <Button
-                android:layout_width="40dp"
-                android:layout_height="35dp"
-                android:background="@drawable/button_increase_alarm_unselected"
-                android:text="30s"
-                android:textAllCaps="false"
-                android:textColor="@color/colorRowTextAndIcon"
-                android:textSize="12sp"
-                android:layout_marginStart="11dp"
-                android:layout_marginLeft="11dp" />
+        <Button android:id="@+id/c15sVolumeTimersButton"
+            android:layout_width="40dp"
+            android:layout_height="35dp"
+            android:background="@drawable/button_increase_alarm_unselected"
+            android:text="15s"
+            android:textAllCaps="false"
+            android:textColor="@color/colorRowTextAndIcon"
+            android:textSize="12sp"
+            android:alpha="0"
+            android:layout_marginStart="11dp"
+            android:layout_marginLeft="11dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"/>
 
-            <Button
-                android:layout_width="40dp"
-                android:layout_height="35dp"
-                android:background="@drawable/button_increase_alarm_unselected"
-                android:text="..."
-                android:textAllCaps="false"
-                android:textColor="@color/colorRowTextAndIcon"
-                android:textSize="12sp"
-                android:layout_marginStart="11dp"
-                android:layout_marginLeft="11dp"/>
+        <Button android:id="@+id/c45sVolumeTimersButton"
+            android:layout_width="40dp"
+            android:layout_height="35dp"
+            android:background="@drawable/button_increase_alarm_unselected"
+            android:text="45s"
+            android:textAllCaps="false"
+            android:textColor="@color/colorRowTextAndIcon"
+            android:textSize="12sp"
+            android:alpha="0"
+            android:layout_marginStart="11dp"
+            android:layout_marginLeft="11dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"/>
 
-        </LinearLayout>
+        <Button android:id="@+id/c60sVolumeTimersButton"
+            android:layout_width="40dp"
+            android:layout_height="35dp"
+            android:background="@drawable/button_increase_alarm_unselected"
+            android:text="60s"
+            android:textAllCaps="false"
+            android:textColor="@color/colorRowTextAndIcon"
+            android:textSize="12sp"
+            android:alpha="0"
+            android:layout_marginStart="11dp"
+            android:layout_marginLeft="11dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp" />
 
+        <Button android:id="@+id/moreVolumeTimersButton"
+            android:layout_width="40dp"
+            android:layout_height="35dp"
+            android:background="@drawable/button_increase_alarm_unselected"
+            android:text="..."
+            android:textAllCaps="false"
+            android:textColor="@color/colorRowTextAndIcon"
+            android:textSize="12sp"
+            android:layout_marginStart="11dp"
+            android:layout_marginLeft="11dp"
+            android:onClick="moreVolumeTimersButtonClicked"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 
 
     <TextView

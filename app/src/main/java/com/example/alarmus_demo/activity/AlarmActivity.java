@@ -2,19 +2,29 @@ package com.example.alarmus_demo.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.alarmus_demo.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AlarmActivity extends AppCompatActivity {
 
@@ -22,9 +32,15 @@ public class AlarmActivity extends AppCompatActivity {
 
     EditText clockEditText;
 
+    //Views - Alarm volume panel
+    TextView increaseVolumeTextView;
+    Button neverVolumeTimersButton, c30sVolumeTimersButton, c15sVolumeTimersButton, c45sVolumeTimersButton,
+            c60sVolumeTimersButton;
+
     //Views - Alarm mode panel
     Button songPlusVibrateButton;
     ImageButton songImageButton, vibrateImageButton, noSoundImageButton;
+
 
     //Views - Alarm mode days panel
     Button mondayButton, tuesdayButton, wednesdayButton, thursdayButton, fridayButton,
@@ -44,6 +60,7 @@ public class AlarmActivity extends AppCompatActivity {
     int cursorPosition; //Cursor for timeEditText
     int alarmSelectedMode; //0: sound+vibrate, 1: sound, 2: vibrate, 3: noSound
     boolean[] isDayActiveArray; //Array of states (active or not) of days' buttons
+    boolean isMoreVolumeButtonsActive;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +77,8 @@ public class AlarmActivity extends AppCompatActivity {
         isTimeChangedByHand = true;
         cursorPosition = 0;
         final String separator = " : ";
+
+        isMoreVolumeButtonsActive = false;
 
         //TODO: get from SharedPreferences
         initDayButtonsPanel();  //Initial values for dayButtons and states (should retrieved from SharedPref)
@@ -128,6 +147,14 @@ public class AlarmActivity extends AppCompatActivity {
 
     private void initViews(){
         clockEditText = findViewById(R.id.clockEditText);
+        increaseVolumeTextView = findViewById(R.id.increaseVolumeTextView);
+
+        //Initialising timers volume buttons
+        neverVolumeTimersButton = findViewById(R.id.neverVolumeTimersButton);
+        c30sVolumeTimersButton = findViewById(R.id.c30sVolumeTimersButton);
+        c15sVolumeTimersButton = findViewById(R.id.c15sVolumeTimersButton);
+        c45sVolumeTimersButton = findViewById(R.id.c45sVolumeTimersButton);
+        c60sVolumeTimersButton = findViewById(R.id.c60sVolumeTimersButton);
 
         //Initialising alarm mode panel buttons
         songPlusVibrateButton = findViewById(R.id.soundAndVibroButton);
@@ -333,4 +360,108 @@ public class AlarmActivity extends AppCompatActivity {
         setUpAlarmDaysPanel();
     }
 
+    //Animation for moving for volume buttons
+    public void moreVolumeTimersButtonClicked(View view) throws InterruptedException {
+
+        if (isMoreVolumeButtonsActive){
+            isMoreVolumeButtonsActive = false;
+
+            ObjectAnimator volIncreaseTextAnimator = ObjectAnimator.ofFloat(increaseVolumeTextView, "translationX", 0f);
+            volIncreaseTextAnimator.setRepeatCount(0);
+            volIncreaseTextAnimator.setDuration(300);
+
+            ObjectAnimator neverVolIncreaseButtonAnimator = ObjectAnimator.ofFloat(neverVolumeTimersButton, "translationX", 0f);
+            neverVolIncreaseButtonAnimator.setRepeatCount(0);
+            neverVolIncreaseButtonAnimator.setDuration(400);
+            neverVolIncreaseButtonAnimator.setStartDelay(100);
+
+            ObjectAnimator c30sVolIncreaseButtonAnimator = ObjectAnimator.ofFloat(c30sVolumeTimersButton, "translationX", 0f);
+            c30sVolIncreaseButtonAnimator.setRepeatCount(0);
+            c30sVolIncreaseButtonAnimator.setDuration(400);
+            c30sVolIncreaseButtonAnimator.setStartDelay(100);
+
+            ObjectAnimator c15sVolIncreaseButtonAnimator = ObjectAnimator.ofFloat(c15sVolumeTimersButton, "translationX", 0f);
+            //c15sVolumeTimersButton.setAlpha(1.0f);
+            c15sVolIncreaseButtonAnimator.setRepeatCount(0);
+            c15sVolIncreaseButtonAnimator.setDuration(400);
+            c15sVolIncreaseButtonAnimator.setStartDelay(100);
+
+            ObjectAnimator c45sVolIncreaseButtonAnimator = ObjectAnimator.ofFloat(c45sVolumeTimersButton, "translationX", 0f);
+            //c45sVolumeTimersButton.setAlpha(1.0f);
+            c45sVolIncreaseButtonAnimator.setRepeatCount(0);
+            c45sVolIncreaseButtonAnimator.setDuration(400);
+            c45sVolIncreaseButtonAnimator.setStartDelay(100);
+
+            ObjectAnimator c60sVolIncreaseButtonAnimator = ObjectAnimator.ofFloat(c60sVolumeTimersButton, "translationX", 0f);
+            //c60sVolumeTimersButton.setAlpha(1.0f);
+            c60sVolIncreaseButtonAnimator.setRepeatCount(0);
+            c60sVolIncreaseButtonAnimator.setDuration(400);
+            c60sVolIncreaseButtonAnimator.setStartDelay(100);
+
+            List<Animator> buttonListAnimator = new ArrayList<>();
+            buttonListAnimator.add(volIncreaseTextAnimator);
+            buttonListAnimator.add(neverVolIncreaseButtonAnimator);
+            buttonListAnimator.add(c30sVolIncreaseButtonAnimator);
+            buttonListAnimator.add(c15sVolIncreaseButtonAnimator);
+            buttonListAnimator.add(c45sVolIncreaseButtonAnimator);
+            buttonListAnimator.add(c60sVolIncreaseButtonAnimator);
+
+            AnimatorSet set = new AnimatorSet();
+            //set.playSequentially(buttonListAnimator);
+            set.playTogether(buttonListAnimator);
+            set.start();
+
+        }
+        else {
+            isMoreVolumeButtonsActive = true;
+
+            ObjectAnimator volIncreaseTextAnimator = ObjectAnimator.ofFloat(increaseVolumeTextView, "translationX", -450f);
+            volIncreaseTextAnimator.setRepeatCount(0);
+            volIncreaseTextAnimator.setDuration(300);
+
+            ObjectAnimator neverVolIncreaseButtonAnimator = ObjectAnimator.ofFloat(neverVolumeTimersButton, "translationX", -450f);
+            neverVolIncreaseButtonAnimator.setRepeatCount(0);
+            neverVolIncreaseButtonAnimator.setDuration(400);
+            neverVolIncreaseButtonAnimator.setStartDelay(100);
+
+            ObjectAnimator c30sVolIncreaseButtonAnimator = ObjectAnimator.ofFloat(c30sVolumeTimersButton, "translationX", -450f);
+            c30sVolIncreaseButtonAnimator.setRepeatCount(0);
+            c30sVolIncreaseButtonAnimator.setDuration(400);
+            c30sVolIncreaseButtonAnimator.setStartDelay(100);
+
+            ObjectAnimator c15sVolIncreaseButtonAnimator = ObjectAnimator.ofFloat(c15sVolumeTimersButton, "translationX", -450f);
+            c15sVolumeTimersButton.setAlpha(1.0f);
+            c15sVolIncreaseButtonAnimator.setRepeatCount(0);
+            c15sVolIncreaseButtonAnimator.setDuration(400);
+            c15sVolIncreaseButtonAnimator.setStartDelay(100);
+
+            ObjectAnimator c45sVolIncreaseButtonAnimator = ObjectAnimator.ofFloat(c45sVolumeTimersButton, "translationX", -310f);
+            c45sVolumeTimersButton.setAlpha(1.0f);
+            c45sVolIncreaseButtonAnimator.setRepeatCount(0);
+            c45sVolIncreaseButtonAnimator.setDuration(400);
+            c45sVolIncreaseButtonAnimator.setStartDelay(100);
+
+            ObjectAnimator c60sVolIncreaseButtonAnimator = ObjectAnimator.ofFloat(c60sVolumeTimersButton, "translationX", -170f);
+            c60sVolumeTimersButton.setAlpha(1.0f);
+            c60sVolIncreaseButtonAnimator.setRepeatCount(0);
+            c60sVolIncreaseButtonAnimator.setDuration(400);
+            c60sVolIncreaseButtonAnimator.setStartDelay(100);
+
+            List<Animator> buttonListAnimator = new ArrayList<>();
+            buttonListAnimator.add(volIncreaseTextAnimator);
+            buttonListAnimator.add(neverVolIncreaseButtonAnimator);
+            buttonListAnimator.add(c30sVolIncreaseButtonAnimator);
+            buttonListAnimator.add(c15sVolIncreaseButtonAnimator);
+            buttonListAnimator.add(c45sVolIncreaseButtonAnimator);
+            buttonListAnimator.add(c60sVolIncreaseButtonAnimator);
+
+            AnimatorSet set = new AnimatorSet();
+            //set.playSequentially(buttonListAnimator);
+            set.playTogether(buttonListAnimator);
+            set.start();
+        }
+
+
+
+    }
 }
