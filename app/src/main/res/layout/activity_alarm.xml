@@ -93,21 +93,22 @@
 <!--            android:textColor="@color/colorRowTextAndIcon"-->
 <!--            android:textSize="32sp" />-->
 
-                <EditText android:id="@+id/clockEditText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/colorWidgetBackground"
-                    android:fontFamily="@font/roboto"
-                    android:paddingStart="30dp"
-                    android:paddingTop="20dp"
-                    android:paddingEnd="30dp"
-                    android:paddingBottom="20dp"
-                    android:text="88 : 88"
-                    android:inputType="number"
-                    android:cursorVisible="false"
-                    android:textColor="@color/colorRowTextAndIcon"
-                    android:textSize="32sp"
-                    android:hint="" />
+        <EditText
+            android:id="@+id/clockEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorWidgetBackground"
+            android:cursorVisible="false"
+            android:fontFamily="@font/roboto"
+            android:hint=""
+            android:inputType="number"
+            android:paddingStart="30dp"
+            android:paddingTop="20dp"
+            android:paddingEnd="30dp"
+            android:paddingBottom="20dp"
+            android:text="11 : 11"
+            android:textColor="@color/colorRowTextAndIcon"
+            android:textSize="32sp" />
 
     </androidx.cardview.widget.CardView>
 
@@ -137,10 +138,11 @@
             android:gravity="right">
 
             <Switch
+                android:id="@+id/setTimeSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical" />
-<!--                android:textOff="off"-->
+            <!--                android:textOff="off"-->
 <!--                android:textOn="on"-->
 <!--                android:thumb="@drawable/switch_thumb"-->
 <!--                android:track="@drawable/switch_track"-->
