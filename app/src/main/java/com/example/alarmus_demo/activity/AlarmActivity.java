@@ -7,7 +7,6 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -17,28 +16,19 @@ import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.alarmus_demo.AlarmController;
 import com.example.alarmus_demo.R;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public class AlarmActivity extends AppCompatActivity {
 
-
-
-
     //************  Views  ****************
-
-    Switch setTimeSwitch;
 
     EditText clockEditText;
 
@@ -57,7 +47,6 @@ public class AlarmActivity extends AppCompatActivity {
             saturdayButton, sundayButton;
     Button[] dayButtonArray; //Array for all these buttons (easier to go through)
 
-
     //**************   Constants   *****************
 
     public static final int ALARM_SELECTED_MODE_SOUND_VIBRATE = 0;
@@ -73,23 +62,12 @@ public class AlarmActivity extends AppCompatActivity {
     boolean[] isDayActiveArray; //Array of states (active or not) of days' buttons
     boolean isMoreVolumeButtonsActive;
 
-
-    SharedPreferences sharedPreferences;    //Storage
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm);
 
         initViews();
-
-
-        SharedPreferences sharedPref = getSharedPreferences("alarm_data", MODE_PRIVATE);
-        AlarmController.sharedPreferences=sharedPref;
-        AlarmController.setup();
-
-        isTimeChangedByHand=false;
-        clockEditText.setText(AlarmController.getTimeString());
 
         //TODO: get from SharedPreferences
         //Initial alarm mode (but this data should be retrieved from sharedPreferences)
@@ -131,16 +109,16 @@ public class AlarmActivity extends AppCompatActivity {
                     String nString;
 
                     if (cursorPosition == 0){
-                        nString = inputSymbol + "0" + separator + "00";
+                        nString = inputSymbol + "8" + separator + "88";
                         clockEditText.setText(nString);
                     }
                     else if (cursorPosition == 1){
-                        nString = s.toString().charAt(cursorPosition) + String.valueOf(inputSymbol) + separator + "00";
+                        nString = s.toString().charAt(cursorPosition) + String.valueOf(inputSymbol) + separator + "88";
                         Toast.makeText(AlarmActivity.this, "charAt0 - " + s.toString().charAt(0), Toast.LENGTH_SHORT).show();
                         clockEditText.setText(nString);
                     }
                     else if (cursorPosition == 2){
-                        nString = String.valueOf(s.toString().charAt(1)) + String.valueOf(s.toString().charAt(2)) + separator + inputSymbol + "0";
+                        nString = String.valueOf(s.toString().charAt(1)) + String.valueOf(s.toString().charAt(2)) + separator + inputSymbol + "8";
                         clockEditText.setText(nString);
                     }
                     else if (cursorPosition == 3){
@@ -160,27 +138,16 @@ public class AlarmActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 if (isTimeChangedByHand){
                     cursorPosition++;
-                    setTimeSwitch.setChecked(false);
                 }
                 isTimeChangedByHand = true;
-
             }
         });
 
-
-        setTimeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                switchOnOffClick(buttonView,isChecked);
-            }
-        });
     }
 
     private void initViews(){
         clockEditText = findViewById(R.id.clockEditText);
         increaseVolumeTextView = findViewById(R.id.increaseVolumeTextView);
-
-        setTimeSwitch = findViewById(R.id.setTimeSwitch);
 
         //Initialising timers volume buttons
         neverVolumeTimersButton = findViewById(R.id.neverVolumeTimersButton);
@@ -280,43 +247,6 @@ public class AlarmActivity extends AppCompatActivity {
             noSoundImageButton.setBackgroundDrawable(getResources().
                     getDrawable(R.drawable.button_alarmmode_sv_selected));
         }
-    }
-
-    //*********   Time set switch  *********** (by Shymon)
-
-    public void switchOnOffClick(CompoundButton buttonView, boolean isChecked){
-        if (isChecked) {
-            try{
-                String timeText=clockEditText.getText().toString();
-                String[] numbers=timeText.split(" : ");
-                int hour;
-                try {
-                    hour = Integer.parseInt(numbers[0]);
-                }
-                catch (NumberFormatException e)
-                {
-                    hour = 0;
-                }
-                int minute;
-                try {
-                    minute = Integer.parseInt(numbers[1]);
-                }
-                catch (NumberFormatException e)
-                {
-                    minute = 0;
-                }
-                AlarmController.setHour(hour);
-                AlarmController.setMinute(minute);
-                isTimeChangedByHand=false;
-                clockEditText.setText(AlarmController.getTimeString());
-            }
-            catch (Exception e){
-
-            }
-        } else {
-            clockEditText.setText(AlarmController.getTimeString());
-        }
-
     }
 
     //*********   Alarm mode buttons clicked   **********

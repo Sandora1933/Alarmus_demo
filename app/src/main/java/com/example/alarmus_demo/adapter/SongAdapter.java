@@ -23,7 +23,6 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
     Context context;
     List<SongEntity> songEntityList; //This list is changeable depending on user search preferences
     List<SongEntity> songEntityListFull; //This list is full and static
-    List<SongEntity> songEntityActiveList; //This list of only active songs
 
     OnSongItemClickListener songClickListener;
 
@@ -59,11 +58,19 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
         }
     }
 
-    public SongAdapter(Context context, List<SongEntity> songEntityList, List<SongEntity> songEntityActiveList) {
+    public SongAdapter(Context context, List<SongEntity> songEntityList) {
         this.context = context;
         this.songEntityList = songEntityList;
-        this.songEntityActiveList = songEntityActiveList;
+
         this.songEntityListFull = new ArrayList<>(songEntityList);
+
+//        if (songEntityList == null){
+//            this.songEntityListFull = new ArrayList<>();
+//        }
+//        else {
+//            this.songEntityListFull = new ArrayList<>(songEntityList);
+//        }
+
     }
 
     @NonNull
@@ -79,21 +86,27 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
         holder.singerTextView.setText(songEntityList.get(position).getSingerTitle());
         holder.songPriorityTextView.setText(String.valueOf(songEntityList.get(position).getSongPriority()));
 
-        SongEntity currentSongEntity = songEntityList.get(position);
-
-        for (SongEntity song : songEntityActiveList){
-            if (song.getSongTitle().equals(currentSongEntity.getSongTitle())){
-                //Present, so it is active
-                holder.songIsActiveImageView.setColorFilter(ContextCompat.getColor(context,
-                        R.color.colorSelectedTextAndIcon), android.graphics.PorterDuff.Mode.SRC_IN);
-            }
+        if (songEntityList.get(position).isActive()){
+            holder.songIsActiveImageView.setColorFilter(ContextCompat.getColor(context,
+                    R.color.colorSelectedTextAndIcon), android.graphics.PorterDuff.Mode.SRC_IN);
         }
+
+        //SongEntity currentSongEntity = songEntityList.get(position);
+
+//        for (SongEntity song : songEntityActiveList){
+//            if (song.getSongTitle().equals(currentSongEntity.getSongTitle())){
+//                //Present, so it is active
+//                holder.songIsActiveImageView.setColorFilter(ContextCompat.getColor(context,
+//                        R.color.colorSelectedTextAndIcon), android.graphics.PorterDuff.Mode.SRC_IN);
+//            }
+//        }
 
     }
 
     @Override
     public int getItemCount() {
         return songEntityList.size();
+        //return 0;
     }
 
     public void filterList(ArrayList<SongEntity> filteredList){
