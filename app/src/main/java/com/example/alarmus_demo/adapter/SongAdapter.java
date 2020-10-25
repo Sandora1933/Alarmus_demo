@@ -90,6 +90,10 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
             holder.songIsActiveImageView.setColorFilter(ContextCompat.getColor(context,
                     R.color.colorSelectedTextAndIcon), android.graphics.PorterDuff.Mode.SRC_IN);
         }
+        else {
+            holder.songIsActiveImageView.setColorFilter(ContextCompat.getColor(context,
+                    R.color.colorSelectedWidgetBackground), android.graphics.PorterDuff.Mode.SRC_IN);
+        }
 
         //SongEntity currentSongEntity = songEntityList.get(position);
 

@@ -201,6 +201,28 @@ public class MusicListActivity extends AppCompatActivity{
 
                     songRecyclerViewAdapter.notifyDataSetChanged();
                 }
+                else {
+                    songEntityList.get(position).setActive(false);
+
+                    int oldPriority = songEntityList.get(position).getSongPriority();
+
+                    songEntityList.get(position).setSongPriority(0);
+                    activeSongNumber--;
+
+                    for (SongEntity song : songEntityList){
+                        if (song.isActive()){
+                            int priority = song.getSongPriority();
+
+                            if (priority > oldPriority){
+                                song.setSongPriority(priority - 1);
+                            }
+
+                        }
+                    }
+                    setUpRecyclerView();
+
+                    songRecyclerViewAdapter.notifyDataSetChanged();
+                }
 
                 Toast.makeText(MusicListActivity.this, "title - " +
                         songEntityList.get(position).getSongTitle(), Toast.LENGTH_SHORT).show();
