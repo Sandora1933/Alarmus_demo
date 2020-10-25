@@ -53,7 +53,7 @@ public class MusicListActivity extends AppCompatActivity{
 
     //Data
     List<SongEntity> songEntityList;    //Songs which retrieved from external storage
-    List<SongEntity> activeSongEntityList;  //Songs which are saved in our storage(sharedPref)
+    int activeSongNumber;
 
     SharedPreferences sharedPreferences;    //Storage
 
@@ -66,10 +66,7 @@ public class MusicListActivity extends AppCompatActivity{
 
         sharedPreferences = getSharedPreferences("active_songs", MODE_PRIVATE);
 
-        loadActiveSongList();   //Loading songs from our storage
-        Toast.makeText(this, "kol-vo active - " + activeSongEntityList.size(), Toast.LENGTH_SHORT).show();
-
-        songEntityList = new ArrayList<>();
+        //songEntityList = new ArrayList<>();
         songRecyclerView = findViewById(R.id.songRecyclerView);
 
         //Request permission for data retrieving
@@ -86,6 +83,8 @@ public class MusicListActivity extends AppCompatActivity{
             }
         }
         else{
+            loadSongList();   //Loading songs from our storage
+            Toast.makeText(this, "kol-vo active - " + activeSongNumber, Toast.LENGTH_SHORT).show();
             setUpRecyclerView();
         }
 
@@ -112,7 +111,8 @@ public class MusicListActivity extends AppCompatActivity{
     @Override
     protected void onStop() {
         super.onStop();
-        saveActiveSongList(); //Saving activeSongList to out storage(sharedPref)
+        //saveActiveSongList(); //Saving activeSongList to out storage(sharedPref)
+        saveSongList(); //Saving songList to storage(sharedPref)
     }
 
     @Override
@@ -123,6 +123,8 @@ public class MusicListActivity extends AppCompatActivity{
                     if (ContextCompat.checkSelfPermission(MusicListActivity.this,
                             Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
                         Toast.makeText(this, "Permission granted!", Toast.LENGTH_SHORT).show();
+                        loadSongList();   //Loading songs from our storage
+                        Toast.makeText(this, "ac_song num from onRequest" + activeSongNumber, Toast.LENGTH_SHORT).show();
                         setUpRecyclerView();
                     }
                 }
@@ -148,8 +150,11 @@ public class MusicListActivity extends AppCompatActivity{
         songRecyclerViewAdapter.filterList(filteredList);
     }
 
-    //Getting songs from external storage to our songList<>
+    //Getting songs from external storage to our shared preferences
     private void getMusicFromStorage(){
+
+        ArrayList<SongEntity> receivedSongEntityList = new ArrayList<>();
+
         ContentResolver contentResolver = getContentResolver();
         Uri songUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         Cursor songCursor = contentResolver.query(songUri, null, null, null, null);
@@ -157,37 +162,30 @@ public class MusicListActivity extends AppCompatActivity{
         if (songCursor != null && songCursor.moveToFirst()){
             int songTitle = songCursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
             int songArtist = songCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST);
+            int songPath = songCursor.getColumnIndex(MediaStore.Audio.Media.DATA);
 
             do {
                 String currentTitle = songCursor.getString(songTitle);
                 String currentArtist = songCursor.getString(songArtist);
-
-//                This info we may know after comparing with activeSongList<>
-//                If activeSongList<> contains any songs with such TITLE then it has priority
-//                And we are ready to assign priority variable, otherwise it is 0
+                String currentPath = songCursor.getString(songPath);
                 int currentPriority = 0;
                 boolean isCurrentActive = false;
+                boolean isPlayedNext = false;
 
-                if (activeSongEntityList != null) {
-                    for (SongEntity song : activeSongEntityList){
-                        if (song.getSongTitle().equals(currentTitle)){
-                            //Such song exists in activeSongList<>
-                            currentPriority = song.getSongPriority();
-                            isCurrentActive = true;
-                        }
-                    }
-                }
-
-                songEntityList.add(new SongEntity(currentTitle, currentArtist,
-                        currentPriority, isCurrentActive));
+                receivedSongEntityList.add(new SongEntity(currentTitle, currentArtist, currentPath,
+                        currentPriority, isCurrentActive, isPlayedNext));
             } while (songCursor.moveToNext());
+
+            //Adding list from storage to shared preferences for the first time
+            saveSongList(receivedSongEntityList);
+
         }
     }
 
     private void setUpRecyclerView(){
-        songRecyclerViewAdapter = new SongAdapter(this, songEntityList, activeSongEntityList);
+        songRecyclerViewAdapter = new SongAdapter(this, songEntityList);
         songRecyclerViewManager = new LinearLayoutManager(this);
-        getMusicFromStorage();
+        //getMusicFromStorage();
 
         songRecyclerView.setAdapter(songRecyclerViewAdapter);
         songRecyclerView.setLayoutManager(songRecyclerViewManager);
@@ -196,14 +194,19 @@ public class MusicListActivity extends AppCompatActivity{
             @Override
             public void onClick(int position) {
 
-                songEntityList.get(position).setActive(true);
-                songEntityList.get(position).setSongPriority(activeSongEntityList.size());
+                if (!songEntityList.get(position).isActive()){
+                    activeSongNumber++;
+                    songEntityList.get(position).setActive(true);
+                    songEntityList.get(position).setSongPriority(activeSongNumber);
 
-                activeSongEntityList.add(songEntityList.get(position));
-                songRecyclerViewAdapter.notifyDataSetChanged();
+                    songRecyclerViewAdapter.notifyDataSetChanged();
+                }
 
                 Toast.makeText(MusicListActivity.this, "title - " +
                         songEntityList.get(position).getSongTitle(), Toast.LENGTH_SHORT).show();
+
+                Toast.makeText(MusicListActivity.this, "act_song num" + activeSongNumber,
+                        Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -225,28 +228,79 @@ public class MusicListActivity extends AppCompatActivity{
     //-------------------------------------------
 
     //Saving activeSongList<> to storage(SharedPreferences)
-    private void saveActiveSongList(){
+//    private void saveActiveSongList(){
+//        SharedPreferences.Editor editor = sharedPreferences.edit();
+//
+//        Gson gson = new Gson();
+//        String activeSongListJson = gson.toJson(activeSongEntityList);
+//
+//        editor.putString("active_song_list", activeSongListJson);
+//        editor.apply();
+//        Toast.makeText(this, "data saved to storage", Toast.LENGTH_SHORT).show();
+//    }
+
+    //Loading activeSongList<> from storage or creating new (if list is null)
+//    private void loadActiveSongList(){
+//        Gson gson = new Gson();
+//        String activeSongListJson = sharedPreferences.getString("active_song_list", null);
+//
+//        Type listType = new TypeToken<ArrayList<SongEntity>>(){}.getType();
+//        activeSongEntityList = gson.fromJson(activeSongListJson, listType);
+//
+//        if (activeSongListJson == null){
+//            activeSongEntityList = new ArrayList<SongEntity>();
+//        }
+//    }
+
+    //********************************
+
+    //Loading song list from shared preferences
+    private void loadSongList(){
+        Gson gson = new Gson();
+        String songListJson = sharedPreferences.getString("song_list", null);
+
+        if (songListJson == null){  //Initial loading of songs
+            //activeSongNumber = 0;
+            getMusicFromStorage();
+            loadSongList();
+            Toast.makeText(this, "Data has been initially loaded", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Type listType = new TypeToken<ArrayList<SongEntity>>(){}.getType();
+            songEntityList = gson.fromJson(songListJson, listType);
+            activeSongNumber = sharedPreferences.getInt("song_active_number", 0);
+            Toast.makeText(this, "ac_song from loadlist " + activeSongNumber, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "data has been loaded again", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    //Saving song list to shared preferences
+    private void saveSongList(){
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         Gson gson = new Gson();
-        String activeSongListJson = gson.toJson(activeSongEntityList);
+        String songListJson = gson.toJson(songEntityList);
 
-        editor.putString("active_song_list", activeSongListJson);
+        editor.putString("song_list", songListJson);
+        editor.putInt("song_active_number", activeSongNumber);
         editor.apply();
         Toast.makeText(this, "data saved to storage", Toast.LENGTH_SHORT).show();
     }
 
-    //Loading activeSongList<> from storage or creating new (if list is null)
-    private void loadActiveSongList(){
+    //overloaded method when we save list to shared preferences for the first time
+    private void saveSongList(ArrayList<SongEntity> receivedSongEntityList){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        activeSongNumber = 0;
+
         Gson gson = new Gson();
-        String activeSongListJson = sharedPreferences.getString("active_song_list", null);
+        String songListJson = gson.toJson(receivedSongEntityList);
 
-        Type listType = new TypeToken<ArrayList<SongEntity>>(){}.getType();
-        activeSongEntityList = gson.fromJson(activeSongListJson, listType);
-
-        if (activeSongListJson == null){
-            activeSongEntityList = new ArrayList<SongEntity>();
-        }
+        editor.putString("song_list", songListJson);
+        editor.putInt("song_active_number", activeSongNumber);
+        editor.apply();
+        Toast.makeText(this, "data saved to storage", Toast.LENGTH_SHORT).show();
     }
 
 }
