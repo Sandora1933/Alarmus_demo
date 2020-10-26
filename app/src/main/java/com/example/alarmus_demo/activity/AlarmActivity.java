@@ -85,15 +85,14 @@ public class AlarmActivity extends AppCompatActivity {
 
 
         SharedPreferences sharedPref = getSharedPreferences("alarm_data", MODE_PRIVATE);
-        AlarmController.sharedPreferences=sharedPref;
-        AlarmController.setup();
+        AlarmController.setup(sharedPref);
 
         isTimeChangedByHand=false;
         clockEditText.setText(AlarmController.getTimeString());
 
-        //TODO: get from SharedPreferences
+        //DONE: get from SharedPreferences
         //Initial alarm mode (but this data should be retrieved from sharedPreferences)
-        alarmSelectedMode = ALARM_SELECTED_MODE_SOUND_ONLY;
+        alarmSelectedMode = AlarmController.getAlarmSelectedMode();
 
         //Initial settings for timeEditText
         isTimeChangedByHand = true;
@@ -102,7 +101,7 @@ public class AlarmActivity extends AppCompatActivity {
 
         isMoreVolumeButtonsActive = false;
 
-        //TODO: get from SharedPreferences
+        //DONE: get from SharedPreferences
         initDayButtonsPanel();  //Initial values for dayButtons and states (should retrieved from SharedPref)
 
         setUpAlarmModePanel();
@@ -207,6 +206,9 @@ public class AlarmActivity extends AppCompatActivity {
 
     private void initDayButtonsPanel(){
         isDayActiveArray = new boolean[]{false, false, false, false, false, false, false};
+        for (int i=0;i<7;i++){
+            isDayActiveArray[i]=AlarmController.getDay(i);
+        }
         dayButtonArray = new Button[]{mondayButton, tuesdayButton, wednesdayButton, thursdayButton,
                 fridayButton, saturdayButton, sundayButton};
     }
@@ -237,9 +239,10 @@ public class AlarmActivity extends AppCompatActivity {
     }
 
     //*********   Detecting alarm mode change   *************
-    //TODO: add alarm mode to sharedPreferences
+    //DONE: add alarm mode to sharedPreferences
 
     private void setUpAlarmModePanel(){
+        AlarmController.setAlarmSelectedMode(alarmSelectedMode);
         if (alarmSelectedMode == ALARM_SELECTED_MODE_SOUND_VIBRATE){
             songPlusVibrateButton.setBackgroundDrawable(getResources().
                     getDrawable(R.drawable.button_alarmmode_sv_selected));
@@ -344,6 +347,9 @@ public class AlarmActivity extends AppCompatActivity {
     //**********   Setting up alarm days views   *************
 
     private void setUpAlarmDaysPanel(){
+
+        AlarmController.setDays(isDayActiveArray);
+
         for (int i = 0; i < isDayActiveArray.length; i++){
             if (isDayActiveArray[i]){
                 dayButtonArray[i].setBackgroundDrawable(getResources().
