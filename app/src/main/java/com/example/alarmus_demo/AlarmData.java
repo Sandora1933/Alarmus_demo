@@ -5,15 +5,17 @@ import android.content.SharedPreferences.Editor;
 import android.text.format.Time;
 
 public class AlarmData {
-    private Integer hour,minute;
-    private boolean state;//false - off, true - on
-    private boolean[] days;
-    private boolean allDays;
+    public static final int ALARM_SELECTED_MODE_SOUND_VIBRATE = 0;
+    public static final int ALARM_SELECTED_MODE_SOUND_ONLY = 1;
+    public static final int ALARM_SELECTED_MODE_VIBRATE_ONLY = 2;
+    public static final int ALARM_SELECTED_MODE_NO_SOUND = 3;
 
+    private Integer hour,minute;
+    private boolean[] days;
+    private Integer alarmSelectedMode;
 
     public AlarmData(){
-        allDays = false;
-        state = false;
+        alarmSelectedMode=ALARM_SELECTED_MODE_SOUND_ONLY;
         hour = 0;
         minute = 0;
         days = new boolean[7];
@@ -33,43 +35,36 @@ public class AlarmData {
         return time;
     }
 
-    // *********** Old code ************************
-
-    /*public boolean checkTime(Time currentTime){
-        Integer h=currentTime.hour;
-        Integer m=currentTime.minute;
-        return (hour.equals(h) && minute.equals(m));
+    public void setDay(boolean value,int day){
+        if (day>=0 && day<7){
+            days[day]=value;
+        }
     }
 
-    public void setState(boolean state) {
-        this.state = state;
-    }
-
-    public boolean isState() {
-        return state;
+    public void setDays(boolean[] isDayActiveArray){
+        days=isDayActiveArray;
     }
 
     public boolean getDay(int day){
-        return days[day];
+        if (day>=0 && day<=6)
+            return days[day];
+        else
+            return false;
     }
 
-    public void changeDay(int day){
-        days[day]=!days[day];
+    public boolean[] getDays(){
+        return days;
     }
 
-    public void setDay(int day,boolean val){
-        days[day]=val;
+    public void setAlarmSelectedMode(Integer newMode){
+        if (newMode>=0 && newMode<=3){
+            alarmSelectedMode=newMode;
+        }
     }
 
-    public boolean checkDay(int day){
-        return (allDays || days[day]);
+    public Integer getAlarmSelectedMode(){
+        return alarmSelectedMode;
     }
 
-    public void setAllDays(boolean allDays) {
-        this.allDays = allDays;
-    }
 
-    public boolean isAllDays() {
-        return allDays;
-    }*/
 }
