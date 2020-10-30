@@ -91,4 +91,9 @@ public class InfoActivity extends AppCompatActivity {
     public void telegramButtonClicked(View view) {
         Toast.makeText(this, "telegram clicked", Toast.LENGTH_SHORT).show();
     }
+
+    public void emailButtonClicked(View view) {
+        Intent alarmStartIntent = new Intent(InfoActivity.this, StartAlarmActivity.class);
+        startActivity(alarmStartIntent);
+    }
 }

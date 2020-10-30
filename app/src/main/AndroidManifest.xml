@@ -20,6 +20,7 @@
         </activity>
         <activity android:name=".activity.InfoActivity"/>
         <activity android:name=".activity.MusicListActivity"/>
+        <activity android:name=".activity.StartAlarmActivity"/>
 
         <meta-data
             android:name="preloaded_fonts"
