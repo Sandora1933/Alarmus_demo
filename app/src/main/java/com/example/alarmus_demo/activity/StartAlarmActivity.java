@@ -1,9 +1,8 @@
 package com.example.alarmus_demo.activity;
 
 import android.annotation.SuppressLint;
-import android.graphics.Color;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,5 +69,14 @@ public class StartAlarmActivity extends AppCompatActivity {
 //            }
 //        });
 
+    }
+
+    public void moreButtonClicked(View view) {
+        Intent snoozeActivityIntent = new Intent(StartAlarmActivity.this, SnoozeActivity.class);
+        startActivity(snoozeActivityIntent);
+    }
+
+    public void stopButtonClicked(View view) {
+        Toast.makeText(this, "stop clicked", Toast.LENGTH_SHORT).show();
     }
 }
