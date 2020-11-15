@@ -12,26 +12,34 @@ public class AlarmController {
     public static void setup(SharedPreferences sharedP){
         sharedPreferences=sharedP;
         data = new AlarmData();
-        if(sharedPreferences.contains("hour")){
+
+        if (sharedPreferences.contains("hour")){
             setHour(sharedPreferences.getInt("hour", 0));
-        }else {
+        }
+        else {
             setHour(0);
         }
-        if(sharedPreferences.contains("minute")){
+
+        if (sharedPreferences.contains("minute")){
             setMinute(sharedPreferences.getInt("minute", 0));
-        }else {
+        }
+        else {
             setMinute(0);
         }
+
         for (int i = 0; i < 7; i++){
             if(sharedPreferences.contains("day"+String.valueOf(i))){
                 setDay(sharedPreferences.getBoolean("day"+String.valueOf(i), false), i);
-            }else {
+            }
+            else {
                 setDay(false, i);
             }
         }
-        if(sharedPreferences.contains("alarmSelectedMode")){
+
+        if (sharedPreferences.contains("alarmSelectedMode")){
             setAlarmSelectedMode(sharedPreferences.getInt("alarmSelectedMode", 1));
-        }else {
+        }
+        else {
             setAlarmSelectedMode(1);
         }
     }

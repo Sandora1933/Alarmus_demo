@@ -20,21 +20,21 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.alarmus_demo.AlarmController;
+import com.example.alarmus_demo.AlarmData;
 import com.example.alarmus_demo.R;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class AlarmActivity extends AppCompatActivity {
-
-
-
 
     //************  Views  ****************
 
@@ -46,6 +46,7 @@ public class AlarmActivity extends AppCompatActivity {
     TextView increaseVolumeTextView;
     Button neverVolumeTimersButton, c30sVolumeTimersButton, c15sVolumeTimersButton, c45sVolumeTimersButton,
             c60sVolumeTimersButton;
+    SeekBar volumeSeekBar;
 
     //Views - Alarm mode panel
     Button songPlusVibrateButton;
@@ -65,16 +66,27 @@ public class AlarmActivity extends AppCompatActivity {
     public static final int ALARM_SELECTED_MODE_VIBRATE_ONLY = 2;
     public static final int ALARM_SELECTED_MODE_NO_SOUND = 3;
 
+    public static final int VOL_INCREASE_MODE_NEVER = 0;
+    public static final int VOL_INCREASE_MODE_15s = 1;
+    public static final int VOL_INCREASE_MODE_30s = 2;
+    public static final int VOL_INCREASE_MODE_45s = 3;
+    public static final int VOL_INCREASE_MODE_60s = 4;
+
+    private static final String APP_PREFERENCES = "alarm_data";
+    public static final String ALARM_DATA_PREFERENCES = "alarm_preferences";
+
     //**************   Variables   *****************
 
     boolean isTimeChangedByHand; //Detects when timeEditText is being changed by user (not by system)
     int cursorPosition; //Cursor for timeEditText
     int alarmSelectedMode; //0: sound+vibrate, 1: sound, 2: vibrate, 3: noSound
+    int volumeIncreaseMode; //0: never, 1: 15s, 2: 30s, 3: 45s, 4: 60s
     boolean[] isDayActiveArray; //Array of states (active or not) of days' buttons
     boolean isMoreVolumeButtonsActive;
 
 
     SharedPreferences sharedPreferences;    //Storage
+    AlarmData alarmData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +96,7 @@ public class AlarmActivity extends AppCompatActivity {
         initViews();
 
 
-        SharedPreferences sharedPref = getSharedPreferences("alarm_data", MODE_PRIVATE);
+        SharedPreferences sharedPref = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
         AlarmController.setup(sharedPref);
 
         isTimeChangedByHand=false;
@@ -173,6 +185,24 @@ public class AlarmActivity extends AppCompatActivity {
                 switchOnOffClick(buttonView,isChecked);
             }
         });
+
+        volumeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                Toast.makeText(AlarmActivity.this, "Progress:" + seekBar.getProgress(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
     }
 
     private void initViews(){
@@ -180,6 +210,7 @@ public class AlarmActivity extends AppCompatActivity {
         increaseVolumeTextView = findViewById(R.id.increaseVolumeTextView);
 
         setTimeSwitch = findViewById(R.id.setTimeSwitch);
+        volumeSeekBar = findViewById(R.id.volumeSeekBar);
 
         //Initialising timers volume buttons
         neverVolumeTimersButton = findViewById(R.id.neverVolumeTimersButton);
@@ -237,6 +268,94 @@ public class AlarmActivity extends AppCompatActivity {
 
         }
     }
+
+    //*********   Detecting volume increase change   ***********
+
+    private void setUpVolumeIncreasePanel(){
+
+        if (volumeIncreaseMode == VOL_INCREASE_MODE_NEVER){
+            neverVolumeTimersButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_never_selected));
+            neverVolumeTimersButton.setTextColor(getResources().getColor(R.color.colorSelectedTextAndIcon));
+
+            c15sVolumeTimersButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_increase_alarm_unselected));
+            c15sVolumeTimersButton.setTextColor(getResources().getColor(R.color.colorRowTextAndIcon));
+
+            c30sVolumeTimersButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_increase_alarm_unselected));
+            c30sVolumeTimersButton.setTextColor(getResources().getColor(R.color.colorRowTextAndIcon));
+
+            c45sVolumeTimersButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_increase_alarm_unselected));
+            c45sVolumeTimersButton.setTextColor(getResources().getColor(R.color.colorRowTextAndIcon));
+
+            c60sVolumeTimersButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_increase_alarm_unselected));
+            c60sVolumeTimersButton.setTextColor(getResources().getColor(R.color.colorRowTextAndIcon));
+        }
+        else if (volumeIncreaseMode == VOL_INCREASE_MODE_15s){
+            neverVolumeTimersButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_never_unselected));
+            neverVolumeTimersButton.setTextColor(getResources().getColor(R.color.colorRowTextAndIcon));
+
+            c15sVolumeTimersButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_increase_alarm_selected));
+            c15sVolumeTimersButton.setTextColor(getResources().getColor(R.color.colorSelectedTextAndIcon));
+
+            c30sVolumeTimersButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_increase_alarm_unselected));
+            c30sVolumeTimersButton.setTextColor(getResources().getColor(R.color.colorRowTextAndIcon));
+
+            c45sVolumeTimersButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_increase_alarm_unselected));
+            c45sVolumeTimersButton.setTextColor(getResources().getColor(R.color.colorRowTextAndIcon));
+
+            c60sVolumeTimersButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_increase_alarm_unselected));
+            c60sVolumeTimersButton.setTextColor(getResources().getColor(R.color.colorRowTextAndIcon));
+        }
+        else if (volumeIncreaseMode == VOL_INCREASE_MODE_30s){
+            neverVolumeTimersButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_never_unselected));
+            neverVolumeTimersButton.setTextColor(getResources().getColor(R.color.colorRowTextAndIcon));
+
+            c15sVolumeTimersButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_increase_alarm_unselected));
+            c15sVolumeTimersButton.setTextColor(getResources().getColor(R.color.colorRowTextAndIcon));
+
+            c30sVolumeTimersButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_increase_alarm_selected));
+            c30sVolumeTimersButton.setTextColor(getResources().getColor(R.color.colorSelectedTextAndIcon));
+
+            c45sVolumeTimersButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_increase_alarm_unselected));
+            c45sVolumeTimersButton.setTextColor(getResources().getColor(R.color.colorRowTextAndIcon));
+
+            c60sVolumeTimersButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_increase_alarm_unselected));
+            c60sVolumeTimersButton.setTextColor(getResources().getColor(R.color.colorRowTextAndIcon));
+        }
+        else if (volumeIncreaseMode == VOL_INCREASE_MODE_45s){
+            neverVolumeTimersButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_never_unselected));
+            neverVolumeTimersButton.setTextColor(getResources().getColor(R.color.colorRowTextAndIcon));
+
+            c15sVolumeTimersButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_increase_alarm_unselected));
+            c15sVolumeTimersButton.setTextColor(getResources().getColor(R.color.colorRowTextAndIcon));
+
+            c30sVolumeTimersButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_increase_alarm_unselected));
+            c30sVolumeTimersButton.setTextColor(getResources().getColor(R.color.colorRowTextAndIcon));
+
+            c45sVolumeTimersButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_increase_alarm_selected));
+            c45sVolumeTimersButton.setTextColor(getResources().getColor(R.color.colorSelectedTextAndIcon));
+
+            c60sVolumeTimersButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_increase_alarm_unselected));
+            c60sVolumeTimersButton.setTextColor(getResources().getColor(R.color.colorRowTextAndIcon));
+        }
+        else if (volumeIncreaseMode == VOL_INCREASE_MODE_60s){
+            neverVolumeTimersButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_never_unselected));
+            neverVolumeTimersButton.setTextColor(getResources().getColor(R.color.colorRowTextAndIcon));
+
+            c15sVolumeTimersButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_increase_alarm_unselected));
+            c15sVolumeTimersButton.setTextColor(getResources().getColor(R.color.colorRowTextAndIcon));
+
+            c30sVolumeTimersButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_increase_alarm_unselected));
+            c30sVolumeTimersButton.setTextColor(getResources().getColor(R.color.colorRowTextAndIcon));
+
+            c45sVolumeTimersButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_increase_alarm_unselected));
+            c45sVolumeTimersButton.setTextColor(getResources().getColor(R.color.colorRowTextAndIcon));
+
+            c60sVolumeTimersButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_increase_alarm_selected));
+            c60sVolumeTimersButton.setTextColor(getResources().getColor(R.color.colorSelectedTextAndIcon));
+        }
+
+    }
+
 
     //*********   Detecting alarm mode change   *************
     //DONE: add alarm mode to sharedPreferences
@@ -320,6 +439,33 @@ public class AlarmActivity extends AppCompatActivity {
             clockEditText.setText(AlarmController.getTimeString());
         }
 
+    }
+
+    //*********   Volume increase buttons clicked   **********
+
+    public void neverVolumeButtonClicked(View view) {
+        volumeIncreaseMode = 0;
+        setUpVolumeIncreasePanel();
+    }
+
+    public void c15sVolumeButtonClicked(View view) {
+        volumeIncreaseMode = 1;
+        setUpVolumeIncreasePanel();
+    }
+
+    public void c30sVolumeButtonClicked(View view) {
+        volumeIncreaseMode = 2;
+        setUpVolumeIncreasePanel();
+    }
+
+    public void c45sVolumeButtonClicked(View view) {
+        volumeIncreaseMode = 3;
+        setUpVolumeIncreasePanel();
+    }
+
+    public void c60sVolumeButtonClicked(View view) {
+        volumeIncreaseMode = 4;
+        setUpVolumeIncreasePanel();
     }
 
     //*********   Alarm mode buttons clicked   **********
@@ -537,7 +683,68 @@ public class AlarmActivity extends AppCompatActivity {
             set.start();
         }
 
+    }
 
+    //********** Loading AlarmData preferences **********
+
+    //Called when app is firstly launched
+    public void setDefaultAlarmDataPreferences(){
+        alarmData = new AlarmData();
+    }
+
+    //Loading from sharedPreferences
+    public void loadAlarmDataPreferences(){
+        //we have fields in this activity and assign them with values from storage
+    }
+
+    //Called when activity onStop() or onDestroy()
+    public void saveAlarmDataPreferences(){
+        //TODO: Scan views and update alarmData variable then save it to storage
+
+        Integer hour, minute;
+
+        String hourS = clockEditText.toString().split(" : ")[0];
+        if (hourS.charAt(0) == '0'){
+            hour = Integer.parseInt(String.valueOf(hourS.charAt(1)));
+        }
+        else {
+            hour = Integer.parseInt(hourS);
+        }
+
+        String minuteS = clockEditText.toString().split(" : ")[1];
+        if (minuteS.charAt(0) == '0'){
+            minute = Integer.parseInt(String.valueOf(minuteS.charAt(1)));
+        }
+        else {
+            minute = Integer.parseInt(minuteS);
+        }
+
+        boolean isActive = setTimeSwitch.isChecked();
+
+        //volumePower - do some stuff with Bar
+        int volumePower = volumeSeekBar.getProgress();
+        //volumeIncreaseMode exists
+
+        //alarmSelectedMode exists
+        //Days exists
+
+        //Saving to sharedPreferences
+        AlarmData updatedAlarmData = new AlarmData();
+        updatedAlarmData.setHour(hour);
+        updatedAlarmData.setMinute(minute);
+        if (isActive) { updatedAlarmData.setAsActive(); }
+        else { updatedAlarmData.setAsNotActive(); }
+        updatedAlarmData.setVolumePower(volumePower);
+
+        //Saving
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+
+        String alarmDataJson = gson.toJson(alarmData);
+        editor.putString(ALARM_DATA_PREFERENCES, alarmDataJson);
+        editor.apply();
+        Toast.makeText(this, "alarm-pref saved to storage", Toast.LENGTH_SHORT).show();
 
     }
+
 }

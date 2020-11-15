@@ -180,6 +180,7 @@
         tools:layout_editor_absoluteX="10dp">
 
         <SeekBar
+            android:id="@+id/volumeSeekBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="8dp" />
@@ -217,7 +218,8 @@
             android:layout_marginStart="7dp"
             android:layout_marginLeft="7dp"
             android:layout_toLeftOf="@id/c30sVolumeTimersButton"
-            android:layout_toStartOf="@id/c30sVolumeTimersButton" />
+            android:layout_toStartOf="@id/c30sVolumeTimersButton"
+            android:onClick="neverVolumeButtonClicked"/>
 
         <Button android:id="@+id/c30sVolumeTimersButton"
             android:layout_width="40dp"
@@ -230,7 +232,8 @@
             android:layout_marginStart="11dp"
             android:layout_marginLeft="11dp"
             android:layout_toLeftOf="@id/moreVolumeTimersButton"
-            android:layout_toStartOf="@id/moreVolumeTimersButton" />
+            android:layout_toStartOf="@id/moreVolumeTimersButton"
+            android:onClick="c30sVolumeButtonClicked"/>
 
         <Button android:id="@+id/c15sVolumeTimersButton"
             android:layout_width="40dp"
@@ -246,7 +249,8 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:layout_marginRight="10dp"
-            android:layout_marginEnd="10dp"/>
+            android:layout_marginEnd="10dp"
+            android:onClick="c15sVolumeButtonClicked"/>
 
         <Button android:id="@+id/c45sVolumeTimersButton"
             android:layout_width="40dp"
@@ -262,7 +266,8 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:layout_marginRight="10dp"
-            android:layout_marginEnd="10dp"/>
+            android:layout_marginEnd="10dp"
+            android:onClick="c45sVolumeButtonClicked"/>
 
         <Button android:id="@+id/c60sVolumeTimersButton"
             android:layout_width="40dp"
@@ -278,7 +283,8 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:layout_marginRight="10dp"
-            android:layout_marginEnd="10dp" />
+            android:layout_marginEnd="10dp"
+            android:onClick="c60sVolumeButtonClicked"/>
 
         <Button android:id="@+id/moreVolumeTimersButton"
             android:layout_width="40dp"
@@ -294,7 +300,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:layout_marginRight="10dp"
-            android:layout_marginEnd="10dp"/>
+            android:layout_marginEnd="10dp" />
 
     </RelativeLayout>
 

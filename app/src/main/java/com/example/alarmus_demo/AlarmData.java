@@ -5,6 +5,7 @@ import android.content.SharedPreferences.Editor;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.format.Time;
+import android.widget.Toast;
 
 public class AlarmData implements Parcelable {
 
@@ -33,10 +34,15 @@ public class AlarmData implements Parcelable {
     private boolean[] days;
 
     public AlarmData(){
-        alarmSelectedMode = ALARM_SELECTED_MODE_SOUND_ONLY;
         hour = 0;
         minute = 0;
-        days = new boolean[7];
+        isActive = false;
+
+        volumePower = 0;
+        volumeIncreaseMode = VOL_INCREASE_MODE_NEVER;
+
+        alarmSelectedMode = ALARM_SELECTED_MODE_SOUND_ONLY;
+        days = new boolean[]{true, true, true, true, true, false, false};
     }
 
     //************ Parcelable implementation ***********
@@ -84,6 +90,8 @@ public class AlarmData implements Parcelable {
     public Integer getMinute() { return minute; }
     public boolean isActive() { return isActive; }
 
+    public int getVolumePower(){ return volumePower; }
+
     public String getTimeString(){
         String time=((Integer)(this.hour/10)).toString()+((Integer)(this.hour%10)).toString()+" : "+
                 ((Integer)(this.minute/10)).toString()+((Integer)(this.minute%10)).toString();
@@ -111,6 +119,16 @@ public class AlarmData implements Parcelable {
 
     public void setAsActive(){ isActive = true; }
     public void setAsNotActive() { isActive = false; }
+
+    public boolean setVolumePower(int volumePower){
+        if (volumePower >= 0 && volumePower <= 100){
+            this.volumePower = volumePower;
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 
     public void setDay(boolean value,int day){
         if (day>=0 && day<7){
