@@ -23,6 +23,8 @@
         <activity android:name=".activity.StartAlarmActivity"/>
         <activity android:name=".activity.SnoozeActivity"/>
 
+        <receiver android:name=".AlertReceiver"/>
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

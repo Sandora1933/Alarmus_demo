@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -27,6 +29,7 @@ import android.widget.Toast;
 
 import com.example.alarmus_demo.AlarmController;
 import com.example.alarmus_demo.AlarmData;
+import com.example.alarmus_demo.AlertReceiver;
 import com.example.alarmus_demo.R;
 import com.example.alarmus_demo.model.SongEntity;
 import com.google.gson.Gson;
@@ -34,6 +37,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -443,6 +447,30 @@ public class AlarmActivity extends AppCompatActivity {
             clockEditText.setText(AlarmController.getTimeString());
         }
 
+    }
+
+    //Commit 1.0.13 - making setAlarm() function
+    private void setAlarm(Calendar c){
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent activateAlarmIntent = new Intent(this, AlertReceiver.class);
+        PendingIntent activateAlarmPendingIntent = PendingIntent.getBroadcast(this, 1,
+                activateAlarmIntent, 0);
+
+        if (c.before(Calendar.getInstance())){
+            c.add(Calendar.DATE, 1);
+        }
+
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, activateAlarmPendingIntent);
+    }
+
+    private void cancelAlarm(){
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent activateAlarmIntent = new Intent(this, AlertReceiver.class);
+        PendingIntent deactivateAlarmPendingIntent = PendingIntent.getBroadcast(this, 1,
+                activateAlarmIntent, 0);
+
+        alarmManager.cancel(deactivateAlarmPendingIntent);
     }
 
     //*********   Volume increase buttons clicked   **********
