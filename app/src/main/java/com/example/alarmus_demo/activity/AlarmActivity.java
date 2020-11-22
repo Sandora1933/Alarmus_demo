@@ -28,8 +28,11 @@ import android.widget.Toast;
 import com.example.alarmus_demo.AlarmController;
 import com.example.alarmus_demo.AlarmData;
 import com.example.alarmus_demo.R;
+import com.example.alarmus_demo.model.SongEntity;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -95,7 +98,6 @@ public class AlarmActivity extends AppCompatActivity {
 
         initViews();
 
-
         SharedPreferences sharedPref = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
         AlarmController.setup(sharedPref);
 
@@ -112,6 +114,8 @@ public class AlarmActivity extends AppCompatActivity {
         final String separator = " : ";
 
         isMoreVolumeButtonsActive = false;
+
+        loadAlarmDataPreferences();
 
         //DONE: get from SharedPreferences
         initDayButtonsPanel();  //Initial values for dayButtons and states (should retrieved from SharedPref)
@@ -695,7 +699,20 @@ public class AlarmActivity extends AppCompatActivity {
     //Loading from sharedPreferences
     public void loadAlarmDataPreferences(){
         //we have fields in this activity and assign them with values from storage
+
+        String alarmDataJson = sharedPreferences.getString(APP_PREFERENCES, "null");
+
+        if (!alarmDataJson.equals("null")){
+            Gson gson = new Gson();
+            alarmData = gson.fromJson(alarmDataJson, AlarmData.class);
+        }
+        else {
+            Toast.makeText(this, "sharedPref is null: Strange stuff", Toast.LENGTH_SHORT).show();
+        }
+
     }
+
+    
 
     //Called when activity onStop() or onDestroy()
     public void saveAlarmDataPreferences(){
