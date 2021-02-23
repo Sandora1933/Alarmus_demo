@@ -101,36 +101,66 @@ public class AlarmActivity extends AppCompatActivity {
         setContentView(R.layout.activity_alarm);
 
         initViews();
+        initDayButtonsPanel();
 
         sharedPreferences = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
 
+        alarmData = new AlarmData();
         dataAccessManager = new DataAccessManager(sharedPreferences);
 
-        alarmController = new AlarmController();
-        alarmController.setup(sharedPreferences);
-        alarmData = alarmController.data;
+        //Filling alarm data
+        alarmData.setHour(dataAccessManager.loadHour());
+        alarmData.setMinute(dataAccessManager.loadMinute());
+
+        if (dataAccessManager.loadIsActive()){
+            alarmData.setAsActive();
+        }
+        else {
+            alarmData.setAsNotActive();
+        }
+
+        alarmData.setVolumeSelectedMode(dataAccessManager.loadVolumeSelectedMode());
+        alarmData.setAlarmSelectedMode(dataAccessManager.loadAlarmSelectedMode());
+
+        alarmData.setDays(dataAccessManager.loadDays());
+
+//        alarmController = new AlarmController();
+//        alarmController.setup(sharedPreferences);
+//        alarmData = alarmController.data;
 
         isTimeChangedByHand=false;
-        clockEditText.setText(alarmController.getTimeString());
+
+        //TODO: organise into distinct method setUpWidgets()
+
+        clockEditText.setText(alarmData.getTimeString());
+        //clockEditText.setText(alarmController.getTimeString());
+
+        setTimeSwitch.setChecked(alarmData.isActive());
+
+        //setUpVolumePanel
+        setUpVolumeIncreasePanel();
+        setUpAlarmModePanel();
+
+        setUpAlarmDaysPanel();
 
         //DONE: get from SharedPreferences
         //Initial alarm mode (but this data should be retrieved from sharedPreferences)
-        alarmSelectedMode = alarmController.getAlarmSelectedMode();
+        //alarmSelectedMode = alarmController.getAlarmSelectedMode();
 
-        //Initial settings for timeEditText
+        //Initial settings for clockEditText
         isTimeChangedByHand = true;
         cursorPosition = 0;
         final String separator = " : ";
 
         isMoreVolumeButtonsActive = false;
 
-        loadAlarmDataPreferences();
+        //loadAlarmDataPreferences();
 
         //DONE: get from SharedPreferences
-        initDayButtonsPanel();  //Initial values for dayButtons and states (should retrieved from SharedPref)
+        //initDayButtonsPanel();  //Initial values for dayButtons and states (should retrieved from SharedPref)
 
-        setUpAlarmModePanel();
-        setUpAlarmDaysPanel();
+        //setUpAlarmModePanel();
+        //setUpAlarmDaysPanel();
 
         clockEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -222,8 +252,32 @@ public class AlarmActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        saveAlarmDataPreferences();
-        Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
+        //saveAlarmDataPreferences();
+
+        Integer hour, minute;
+
+        String hourS = clockEditText.getText().toString().split(" : ")[0];
+        if (hourS.charAt(0) == '0'){
+            hour = Integer.parseInt(String.valueOf(hourS.charAt(1)));
+        }
+        else {
+            hour = Integer.parseInt(hourS);
+        }
+
+        String minuteS = clockEditText.getText().toString().split(" : ")[1];
+        if (minuteS.charAt(0) == '0'){
+            minute = Integer.parseInt(String.valueOf(minuteS.charAt(1)));
+        }
+        else {
+            minute = Integer.parseInt(minuteS);
+        }
+
+        boolean isActive = setTimeSwitch.isChecked();
+
+        dataAccessManager.saveHour(hour);
+        dataAccessManager.saveMinute(minute);
+        dataAccessManager.saveIsActive(isActive);
+
     }
 
     private void initViews(){
@@ -257,10 +311,10 @@ public class AlarmActivity extends AppCompatActivity {
     }
 
     private void initDayButtonsPanel(){
-        isDayActiveArray = new boolean[]{false, false, false, false, false, false, false};
-        for (int i=0;i<7;i++){
-            isDayActiveArray[i] = alarmController.getDay(i);
-        }
+//        isDayActiveArray = new boolean[]{false, false, false, false, false, false, false};
+//        for (int i=0;i<7;i++){
+//            isDayActiveArray[i] = alarmController.getDay(i);
+//        }
         dayButtonArray = new Button[]{mondayButton, tuesdayButton, wednesdayButton, thursdayButton,
                 fridayButton, saturdayButton, sundayButton};
     }
@@ -293,6 +347,9 @@ public class AlarmActivity extends AppCompatActivity {
     //*********   Detecting volume increase change   ***********
 
     private void setUpVolumeIncreasePanel(){
+
+        dataAccessManager.saveVolumeSelectedMode(alarmData.getVolumeSelectedMode());
+        volumeIncreaseMode = alarmData.getVolumeSelectedMode();
 
         if (volumeIncreaseMode == VOL_INCREASE_MODE_NEVER){
             neverVolumeTimersButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_never_selected));
@@ -382,7 +439,10 @@ public class AlarmActivity extends AppCompatActivity {
     //DONE: add alarm mode to sharedPreferences
 
     private void setUpAlarmModePanel(){
-        alarmController.setAlarmSelectedMode(alarmSelectedMode);
+
+        dataAccessManager.saveAlarmSelectedMode(alarmData.getAlarmSelectedMode());
+        alarmSelectedMode = dataAccessManager.loadAlarmSelectedMode();
+
         if (alarmSelectedMode == ALARM_SELECTED_MODE_SOUND_VIBRATE){
             songPlusVibrateButton.setBackgroundDrawable(getResources().
                     getDrawable(R.drawable.button_alarmmode_sv_selected));
@@ -576,49 +636,58 @@ public class AlarmActivity extends AppCompatActivity {
     //*********   Volume increase buttons clicked   **********
 
     public void neverVolumeButtonClicked(View view) {
-        volumeIncreaseMode = 0;
+        //volumeIncreaseMode = 0;
+        alarmData.setVolumeSelectedMode(0);
         setUpVolumeIncreasePanel();
     }
 
     public void c15sVolumeButtonClicked(View view) {
-        volumeIncreaseMode = 1;
+        //volumeIncreaseMode = 1;
+        alarmData.setVolumeSelectedMode(1);
         setUpVolumeIncreasePanel();
     }
 
     public void c30sVolumeButtonClicked(View view) {
-        volumeIncreaseMode = 2;
+        //volumeIncreaseMode = 2;
+        alarmData.setVolumeSelectedMode(2);
         setUpVolumeIncreasePanel();
     }
 
     public void c45sVolumeButtonClicked(View view) {
-        volumeIncreaseMode = 3;
+        //volumeIncreaseMode = 3;
+        alarmData.setVolumeSelectedMode(3);
         setUpVolumeIncreasePanel();
     }
 
     public void c60sVolumeButtonClicked(View view) {
-        volumeIncreaseMode = 4;
+        //volumeIncreaseMode = 4;
+        alarmData.setVolumeSelectedMode(4);
         setUpVolumeIncreasePanel();
     }
 
     //*********   Alarm mode buttons clicked   **********
 
     public void soundPlusVibrateButtonClicked(View view) {
-        alarmSelectedMode = 0;
+        //alarmSelectedMode = 0;
+        alarmData.setAlarmSelectedMode(0);
         setUpAlarmModePanel();
     }
 
     public void soundButtonClicked(View view) {
-        alarmSelectedMode = 1;
+        //alarmSelectedMode = 1;
+        alarmData.setAlarmSelectedMode(1);
         setUpAlarmModePanel();
     }
 
     public void vibrateButtonClicked(View view) {
-        alarmSelectedMode = 2;
+        //alarmSelectedMode = 2;
+        alarmData.setAlarmSelectedMode(2);
         setUpAlarmModePanel();
     }
 
     public void noSoundButtonClicked(View view) {
-        alarmSelectedMode = 3;
+        //alarmSelectedMode = 3;
+        alarmData.setAlarmSelectedMode(3);
         setUpAlarmModePanel();
     }
 
@@ -626,7 +695,8 @@ public class AlarmActivity extends AppCompatActivity {
 
     private void setUpAlarmDaysPanel(){
 
-        alarmController.setDays(isDayActiveArray);
+        dataAccessManager.saveDays(alarmData.getDays());
+        isDayActiveArray = dataAccessManager.loadDays();
 
         for (int i = 0; i < isDayActiveArray.length; i++){
             if (isDayActiveArray[i]){
@@ -645,72 +715,106 @@ public class AlarmActivity extends AppCompatActivity {
     //*************   Alarm days buttons clicked   ***************
 
     public void mondayButtonClicked(View view) {
-        if (isDayActiveArray[0]){
-            isDayActiveArray[0] = false;
+//        if (isDayActiveArray[0]){
+//            isDayActiveArray[0] = false;
+//        }
+//        else {
+//            isDayActiveArray[0] = true;
+//        }
+
+        boolean previousState = dataAccessManager.loadDay(0);
+        if (previousState){
+//            dataAccessManager.saveDay(0, false);
+            alarmData.setDay(false, 0);
         }
-        else {
-            isDayActiveArray[0] = true;
+        else{
+            alarmData.setDay(true, 0);
         }
+
         setUpAlarmDaysPanel();
     }
 
     public void tuesdayButtonClicked(View view) {
-        if (isDayActiveArray[1]){
-            isDayActiveArray[1] = false;
+//        if (isDayActiveArray[1]){
+//            isDayActiveArray[1] = false;
+//        }
+//        else {
+//            isDayActiveArray[1] = true;
+//        }
+
+        boolean previousState = dataAccessManager.loadDay(1);
+        if (previousState){
+            alarmData.setDay(false, 1);
         }
-        else {
-            isDayActiveArray[1] = true;
+        else{
+            alarmData.setDay(true, 1);
         }
+
         setUpAlarmDaysPanel();
     }
 
     public void wednesdayButtonClicked(View view) {
-        if (isDayActiveArray[2]){
-            isDayActiveArray[2] = false;
+
+        boolean previousState = dataAccessManager.loadDay(2);
+        if (previousState){
+            alarmData.setDay(false, 2);
         }
-        else {
-            isDayActiveArray[2] = true;
+        else{
+            alarmData.setDay(true, 2);
         }
+
         setUpAlarmDaysPanel();
     }
 
     public void thursdayButtonClicked(View view) {
-        if (isDayActiveArray[3]){
-            isDayActiveArray[3] = false;
+
+        boolean previousState = dataAccessManager.loadDay(3);
+        if (previousState){
+            alarmData.setDay(false, 3);
         }
-        else {
-            isDayActiveArray[3] = true;
+        else{
+            alarmData.setDay(true, 3);
         }
+
         setUpAlarmDaysPanel();
     }
 
     public void fridayButtonClicked(View view) {
-        if (isDayActiveArray[4]){
-            isDayActiveArray[4] = false;
+
+        boolean previousState = dataAccessManager.loadDay(4);
+        if (previousState){
+            alarmData.setDay(false, 4);
         }
-        else {
-            isDayActiveArray[4] = true;
+        else{
+            alarmData.setDay(true, 4);
         }
+
         setUpAlarmDaysPanel();
     }
 
     public void saturdayButtonClicked(View view) {
-        if (isDayActiveArray[5]){
-            isDayActiveArray[5] = false;
+
+        boolean previousState = dataAccessManager.loadDay(5);
+        if (previousState){
+            alarmData.setDay(false, 5);
         }
-        else {
-            isDayActiveArray[5] = true;
+        else{
+            alarmData.setDay(true, 5);
         }
+
         setUpAlarmDaysPanel();
     }
 
     public void sundayButtonClicked(View view) {
-        if (isDayActiveArray[6]){
-            isDayActiveArray[6] = false;
+
+        boolean previousState = dataAccessManager.loadDay(6);
+        if (previousState){
+            alarmData.setDay(false, 6);
         }
-        else {
-            isDayActiveArray[6] = true;
+        else{
+            alarmData.setDay(true, 6);
         }
+
         setUpAlarmDaysPanel();
     }
 

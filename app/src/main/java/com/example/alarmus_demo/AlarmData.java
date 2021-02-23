@@ -1,11 +1,7 @@
 package com.example.alarmus_demo;
 
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.text.format.Time;
-import android.widget.Toast;
 
 public class AlarmData implements Parcelable {
 
@@ -27,7 +23,7 @@ public class AlarmData implements Parcelable {
 
     //Volume menu fields
     private int volumePower;
-    private int volumeIncreaseMode;
+    private int volumeSelectedMode;
 
     //Mode menu fields
     private Integer alarmSelectedMode;
@@ -39,7 +35,7 @@ public class AlarmData implements Parcelable {
         isActive = false;
 
         volumePower = 0;
-        volumeIncreaseMode = VOL_INCREASE_MODE_NEVER;
+        volumeSelectedMode = VOL_INCREASE_MODE_NEVER;
 
         alarmSelectedMode = ALARM_SELECTED_MODE_SOUND_ONLY;
         days = new boolean[]{true, true, true, true, true, false, false};
@@ -61,7 +57,7 @@ public class AlarmData implements Parcelable {
 
         isActive = in.readByte() != 0;
         volumePower = in.readInt();
-        volumeIncreaseMode = in.readInt();
+        volumeSelectedMode = in.readInt();
 
         if (in.readByte() == 0) {
             alarmSelectedMode = null;
@@ -93,9 +89,8 @@ public class AlarmData implements Parcelable {
     public int getVolumePower(){ return volumePower; }
 
     public String getTimeString(){
-        String time=((Integer)(this.hour/10)).toString()+((Integer)(this.hour%10)).toString()+" : "+
+        return ((Integer)(this.hour/10)).toString()+((Integer)(this.hour%10)).toString()+" : "+
                 ((Integer)(this.minute/10)).toString()+((Integer)(this.minute%10)).toString();
-        return time;
     }
 
     public boolean getDay(int day){
@@ -112,10 +107,17 @@ public class AlarmData implements Parcelable {
         return alarmSelectedMode;
     }
 
+    public int getVolumeSelectedMode(){
+        return this.volumeSelectedMode;
+    }
+
     //************ Setters *************
 
-    public void setHour(Integer hour) { this.hour = Math.max(0,Math.min(23,hour)); }
-    public void setMinute(Integer minute) { this.minute = Math.max(0,Math.min(59,minute)); }
+//    public void setHour(Integer hour) { this.hour = Math.max(0,Math.min(23,hour)); }
+//    public void setMinute(Integer minute) { this.minute = Math.max(0,Math.min(59,minute)); }
+
+    public void setHour(Integer hour) { this.hour = hour; }
+    public void setMinute(Integer minute) { this.minute = minute; }
 
     public void setAsActive(){ isActive = true; }
     public void setAsNotActive() { isActive = false; }
@@ -123,6 +125,16 @@ public class AlarmData implements Parcelable {
     public boolean setVolumePower(int volumePower){
         if (volumePower >= 0 && volumePower <= 100){
             this.volumePower = volumePower;
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    public boolean setVolumeSelectedMode(int mode){
+        if (mode >= 0 && mode <= 4){
+            this.volumeSelectedMode = mode;
             return true;
         }
         else {
@@ -170,7 +182,7 @@ public class AlarmData implements Parcelable {
 
         dest.writeByte((byte) (isActive ? 1 : 0));
         dest.writeInt(volumePower);
-        dest.writeInt(volumeIncreaseMode);
+        dest.writeInt(volumeSelectedMode);
 
         if (alarmSelectedMode == null) {
             dest.writeByte((byte) 0);
