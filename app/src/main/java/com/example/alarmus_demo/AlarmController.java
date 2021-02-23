@@ -7,9 +7,9 @@ public class AlarmController {
     private static final String APP_PREFERENCES = "alarm_data";
     private static SharedPreferences sharedPreferences;
 
-    private static AlarmData data;
+    public AlarmData data;
 
-    public static void setup(SharedPreferences sharedP){
+    public void setup(SharedPreferences sharedP){
         sharedPreferences=sharedP;
         data = new AlarmData();
 
@@ -44,19 +44,19 @@ public class AlarmController {
         }
     }
 
-    public static Integer getHour() {
+    public Integer getHour() {
         return data.getHour();
     }
 
-    public static Integer getMinute() {
+    public Integer getMinute() {
         return data.getMinute();
     }
 
-    public static Integer getAlarmSelectedMode() {
+    public Integer getAlarmSelectedMode() {
         return data.getAlarmSelectedMode();
     }
 
-    public static boolean getDay(int day){
+    public boolean getDay(int day){
         if (day>=0 && day<7){
             return data.getDay(day);
         }else {
@@ -64,7 +64,7 @@ public class AlarmController {
         }
     }
 
-    public static void setDay(boolean value,int day){
+    public void setDay(boolean value,int day){
         if (day>=0 && day<7){
             data.setDay(value,day);
             SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -73,33 +73,32 @@ public class AlarmController {
         }
     }
 
-    public static void setDays(boolean[] isDayActiveArray){
+    public void setDays(boolean[] isDayActiveArray){
         for (int i=0;i<7;i++){
             setDay(isDayActiveArray[i], i);
         }
     }
 
-    public static void setHour(Integer hour) {
+    public void setHour(Integer hour) {
         data.setHour(hour);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("hour",data.getHour());
         editor.apply();
     }
 
-    public static void setMinute(Integer minute) {
+    public void setMinute(Integer minute) {
         data.setMinute(minute);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("minute",data.getMinute());
         editor.apply();
     }
 
-
-    public static void setAlarmSelectedMode(Integer newMode){
+    public void setAlarmSelectedMode(Integer newMode){
         data.setAlarmSelectedMode(newMode);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("alarmSelectedMode",data.getAlarmSelectedMode());
         editor.apply();
     }
 
-    public static String getTimeString(){return data.getTimeString();}
+    public String getTimeString(){return data.getTimeString();}
 }

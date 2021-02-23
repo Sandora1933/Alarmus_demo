@@ -44,8 +44,10 @@ public class NotificationHelper extends ContextWrapper {
         return mManager;
     }
 
-    public NotificationCompat.Builder getChannelNotification(){
+    public NotificationCompat.Builder getChannelNotification(String title){
         return new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
+                .setContentTitle(title)
+                .setContentText("Content text")
                 .setSmallIcon(R.drawable.ic_baseline_alarm_24);
     }
 

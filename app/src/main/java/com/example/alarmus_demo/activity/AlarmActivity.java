@@ -1,5 +1,6 @@
 package com.example.alarmus_demo.activity;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.animation.Animator;
@@ -10,13 +11,11 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -30,16 +29,14 @@ import android.widget.Toast;
 import com.example.alarmus_demo.AlarmController;
 import com.example.alarmus_demo.AlarmData;
 import com.example.alarmus_demo.AlertReceiver;
+import com.example.alarmus_demo.DataAccessManager;
 import com.example.alarmus_demo.R;
-import com.example.alarmus_demo.model.SongEntity;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public class AlarmActivity extends AppCompatActivity {
 
@@ -80,7 +77,7 @@ public class AlarmActivity extends AppCompatActivity {
     public static final int VOL_INCREASE_MODE_60s = 4;
 
     private static final String APP_PREFERENCES = "alarm_data";
-    public static final String ALARM_DATA_PREFERENCES = "alarm_preferences";
+    public static final String ALARM_DATA_KEY_PREFERENCES = "alarm_preferences";
 
     //**************   Variables   *****************
 
@@ -93,7 +90,10 @@ public class AlarmActivity extends AppCompatActivity {
 
 
     SharedPreferences sharedPreferences;    //Storage
+    AlarmController alarmController;
     AlarmData alarmData;
+
+    DataAccessManager dataAccessManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,15 +102,20 @@ public class AlarmActivity extends AppCompatActivity {
 
         initViews();
 
-        SharedPreferences sharedPref = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
-        AlarmController.setup(sharedPref);
+        sharedPreferences = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
+
+        dataAccessManager = new DataAccessManager(sharedPreferences);
+
+        alarmController = new AlarmController();
+        alarmController.setup(sharedPreferences);
+        alarmData = alarmController.data;
 
         isTimeChangedByHand=false;
-        clockEditText.setText(AlarmController.getTimeString());
+        clockEditText.setText(alarmController.getTimeString());
 
         //DONE: get from SharedPreferences
         //Initial alarm mode (but this data should be retrieved from sharedPreferences)
-        alarmSelectedMode = AlarmController.getAlarmSelectedMode();
+        alarmSelectedMode = alarmController.getAlarmSelectedMode();
 
         //Initial settings for timeEditText
         isTimeChangedByHand = true;
@@ -188,9 +193,10 @@ public class AlarmActivity extends AppCompatActivity {
 
 
         setTimeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                switchOnOffClick(buttonView,isChecked);
+                switchOnOffClick(buttonView, isChecked);
             }
         });
 
@@ -211,6 +217,13 @@ public class AlarmActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        saveAlarmDataPreferences();
+        Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
     }
 
     private void initViews(){
@@ -246,7 +259,7 @@ public class AlarmActivity extends AppCompatActivity {
     private void initDayButtonsPanel(){
         isDayActiveArray = new boolean[]{false, false, false, false, false, false, false};
         for (int i=0;i<7;i++){
-            isDayActiveArray[i]=AlarmController.getDay(i);
+            isDayActiveArray[i] = alarmController.getDay(i);
         }
         dayButtonArray = new Button[]{mondayButton, tuesdayButton, wednesdayButton, thursdayButton,
                 fridayButton, saturdayButton, sundayButton};
@@ -369,7 +382,7 @@ public class AlarmActivity extends AppCompatActivity {
     //DONE: add alarm mode to sharedPreferences
 
     private void setUpAlarmModePanel(){
-        AlarmController.setAlarmSelectedMode(alarmSelectedMode);
+        alarmController.setAlarmSelectedMode(alarmSelectedMode);
         if (alarmSelectedMode == ALARM_SELECTED_MODE_SOUND_VIBRATE){
             songPlusVibrateButton.setBackgroundDrawable(getResources().
                     getDrawable(R.drawable.button_alarmmode_sv_selected));
@@ -414,45 +427,126 @@ public class AlarmActivity extends AppCompatActivity {
 
     //*********   Time set switch  *********** (by Shymon)
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void switchOnOffClick(CompoundButton buttonView, boolean isChecked){
-        if (isChecked) {
+        if (!isChecked) {
+
+            dataAccessManager.saveIsActive(false);
+
+            cancelAlarm();
+
+//            try{
+//                String timeText = clockEditText.getText().toString();
+//                String[] numbers = timeText.split(" : ");
+//
+//                int hour, minute;
+//
+//                try {
+//                    hour = Integer.parseInt(numbers[0]);
+//                    minute = Integer.parseInt(numbers[1]);
+//                }
+//                catch (NumberFormatException e)
+//                {
+//                    Toast.makeText(this, "Exception: number-format", Toast.LENGTH_SHORT).show();
+//                    hour = 0;
+//                    minute = 0;
+//                }
+//
+//                AlarmController.setHour(hour);
+//                AlarmController.setMinute(minute);
+//
+//                isTimeChangedByHand = false;
+//
+//                //clockEditText.setText(AlarmController.getTimeString());
+//            }
+//            catch (Exception e){
+//
+//            }
+//
+//            cancelAlarm();
+
+        }
+        else {
+
+//            Toast.makeText(this, clockEditText.getText().toString(), Toast.LENGTH_SHORT).show();
+
+            String timeText = clockEditText.getText().toString();
+            String[] numbers = timeText.split(" : ");
+
+            int hour, minute;
+
             try{
-                String timeText=clockEditText.getText().toString();
-                String[] numbers=timeText.split(" : ");
-                int hour;
-                try {
-                    hour = Integer.parseInt(numbers[0]);
-                }
-                catch (NumberFormatException e)
-                {
-                    hour = 0;
-                }
-                int minute;
-                try {
-                    minute = Integer.parseInt(numbers[1]);
-                }
-                catch (NumberFormatException e)
-                {
-                    minute = 0;
-                }
-                AlarmController.setHour(hour);
-                AlarmController.setMinute(minute);
-                isTimeChangedByHand=false;
-                clockEditText.setText(AlarmController.getTimeString());
+                hour = Integer.parseInt(numbers[0]);
+                minute = Integer.parseInt(numbers[1]);
             }
             catch (Exception e){
-
+                Toast.makeText(this, "parseInt exception", Toast.LENGTH_SHORT).show();
+                hour = 0;
+                minute = 0;
             }
-        } else {
-            clockEditText.setText(AlarmController.getTimeString());
+
+            Toast.makeText(this, "" + hour + ":" + minute + " ready to set", Toast.LENGTH_SHORT).show();
+
+//            alarmController.setHour(hour);
+//            alarmController.setMinute(minute);
+
+            dataAccessManager.saveHour(hour);
+            dataAccessManager.saveMinute(minute);
+            dataAccessManager.saveIsActive(true);
+
+            Calendar c = Calendar.getInstance();
+
+            c.set(Calendar.HOUR_OF_DAY, dataAccessManager.loadHour());
+            c.set(Calendar.MINUTE, dataAccessManager.loadMinute());
+            c.set(Calendar.SECOND, 0);
+
+            setAlarm(c);
+
+//            //clockEditText.setText(AlarmController.getTimeString());
+//            clockEditText.setText("20:09");
+//
+//            Calendar c = Calendar.getInstance();
+//
+//            //alarm data is null here so returned
+//
+////            if (alarmData == null){
+////                Toast.makeText(this, "alarmData is null", Toast.LENGTH_SHORT).show();
+////                return;
+////            }
+////
+////            if (alarmData.getHour() == null){
+////                Toast.makeText(this, "hour is null", Toast.LENGTH_SHORT).show();
+////                return;
+////            }
+////
+////            if (alarmData.getMinute() == null){
+////                Toast.makeText(this, "minute is null", Toast.LENGTH_SHORT).show();
+////                return;
+////            }
+////
+////            c.set(Calendar.HOUR_OF_DAY, alarmData.getHour());
+////            c.set(Calendar.MINUTE, alarmData.getMinute());
+////            c.set(Calendar.SECOND, 0);
+//
+//            c.set(Calendar.HOUR_OF_DAY, 20);
+//            c.set(Calendar.MINUTE, 9);
+//            c.set(Calendar.SECOND, 0);
+//
+//            setAlarm(c);
+
         }
 
     }
 
     //Commit 1.0.13 - making setAlarm() function
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void setAlarm(Calendar c){
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent activateAlarmIntent = new Intent(this, AlertReceiver.class);
+
+        int mode = alarmSelectedMode;
+
+        activateAlarmIntent.putExtra("mode", mode);
         PendingIntent activateAlarmPendingIntent = PendingIntent.getBroadcast(this, 1,
                 activateAlarmIntent, 0);
 
@@ -460,8 +554,12 @@ public class AlarmActivity extends AppCompatActivity {
             c.add(Calendar.DATE, 1);
         }
 
+        String alarmInfo = DateFormat.getTimeInstance(DateFormat.SHORT).format(c.getTime());
+        Toast.makeText(this, "was set for: " + alarmInfo, Toast.LENGTH_SHORT).show();
+
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(),
                 AlarmManager.INTERVAL_DAY, activateAlarmPendingIntent);
+        //alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), activateAlarmPendingIntent);
     }
 
     private void cancelAlarm(){
@@ -469,6 +567,8 @@ public class AlarmActivity extends AppCompatActivity {
         Intent activateAlarmIntent = new Intent(this, AlertReceiver.class);
         PendingIntent deactivateAlarmPendingIntent = PendingIntent.getBroadcast(this, 1,
                 activateAlarmIntent, 0);
+
+        Toast.makeText(this, "cancelled", Toast.LENGTH_SHORT).show();
 
         alarmManager.cancel(deactivateAlarmPendingIntent);
     }
@@ -526,7 +626,7 @@ public class AlarmActivity extends AppCompatActivity {
 
     private void setUpAlarmDaysPanel(){
 
-        AlarmController.setDays(isDayActiveArray);
+        alarmController.setDays(isDayActiveArray);
 
         for (int i = 0; i < isDayActiveArray.length; i++){
             if (isDayActiveArray[i]){
@@ -728,7 +828,7 @@ public class AlarmActivity extends AppCompatActivity {
     public void loadAlarmDataPreferences(){
         //we have fields in this activity and assign them with values from storage
 
-        String alarmDataJson = sharedPreferences.getString(APP_PREFERENCES, "null");
+        String alarmDataJson = sharedPreferences.getString(ALARM_DATA_KEY_PREFERENCES, "null");
 
         if (!alarmDataJson.equals("null")){
             Gson gson = new Gson();
@@ -748,7 +848,7 @@ public class AlarmActivity extends AppCompatActivity {
 
         Integer hour, minute;
 
-        String hourS = clockEditText.toString().split(" : ")[0];
+        String hourS = clockEditText.getText().toString().split(" : ")[0];
         if (hourS.charAt(0) == '0'){
             hour = Integer.parseInt(String.valueOf(hourS.charAt(1)));
         }
@@ -756,7 +856,7 @@ public class AlarmActivity extends AppCompatActivity {
             hour = Integer.parseInt(hourS);
         }
 
-        String minuteS = clockEditText.toString().split(" : ")[1];
+        String minuteS = clockEditText.getText().toString().split(" : ")[1];
         if (minuteS.charAt(0) == '0'){
             minute = Integer.parseInt(String.valueOf(minuteS.charAt(1)));
         }
@@ -786,7 +886,7 @@ public class AlarmActivity extends AppCompatActivity {
         Gson gson = new Gson();
 
         String alarmDataJson = gson.toJson(alarmData);
-        editor.putString(ALARM_DATA_PREFERENCES, alarmDataJson);
+        editor.putString(ALARM_DATA_KEY_PREFERENCES, alarmDataJson);
         editor.apply();
         Toast.makeText(this, "alarm-pref saved to storage", Toast.LENGTH_SHORT).show();
 
