@@ -35,6 +35,8 @@ import java.util.List;
 
 public class MusicListActivity extends AppCompatActivity{
 
+    private static final String APP_PREFERENCES = "alarm_data";
+
     //************  Views  ****************
 
     EditText songEditText;  //Field for song search
@@ -64,7 +66,7 @@ public class MusicListActivity extends AppCompatActivity{
 
         initViews();
 
-        sharedPreferences = getSharedPreferences("active_songs", MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
 
         //songEntityList = new ArrayList<>();
         songRecyclerView = findViewById(R.id.songRecyclerView);

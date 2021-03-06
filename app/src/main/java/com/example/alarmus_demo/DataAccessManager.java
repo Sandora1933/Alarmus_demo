@@ -30,6 +30,18 @@ public class DataAccessManager {
         editor.apply();
     }
 
+    public void saveVolumePower(int power){
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putInt("volume_power", power);
+        editor.apply();
+    }
+
+    public void saveMaxVolumePower(int power){
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putInt("max_volume_power", 0);
+        editor.apply();
+    }
+
     public void saveVolumeSelectedMode(int mode){
         SharedPreferences.Editor editor = sp.edit();
         editor.putInt("volume_selected_mode", mode);
@@ -68,6 +80,14 @@ public class DataAccessManager {
 
     public boolean loadIsActive(){
         return sp.getBoolean("is_active", false);
+    }
+
+    public int loadVolumePower() {
+        return sp.getInt("volume_power", 0);
+    }
+
+    public int loadMaxVolumePower(){
+        return sp.getInt("max_volume_power", 0);
     }
 
     public int loadVolumeSelectedMode(){
