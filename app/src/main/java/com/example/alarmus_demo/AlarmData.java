@@ -23,6 +23,7 @@ public class AlarmData implements Parcelable {
 
     //Volume menu fields
     private int volumePower;
+    private int maxVolumePower;     // Needed to send to Receiver through storage
     private int volumeSelectedMode;
 
     //Mode menu fields
@@ -34,7 +35,7 @@ public class AlarmData implements Parcelable {
         minute = 0;
         isActive = false;
 
-        volumePower = 0;
+        volumePower = 0;    // Initially 75% - initialized in onCreate()
         volumeSelectedMode = VOL_INCREASE_MODE_NEVER;
 
         alarmSelectedMode = ALARM_SELECTED_MODE_SOUND_ONLY;
@@ -154,7 +155,7 @@ public class AlarmData implements Parcelable {
 
     public void setAlarmSelectedMode(Integer newMode){
         if (newMode>=0 && newMode<=3){
-            alarmSelectedMode=newMode;
+            alarmSelectedMode = newMode;
         }
     }
 
@@ -181,7 +182,7 @@ public class AlarmData implements Parcelable {
         }
 
         dest.writeByte((byte) (isActive ? 1 : 0));
-        dest.writeInt(volumePower);
+        dest.writeDouble(volumePower);
         dest.writeInt(volumeSelectedMode);
 
         if (alarmSelectedMode == null) {

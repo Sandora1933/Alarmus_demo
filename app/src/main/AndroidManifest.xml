@@ -25,7 +25,7 @@
         <activity android:name=".activity.StartAlarmActivity"/>
         <activity android:name=".activity.SnoozeActivity"/>
 
-        <receiver android:name=".AlertReceiver"/>
+        <receiver android:name=".AlertReceiver" android:enabled="true" android:exported="true"/>
 
         <meta-data
             android:name="preloaded_fonts"

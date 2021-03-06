@@ -11,6 +11,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -56,7 +57,6 @@ public class AlarmActivity extends AppCompatActivity {
     Button songPlusVibrateButton;
     ImageButton songImageButton, vibrateImageButton, noSoundImageButton;
 
-
     //Views - Alarm mode days panel
     Button mondayButton, tuesdayButton, wednesdayButton, thursdayButton, fridayButton,
             saturdayButton, sundayButton;
@@ -85,15 +85,19 @@ public class AlarmActivity extends AppCompatActivity {
     int cursorPosition; //Cursor for timeEditText
     int alarmSelectedMode; //0: sound+vibrate, 1: sound, 2: vibrate, 3: noSound
     int volumeIncreaseMode; //0: never, 1: 15s, 2: 30s, 3: 45s, 4: 60s
+    double volumePowerPercent;  // 0-100% of volume power value (Does not correlate with system alarm value yet)
+    int maxVolumePower;
     boolean[] isDayActiveArray; //Array of states (active or not) of days' buttons
     boolean isMoreVolumeButtonsActive;
-
 
     SharedPreferences sharedPreferences;    //Storage
     AlarmController alarmController;
     AlarmData alarmData;
 
     DataAccessManager dataAccessManager;
+
+    // To work with volume seek bar
+    AudioManager audioManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,12 +109,23 @@ public class AlarmActivity extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
 
+        audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+        maxVolumePower = audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM);
+
         alarmData = new AlarmData();
         dataAccessManager = new DataAccessManager(sharedPreferences);
 
         //Filling alarm data
         alarmData.setHour(dataAccessManager.loadHour());
         alarmData.setMinute(dataAccessManager.loadMinute());
+
+        // Initial power is 75% of max
+        alarmData.setVolumePower((int) ((int) maxVolumePower * 0.75));
+
+        // Set up seek bar
+        // TODO: transfer to distinct method setUpSeekBar()
+        volumeSeekBar.setMax(maxVolumePower);
+        volumeSeekBar.setProgress(alarmData.getVolumePower());
 
         if (dataAccessManager.loadIsActive()){
             alarmData.setAsActive();
@@ -224,6 +239,7 @@ public class AlarmActivity extends AppCompatActivity {
 
         setTimeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 switchOnOffClick(buttonView, isChecked);
@@ -233,7 +249,7 @@ public class AlarmActivity extends AppCompatActivity {
         volumeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                Toast.makeText(AlarmActivity.this, "Progress:" + seekBar.getProgress(), Toast.LENGTH_SHORT).show();
+                audioManager.setStreamVolume(AudioManager.STREAM_ALARM, progress, 0);
             }
 
             @Override
@@ -243,7 +259,7 @@ public class AlarmActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
+                Toast.makeText(AlarmActivity.this, "volume changed to : " + seekBar.getProgress(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -273,10 +289,13 @@ public class AlarmActivity extends AppCompatActivity {
         }
 
         boolean isActive = setTimeSwitch.isChecked();
+        int currentVolumePower = volumeSeekBar.getProgress();
 
         dataAccessManager.saveHour(hour);
         dataAccessManager.saveMinute(minute);
         dataAccessManager.saveIsActive(isActive);
+        dataAccessManager.saveVolumePower(currentVolumePower);
+        dataAccessManager.saveMaxVolumePower(maxVolumePower);
 
     }
 
@@ -491,6 +510,7 @@ public class AlarmActivity extends AppCompatActivity {
     public void switchOnOffClick(CompoundButton buttonView, boolean isChecked){
         if (!isChecked) {
 
+            alarmData.setAsNotActive();
             dataAccessManager.saveIsActive(false);
 
             cancelAlarm();
@@ -527,6 +547,8 @@ public class AlarmActivity extends AppCompatActivity {
 
         }
         else {
+
+            alarmData.setAsActive();
 
 //            Toast.makeText(this, clockEditText.getText().toString(), Toast.LENGTH_SHORT).show();
 
@@ -604,7 +626,7 @@ public class AlarmActivity extends AppCompatActivity {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent activateAlarmIntent = new Intent(this, AlertReceiver.class);
 
-        int mode = alarmSelectedMode;
+        int mode = alarmData.getAlarmSelectedMode();
 
         activateAlarmIntent.putExtra("mode", mode);
         PendingIntent activateAlarmPendingIntent = PendingIntent.getBroadcast(this, 1,
@@ -615,7 +637,8 @@ public class AlarmActivity extends AppCompatActivity {
         }
 
         String alarmInfo = DateFormat.getTimeInstance(DateFormat.SHORT).format(c.getTime());
-        Toast.makeText(this, "was set for: " + alarmInfo, Toast.LENGTH_SHORT).show();
+        int aMode = alarmData.getAlarmSelectedMode();
+        Toast.makeText(this, "was set for: " + alarmInfo + " with mode " + aMode, Toast.LENGTH_SHORT).show();
 
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(),
                 AlarmManager.INTERVAL_DAY, activateAlarmPendingIntent);
@@ -671,24 +694,32 @@ public class AlarmActivity extends AppCompatActivity {
         //alarmSelectedMode = 0;
         alarmData.setAlarmSelectedMode(0);
         setUpAlarmModePanel();
+        setTimeSwitch.setChecked(false);
+        switchOnOffClick(setTimeSwitch, false);
     }
 
     public void soundButtonClicked(View view) {
         //alarmSelectedMode = 1;
         alarmData.setAlarmSelectedMode(1);
         setUpAlarmModePanel();
+        setTimeSwitch.setChecked(false);
+        switchOnOffClick(setTimeSwitch, false);
     }
 
     public void vibrateButtonClicked(View view) {
         //alarmSelectedMode = 2;
         alarmData.setAlarmSelectedMode(2);
         setUpAlarmModePanel();
+        setTimeSwitch.setChecked(false);
+        switchOnOffClick(setTimeSwitch, false);
     }
 
     public void noSoundButtonClicked(View view) {
         //alarmSelectedMode = 3;
         alarmData.setAlarmSelectedMode(3);
         setUpAlarmModePanel();
+        setTimeSwitch.setChecked(false);
+        switchOnOffClick(setTimeSwitch, false);
     }
 
     //**********   Setting up alarm days views   *************
