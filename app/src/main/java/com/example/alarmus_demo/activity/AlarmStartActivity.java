@@ -45,44 +45,15 @@ public class AlarmStartActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-//        PowerManager powerManager = (PowerManager) this.getSystemService(POWER_SERVICE);
-//        PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK |
-//                PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, "alarmus_demo::WakeLock");
-//
-//        // Turn on the display
-//        wakeLock.acquire();
-//
-//        KeyguardManager keyguardManager = (KeyguardManager) getApplicationContext().getSystemService(KEYGUARD_SERVICE);
-//        KeyguardManager.KeyguardLock keyguardLock = keyguardManager.newKeyguardLock("TAG");
-//        keyguardLock.disableKeyguard();
-
         setContentView(R.layout.activity_alarm_start);
 
-//        //  Waking up the phone
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1){
-//            this.setTurnScreenOn(true);
-//        }
-//        else {
-//            final Window window  = getWindow();
-//            window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
-//        }
-
+        // Waking up the phone
         final Window win = getWindow();
         win.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
                         WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
                         WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
                         WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
                         WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON);
-
-
-
-
-//        this.setTurnScreenOn(true);
-//        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED;
-
-
-
 
         sp = getSharedPreferences("alarm_data", Context.MODE_PRIVATE);
         dam = new DataAccessManager(sp);
@@ -192,10 +163,6 @@ public class AlarmStartActivity extends AppCompatActivity {
             sendNotification(this, mode);
         }
         else if (mode == 2){
-//            Vibrator vibrator; // :D
-//            vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-//            vibrator.vibrate(5000);
-
             sendNotification(this, mode);
         }
         else {

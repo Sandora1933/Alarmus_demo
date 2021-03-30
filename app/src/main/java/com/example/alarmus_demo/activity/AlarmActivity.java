@@ -11,11 +11,14 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Property;
+import android.view.Display;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -904,33 +907,39 @@ public class AlarmActivity extends AppCompatActivity {
         else {
             isMoreVolumeButtonsActive = true;
 
-            ObjectAnimator volIncreaseTextAnimator = ObjectAnimator.ofFloat(increaseVolumeTextView, "translationX", -450f);
+            Display display = getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            int displayWidth = size.x;
+            float width50Percent = size.x * 0.5f;
+
+            ObjectAnimator volIncreaseTextAnimator = ObjectAnimator.ofFloat(increaseVolumeTextView, "translationX", -size.x * 0.5f);
             volIncreaseTextAnimator.setRepeatCount(0);
             volIncreaseTextAnimator.setDuration(300);
 
-            ObjectAnimator neverVolIncreaseButtonAnimator = ObjectAnimator.ofFloat(neverVolumeTimersButton, "translationX", -450f);
+            ObjectAnimator neverVolIncreaseButtonAnimator = ObjectAnimator.ofFloat(neverVolumeTimersButton, "translationX", -size.x * 0.4f);
             neverVolIncreaseButtonAnimator.setRepeatCount(0);
             neverVolIncreaseButtonAnimator.setDuration(400);
             neverVolIncreaseButtonAnimator.setStartDelay(100);
 
-            ObjectAnimator c30sVolIncreaseButtonAnimator = ObjectAnimator.ofFloat(c30sVolumeTimersButton, "translationX", -450f);
+            ObjectAnimator c30sVolIncreaseButtonAnimator = ObjectAnimator.ofFloat(c30sVolumeTimersButton, "translationX", -size.x * 0.4f);
             c30sVolIncreaseButtonAnimator.setRepeatCount(0);
             c30sVolIncreaseButtonAnimator.setDuration(400);
             c30sVolIncreaseButtonAnimator.setStartDelay(100);
 
-            ObjectAnimator c15sVolIncreaseButtonAnimator = ObjectAnimator.ofFloat(c15sVolumeTimersButton, "translationX", -450f);
+            ObjectAnimator c15sVolIncreaseButtonAnimator = ObjectAnimator.ofFloat(c15sVolumeTimersButton, "translationX", -size.x * 0.4f);
             c15sVolumeTimersButton.setAlpha(1.0f);
             c15sVolIncreaseButtonAnimator.setRepeatCount(0);
             c15sVolIncreaseButtonAnimator.setDuration(400);
             c15sVolIncreaseButtonAnimator.setStartDelay(100);
 
-            ObjectAnimator c45sVolIncreaseButtonAnimator = ObjectAnimator.ofFloat(c45sVolumeTimersButton, "translationX", -310f);
+            ObjectAnimator c45sVolIncreaseButtonAnimator = ObjectAnimator.ofFloat(c45sVolumeTimersButton, "translationX", -size.x * 0.265f);
             c45sVolumeTimersButton.setAlpha(1.0f);
             c45sVolIncreaseButtonAnimator.setRepeatCount(0);
             c45sVolIncreaseButtonAnimator.setDuration(400);
             c45sVolIncreaseButtonAnimator.setStartDelay(100);
 
-            ObjectAnimator c60sVolIncreaseButtonAnimator = ObjectAnimator.ofFloat(c60sVolumeTimersButton, "translationX", -170f);
+            ObjectAnimator c60sVolIncreaseButtonAnimator = ObjectAnimator.ofFloat(c60sVolumeTimersButton, "translationX", -size.x * 0.13f);
             c60sVolumeTimersButton.setAlpha(1.0f);
             c60sVolIncreaseButtonAnimator.setRepeatCount(0);
             c60sVolIncreaseButtonAnimator.setDuration(400);
@@ -951,6 +960,19 @@ public class AlarmActivity extends AppCompatActivity {
         }
 
     }
+
+    // Property for animation (object Animator)
+    Property<View, Float> fractionXProperty = new Property<View, Float>(Float.TYPE, "translation_x_fraction") {
+        @Override
+        public Float get(View object) {
+            return object.getWidth() <= 0 ? 0 : object.getTranslationX() / object.getWidth();
+        }
+
+        @Override
+        public void set(View object, Float value) {
+            object.setTranslationX(object.getWidth() * value);
+        }
+    };
 
     //********** Loading AlarmData preferences **********
 
