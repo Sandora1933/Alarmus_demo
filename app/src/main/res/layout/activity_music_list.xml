@@ -101,7 +101,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="7"
-                android:hint="sdkfnsdof sdofsd sdfsd" />
+                android:hint="Search your music here"
+                android:textColorHint="@color/colorSelectedWidgetBackground"/>
 
         </LinearLayout>
 

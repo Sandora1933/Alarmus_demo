@@ -693,6 +693,7 @@ public class AlarmActivity extends AppCompatActivity {
 
     //*********   Alarm mode buttons clicked   **********
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void soundPlusVibrateButtonClicked(View view) {
         //alarmSelectedMode = 0;
         alarmData.setAlarmSelectedMode(0);
@@ -701,6 +702,7 @@ public class AlarmActivity extends AppCompatActivity {
         switchOnOffClick(setTimeSwitch, false);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void soundButtonClicked(View view) {
         //alarmSelectedMode = 1;
         alarmData.setAlarmSelectedMode(1);
@@ -709,6 +711,7 @@ public class AlarmActivity extends AppCompatActivity {
         switchOnOffClick(setTimeSwitch, false);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void vibrateButtonClicked(View view) {
         //alarmSelectedMode = 2;
         alarmData.setAlarmSelectedMode(2);
@@ -717,6 +720,7 @@ public class AlarmActivity extends AppCompatActivity {
         switchOnOffClick(setTimeSwitch, false);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void noSoundButtonClicked(View view) {
         //alarmSelectedMode = 3;
         alarmData.setAlarmSelectedMode(3);
@@ -748,6 +752,7 @@ public class AlarmActivity extends AppCompatActivity {
 
     //*************   Alarm days buttons clicked   ***************
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void mondayButtonClicked(View view) {
 //        if (isDayActiveArray[0]){
 //            isDayActiveArray[0] = false;
@@ -765,9 +770,13 @@ public class AlarmActivity extends AppCompatActivity {
             alarmData.setDay(true, 0);
         }
 
+        // Probably high weight -> do saving in onStop()
         setUpAlarmDaysPanel();
+        setTimeSwitch.setChecked(false);
+        switchOnOffClick(setTimeSwitch, false);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void tuesdayButtonClicked(View view) {
 //        if (isDayActiveArray[1]){
 //            isDayActiveArray[1] = false;
@@ -785,8 +794,11 @@ public class AlarmActivity extends AppCompatActivity {
         }
 
         setUpAlarmDaysPanel();
+        setTimeSwitch.setChecked(false);
+        switchOnOffClick(setTimeSwitch, false);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void wednesdayButtonClicked(View view) {
 
         boolean previousState = dataAccessManager.loadDay(2);
@@ -798,8 +810,11 @@ public class AlarmActivity extends AppCompatActivity {
         }
 
         setUpAlarmDaysPanel();
+        setTimeSwitch.setChecked(false);
+        switchOnOffClick(setTimeSwitch, false);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void thursdayButtonClicked(View view) {
 
         boolean previousState = dataAccessManager.loadDay(3);
@@ -811,8 +826,11 @@ public class AlarmActivity extends AppCompatActivity {
         }
 
         setUpAlarmDaysPanel();
+        setTimeSwitch.setChecked(false);
+        switchOnOffClick(setTimeSwitch, false);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void fridayButtonClicked(View view) {
 
         boolean previousState = dataAccessManager.loadDay(4);
@@ -824,8 +842,11 @@ public class AlarmActivity extends AppCompatActivity {
         }
 
         setUpAlarmDaysPanel();
+        setTimeSwitch.setChecked(false);
+        switchOnOffClick(setTimeSwitch, false);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void saturdayButtonClicked(View view) {
 
         boolean previousState = dataAccessManager.loadDay(5);
@@ -837,8 +858,11 @@ public class AlarmActivity extends AppCompatActivity {
         }
 
         setUpAlarmDaysPanel();
+        setTimeSwitch.setChecked(false);
+        switchOnOffClick(setTimeSwitch, false);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void sundayButtonClicked(View view) {
 
         boolean previousState = dataAccessManager.loadDay(6);
@@ -850,6 +874,8 @@ public class AlarmActivity extends AppCompatActivity {
         }
 
         setUpAlarmDaysPanel();
+        setTimeSwitch.setChecked(false);
+        switchOnOffClick(setTimeSwitch, false);
     }
 
     //Animation for moving for volume buttons
