@@ -1,7 +1,9 @@
 package com.example.alarmus_demo.activity;
 
+import android.annotation.SuppressLint;
 import android.app.KeyguardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AsyncPlayer;
 import android.media.AudioAttributes;
@@ -13,8 +15,14 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.PowerManager;
 import android.provider.Settings;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -35,12 +43,20 @@ import java.util.ArrayList;
 
 public class AlarmStartActivity extends AppCompatActivity {
 
+    // layout
+    RelativeLayout percentRelativeLayout;
+    FrameLayout frameLayout;
+    TextView textView;
+
     public static final int MELODY_DURATION = 5000;
     boolean isAnyActiveSongExist = false;
+    int maxVolumePower;
 
     SharedPreferences sp;
     DataAccessManager dam;
+    AudioManager audioManager;
 
+    @SuppressLint("ClickableViewAccessibility")
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,6 +73,13 @@ public class AlarmStartActivity extends AppCompatActivity {
 
         sp = getSharedPreferences("alarm_data", Context.MODE_PRIVATE);
         dam = new DataAccessManager(sp);
+        audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+        maxVolumePower = audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM);
+
+        // init views
+        percentRelativeLayout = findViewById(R.id.percentRelativeLayout);
+        frameLayout = findViewById(R.id.frameLayout);
+        textView = findViewById(R.id.percentTextView);
 
         // Getting song
         Gson gson = new Gson();
@@ -93,6 +116,30 @@ public class AlarmStartActivity extends AppCompatActivity {
             isAnyActiveSongExist = false;
         }
 
+        // dynamic change of percent
+        percentRelativeLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN){
+                    double num = (event.getY() / v.getHeight()) * 100;
+                    num = 100 - num;
+                    textView.setText((int) num + "%");
+
+                    int progress = (int) ((num * 0.01) * maxVolumePower);
+                    Toast.makeText(AlarmStartActivity.this, "maxPower: " + maxVolumePower, Toast.LENGTH_SHORT).show();
+
+                    audioManager.setStreamVolume(AudioManager.STREAM_ALARM, progress, 0);
+
+                    ViewGroup.LayoutParams params = frameLayout.getLayoutParams();
+                    params.height = v.getHeight() - (int) event.getY();
+                    frameLayout.setLayoutParams(params);
+
+                }
+
+                return true;
+            }
+
+        });
 
         // Getting other data
         int mode = dam.loadAlarmSelectedMode();
@@ -176,6 +223,15 @@ public class AlarmStartActivity extends AppCompatActivity {
         NotificationCompat.Builder builder = helper.getChannelNotification(String.valueOf(mode), mode);
 
         helper.getManager().notify(1, builder.build());
+    }
+
+    public void moreButtonClicked(View view) {
+        Intent snoozeActivityIntent = new Intent(AlarmStartActivity.this, SnoozeActivity.class);
+        startActivity(snoozeActivityIntent);
+    }
+
+    public void stopButtonClicked(View view) {
+        Toast.makeText(this, "stop clicked", Toast.LENGTH_SHORT).show();
     }
 
 }
