@@ -52,9 +52,13 @@ public class AlarmStartActivity extends AppCompatActivity {
     boolean isAnyActiveSongExist = false;
     int maxVolumePower;
 
+    boolean isPlaying;
+
     SharedPreferences sp;
     DataAccessManager dam;
     AudioManager audioManager;
+
+    AsyncPlayer asyncPlayer;
 
     @SuppressLint("ClickableViewAccessibility")
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -75,6 +79,8 @@ public class AlarmStartActivity extends AppCompatActivity {
         dam = new DataAccessManager(sp);
         audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
         maxVolumePower = audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM);
+
+        isPlaying = false;
 
         // init views
         percentRelativeLayout = findViewById(R.id.percentRelativeLayout);
@@ -152,9 +158,10 @@ public class AlarmStartActivity extends AppCompatActivity {
         //int mode = intent.getIntExtra("mode", 1);
         Toast.makeText(this, "mode, volume received : " + mode + ", " + volumePower, Toast.LENGTH_SHORT).show();
 
+        asyncPlayer = new AsyncPlayer("player");
+
         if (mode == 0){
 
-            AsyncPlayer asyncPlayer = new AsyncPlayer("player");
             Uri uri;
 
             if (isAnyActiveSongExist){
@@ -163,6 +170,8 @@ public class AlarmStartActivity extends AppCompatActivity {
             else{
                 uri = Settings.System.DEFAULT_RINGTONE_URI;
             }
+
+            isPlaying = true;
 
             asyncPlayer.play(this, uri, false,
                     new AudioAttributes.Builder()
@@ -191,7 +200,6 @@ public class AlarmStartActivity extends AppCompatActivity {
         else if (mode == 1){
             //Toast.makeText(context, "sound only", Toast.LENGTH_SHORT).show();
 
-            AsyncPlayer asyncPlayer = new AsyncPlayer("player");
             Uri uri;
 
             if (isAnyActiveSongExist){
@@ -200,6 +208,8 @@ public class AlarmStartActivity extends AppCompatActivity {
             else{
                 uri = Settings.System.DEFAULT_RINGTONE_URI;
             }
+
+            isPlaying = true;
 
             asyncPlayer.play(this, uri, false,
                     new AudioAttributes.Builder()
@@ -231,7 +241,12 @@ public class AlarmStartActivity extends AppCompatActivity {
     }
 
     public void stopButtonClicked(View view) {
-        Toast.makeText(this, "stop clicked", Toast.LENGTH_SHORT).show();
+        if (isPlaying){
+            isPlaying = false;
+            asyncPlayer.stop();
+        }
+
+        this.finish();
     }
 
 }
