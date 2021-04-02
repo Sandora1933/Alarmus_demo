@@ -7,14 +7,18 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Property;
@@ -41,6 +45,7 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class AlarmActivity extends AppCompatActivity {
 
@@ -102,10 +107,41 @@ public class AlarmActivity extends AppCompatActivity {
     // To work with volume seek bar
     AudioManager audioManager;
 
+    public static final int OVERLAY_REQUEST_CODE = 512;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm);
+
+        // Request permission for Xiaomi devices (Show on lockScreen & Display Pop-Up)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.canDrawOverlays(this)) {
+                if ("xiaomi".equals(Build.MANUFACTURER.toLowerCase(Locale.ROOT))) {
+                    final Intent intent =new Intent("miui.intent.action.APP_PERM_EDITOR");
+                    intent.setClassName("com.miui.securitycenter",
+                            "com.miui.permcenter.permissions.PermissionsEditorActivity");
+                    intent.putExtra("extra_pkgname", getPackageName());
+                    new AlertDialog.Builder(this)
+                            .setTitle("Please Enable the additional permissions")
+                            .setMessage("You will not receive notifications while the app is in background if you disable these permissions")
+                            .setPositiveButton("Go to Settings", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    startActivity(intent);
+                                }
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_info)
+                            .setCancelable(false)
+                            .show();
+                }else {
+                    Intent overlaySettings = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
+                    startActivityForResult(overlaySettings, OVERLAY_REQUEST_CODE);
+                }
+            }
+        }
+
+        //----------------------
 
         initViews();
         initDayButtonsPanel();
@@ -693,6 +729,7 @@ public class AlarmActivity extends AppCompatActivity {
 
     //*********   Alarm mode buttons clicked   **********
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void soundPlusVibrateButtonClicked(View view) {
         //alarmSelectedMode = 0;
         alarmData.setAlarmSelectedMode(0);
@@ -701,6 +738,7 @@ public class AlarmActivity extends AppCompatActivity {
         switchOnOffClick(setTimeSwitch, false);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void soundButtonClicked(View view) {
         //alarmSelectedMode = 1;
         alarmData.setAlarmSelectedMode(1);
@@ -709,6 +747,7 @@ public class AlarmActivity extends AppCompatActivity {
         switchOnOffClick(setTimeSwitch, false);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void vibrateButtonClicked(View view) {
         //alarmSelectedMode = 2;
         alarmData.setAlarmSelectedMode(2);
@@ -717,6 +756,7 @@ public class AlarmActivity extends AppCompatActivity {
         switchOnOffClick(setTimeSwitch, false);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void noSoundButtonClicked(View view) {
         //alarmSelectedMode = 3;
         alarmData.setAlarmSelectedMode(3);
@@ -748,6 +788,7 @@ public class AlarmActivity extends AppCompatActivity {
 
     //*************   Alarm days buttons clicked   ***************
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void mondayButtonClicked(View view) {
 //        if (isDayActiveArray[0]){
 //            isDayActiveArray[0] = false;
@@ -765,9 +806,13 @@ public class AlarmActivity extends AppCompatActivity {
             alarmData.setDay(true, 0);
         }
 
+        // Probably high weight -> do saving in onStop()
         setUpAlarmDaysPanel();
+        setTimeSwitch.setChecked(false);
+        switchOnOffClick(setTimeSwitch, false);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void tuesdayButtonClicked(View view) {
 //        if (isDayActiveArray[1]){
 //            isDayActiveArray[1] = false;
@@ -785,8 +830,11 @@ public class AlarmActivity extends AppCompatActivity {
         }
 
         setUpAlarmDaysPanel();
+        setTimeSwitch.setChecked(false);
+        switchOnOffClick(setTimeSwitch, false);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void wednesdayButtonClicked(View view) {
 
         boolean previousState = dataAccessManager.loadDay(2);
@@ -798,8 +846,11 @@ public class AlarmActivity extends AppCompatActivity {
         }
 
         setUpAlarmDaysPanel();
+        setTimeSwitch.setChecked(false);
+        switchOnOffClick(setTimeSwitch, false);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void thursdayButtonClicked(View view) {
 
         boolean previousState = dataAccessManager.loadDay(3);
@@ -811,8 +862,11 @@ public class AlarmActivity extends AppCompatActivity {
         }
 
         setUpAlarmDaysPanel();
+        setTimeSwitch.setChecked(false);
+        switchOnOffClick(setTimeSwitch, false);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void fridayButtonClicked(View view) {
 
         boolean previousState = dataAccessManager.loadDay(4);
@@ -824,8 +878,11 @@ public class AlarmActivity extends AppCompatActivity {
         }
 
         setUpAlarmDaysPanel();
+        setTimeSwitch.setChecked(false);
+        switchOnOffClick(setTimeSwitch, false);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void saturdayButtonClicked(View view) {
 
         boolean previousState = dataAccessManager.loadDay(5);
@@ -837,8 +894,11 @@ public class AlarmActivity extends AppCompatActivity {
         }
 
         setUpAlarmDaysPanel();
+        setTimeSwitch.setChecked(false);
+        switchOnOffClick(setTimeSwitch, false);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void sundayButtonClicked(View view) {
 
         boolean previousState = dataAccessManager.loadDay(6);
@@ -850,6 +910,8 @@ public class AlarmActivity extends AppCompatActivity {
         }
 
         setUpAlarmDaysPanel();
+        setTimeSwitch.setChecked(false);
+        switchOnOffClick(setTimeSwitch, false);
     }
 
     //Animation for moving for volume buttons

@@ -93,7 +93,6 @@ public class InfoActivity extends AppCompatActivity {
     }
 
     public void emailButtonClicked(View view) {
-        Intent alarmStartIntent = new Intent(InfoActivity.this, StartAlarmActivity.class);
-        startActivity(alarmStartIntent);
+        Toast.makeText(this, "email button clicked", Toast.LENGTH_SHORT).show();
     }
 }

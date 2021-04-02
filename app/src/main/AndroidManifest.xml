@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
     <application
         android:allowBackup="true"
@@ -24,9 +25,10 @@
         </activity>
         <activity android:name=".activity.InfoActivity"/>
         <activity android:name=".activity.MusicListActivity"/>
-        <activity android:name=".activity.StartAlarmActivity"/>
         <activity android:name=".activity.AlarmStartActivity"/>
-        <activity android:name=".activity.SnoozeActivity"/>
+        <activity android:name=".activity.SnoozeActivity"
+                    android:launchMode="singleTask"
+                    android:showOnLockScreen="true" />
 
         <receiver android:name=".AlertReceiver" android:enabled="true" android:exported="true"
             android:permission="TODO" />

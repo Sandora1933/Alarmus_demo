@@ -162,7 +162,8 @@
                             android:textSize="15sp" />
 
                         <LinearLayout
-                            android:layout_width="246dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/rightsTextView"
                             android:layout_centerHorizontal="true"
@@ -171,16 +172,22 @@
 
                             <Button
                                 android:layout_width="118dp"
-                                android:layout_height="wrap_content"
+                                android:layout_height="40dp"
+                                android:layout_marginRight="10dp"
                                 android:text="Telegram"
                                 android:textAllCaps="false"
-                                android:onClick="telegramButtonClicked"/>
+                                android:background="@drawable/button_infoblock_untapped"
+                                android:textColor="@color/colorRowTextAndIcon"
+                                android:onClick="telegramButtonClicked"
+                                android:layout_marginEnd="10dp" />
 
                             <Button android:id="@+id/emailButton"
                                 android:layout_width="118dp"
-                                android:layout_height="wrap_content"
+                                android:layout_height="40dp"
                                 android:text="Email"
                                 android:textAllCaps="false"
+                                android:background="@drawable/button_infoblock_untapped"
+                                android:textColor="@color/colorRowTextAndIcon"
                                 android:onClick="emailButtonClicked"/>
 
                         </LinearLayout>
