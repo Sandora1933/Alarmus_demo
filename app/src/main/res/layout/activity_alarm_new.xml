@@ -1,0 +1,702 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/colorMainBackground"
+    tools:context=".activity.AlarmActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        app:layout_constraintStart_toEndOf="@id/guidelineMainStart"
+        app:layout_constraintEnd_toStartOf="@id/guidelineMainEnd">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/colorWidgetBackground"
+            app:cardCornerRadius="6dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guidelineMenuTop">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/alarmButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:background="@color/colorWidgetBackground"
+                    android:fontFamily="@font/roboto"
+                    android:paddingTop="10dp"
+                    android:text="alarm"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorSelectedTextAndIcon"
+                    android:textSize="19sp" />
+
+                <Button
+                    android:id="@+id/musicButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:background="@color/colorWidgetBackground"
+                    android:fontFamily="@font/roboto"
+                    android:onClick="musicMenuButtonClicked"
+                    android:paddingTop="10dp"
+                    android:text="music"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorRowTextAndIcon"
+                    android:textSize="19sp" />
+
+                <Button
+                    android:id="@+id/infoButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:background="@color/colorWidgetBackground"
+                    android:fontFamily="@font/roboto"
+                    android:onClick="infoMenuButtonClicked"
+                    android:paddingTop="10dp"
+                    android:text="info"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorRowTextAndIcon"
+                    android:textSize="19sp" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView5"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            app:cardBackgroundColor="@color/colorWidgetBackground"
+            app:cardCornerRadius="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/guidelineClockBottom"
+            app:layout_constraintEnd_toEndOf="@+id/cardView"
+            app:layout_constraintStart_toStartOf="@+id/cardView"
+            app:layout_constraintTop_toTopOf="@+id/guidelineClockTop">
+
+            <!--        <TextView-->
+            <!--            android:layout_width="wrap_content"-->
+            <!--            android:layout_height="wrap_content"-->
+            <!--            android:background="@color/colorWidgetBackground"-->
+            <!--            android:fontFamily="@font/roboto"-->
+            <!--            android:paddingStart="30dp"-->
+            <!--            android:paddingTop="20dp"-->
+            <!--            android:paddingEnd="30dp"-->
+            <!--            android:paddingBottom="20dp"-->
+            <!--            android:text="88 : 88"-->
+            <!--            android:textColor="@color/colorRowTextAndIcon"-->
+            <!--            android:textSize="32sp" />-->
+
+            <EditText
+                android:id="@+id/clockEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@color/colorWidgetBackground"
+                android:cursorVisible="false"
+                android:fontFamily="@font/roboto"
+                android:hint=""
+                android:inputType="number"
+                android:paddingStart="30dp"
+                android:paddingTop="20dp"
+                android:paddingEnd="30dp"
+                android:paddingBottom="20dp"
+                android:text="11 : 11"
+                android:textColor="@color/colorRowTextAndIcon"
+                android:textSize="32sp" />
+
+        </androidx.cardview.widget.CardView>
+
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@+id/guidelineSetTimeBlockBottom"
+            app:layout_constraintEnd_toEndOf="@+id/cardView5"
+            app:layout_constraintStart_toStartOf="@+id/cardView5"
+            app:layout_constraintTop_toTopOf="@+id/guidelineSetTimeBlockTop">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="SET TIME"
+                android:textColor="@color/colorSelectedTextAndIcon"
+                android:textSize="26sp" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:orientation="horizontal">
+
+                <Switch
+                    android:id="@+id/setTimeSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical" />
+                <!--                android:textOff="off"-->
+                <!--                android:textOn="on"-->
+                <!--                android:thumb="@drawable/switch_thumb"-->
+                <!--                android:track="@drawable/switch_track"-->
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="center_horizontal"
+            android:fontFamily="@font/roboto"
+            android:text="Volume"
+            android:textColor="@color/colorRowTextAndIcon"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@+id/guidelineVolumeTextBottom"
+            app:layout_constraintEnd_toEndOf="@+id/linearLayout"
+            app:layout_constraintStart_toStartOf="@+id/linearLayout"
+            app:layout_constraintTop_toTopOf="@+id/guidelineVolumeTextTop" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/volumeSeekBarCardView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:cardBackgroundColor="@color/colorWidgetBackground"
+            app:cardCornerRadius="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/guidelineVolumeSeekBarBottom"
+            app:layout_constraintTop_toTopOf="@+id/guidelineVolumeSeekBarTop"
+            tools:layout_editor_absoluteX="10dp">
+
+            <SeekBar
+                android:id="@+id/volumeSeekBar"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:paddingHorizontal="8dp" />
+
+        </androidx.cardview.widget.CardView>
+
+        <RelativeLayout
+            android:id="@+id/alarmPeriodsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/guidelineVolumeIncreaseModeBottom"
+            app:layout_constraintTop_toTopOf="@+id/guidelineVolumeIncreaseModeTop"
+            tools:layout_editor_absoluteX="10dp">
+
+            <TextView
+                android:id="@+id/increaseVolumeTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
+                android:fontFamily="@font/roboto"
+                android:text="Gradually increasing volume"
+                android:textColor="@color/colorRowTextAndIcon"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/neverVolumeTimersButton"
+                android:layout_width="55dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="7dp"
+                android:layout_marginLeft="7dp"
+                android:layout_toStartOf="@id/c30sVolumeTimersButton"
+                android:layout_toLeftOf="@id/c30sVolumeTimersButton"
+                android:background="@drawable/button_never_selected"
+                android:onClick="neverVolumeButtonClicked"
+                android:text="Never"
+                android:textAllCaps="false"
+                android:textColor="@color/colorSelectedTextAndIcon"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/c30sVolumeTimersButton"
+                android:layout_width="40dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="11dp"
+                android:layout_marginLeft="11dp"
+                android:layout_toStartOf="@id/moreVolumeTimersButton"
+                android:layout_toLeftOf="@id/moreVolumeTimersButton"
+                android:background="@drawable/button_increase_alarm_unselected"
+                android:onClick="c30sVolumeButtonClicked"
+                android:text="30s"
+                android:textAllCaps="false"
+                android:textColor="@color/colorRowTextAndIcon"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/c15sVolumeTimersButton"
+                android:layout_width="40dp"
+                android:layout_height="35dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginStart="11dp"
+                android:layout_marginLeft="11dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:alpha="0"
+                android:background="@drawable/button_increase_alarm_unselected"
+                android:onClick="c15sVolumeButtonClicked"
+                android:text="15s"
+                android:textAllCaps="false"
+                android:textColor="@color/colorRowTextAndIcon"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/c45sVolumeTimersButton"
+                android:layout_width="40dp"
+                android:layout_height="35dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginStart="11dp"
+                android:layout_marginLeft="11dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:alpha="0"
+                android:background="@drawable/button_increase_alarm_unselected"
+                android:onClick="c45sVolumeButtonClicked"
+                android:text="45s"
+                android:textAllCaps="false"
+                android:textColor="@color/colorRowTextAndIcon"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/c60sVolumeTimersButton"
+                android:layout_width="40dp"
+                android:layout_height="35dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginStart="11dp"
+                android:layout_marginLeft="11dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:alpha="0"
+                android:background="@drawable/button_increase_alarm_unselected"
+                android:onClick="c60sVolumeButtonClicked"
+                android:text="60s"
+                android:textAllCaps="false"
+                android:textColor="@color/colorRowTextAndIcon"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/moreVolumeTimersButton"
+                android:layout_width="40dp"
+                android:layout_height="35dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginStart="11dp"
+                android:layout_marginLeft="11dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/button_increase_alarm_unselected"
+                android:onClick="moreVolumeTimersButtonClicked"
+                android:text="..."
+                android:textAllCaps="false"
+                android:textColor="@color/colorRowTextAndIcon"
+                android:textSize="12sp" />
+
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="center_horizontal"
+            android:fontFamily="@font/roboto"
+            android:text="Alarm mode"
+            android:textAllCaps="false"
+            android:textColor="@color/colorRowTextAndIcon"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@+id/guidelineAlarmModeTextBottom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guidelineAlarmModeTextTop" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@+id/guidelineAlarmModeListBottom"
+            app:layout_constraintTop_toTopOf="@+id/guidelineAlarmModeListTop"
+            tools:layout_editor_absoluteX="10dp">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.045"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.91">
+
+                <Button
+                    android:id="@+id/soundAndVibroButton"
+                    android:layout_width="98dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/button_alarmmode_sv_unselected"
+                    android:drawableLeft="@drawable/ic_baseline_volume_up_24"
+                    android:drawableRight="@drawable/ic_baseline_vibration_24"
+                    android:onClick="soundPlusVibrateButtonClicked"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/soundImageButton"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintHorizontal_chainStyle="spread_inside"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/soundImageButton"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/button_alarmmode_sv_unselected"
+                    android:onClick="soundButtonClicked"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/vibroImageButton"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/soundAndVibroButton"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_baseline_volume_up_24" />
+
+                <ImageButton
+                    android:id="@+id/vibroImageButton"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/button_alarmmode_sv_unselected"
+                    android:onClick="vibrateButtonClicked"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/noSoundButton"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/soundImageButton"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_baseline_vibration_24" />
+
+                <ImageButton
+                    android:id="@+id/noSoundButton"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/button_alarmmode_sv_unselected"
+                    android:onClick="noSoundButtonClicked"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/vibroImageButton"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_baseline_volume_off_24" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.045"/>
+
+        </LinearLayout>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView4"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:cardBackgroundColor="@color/colorWidgetBackground"
+            app:cardCornerRadius="15dp"
+            app:layout_constraintBottom_toTopOf="@+id/guidelineAlarmDaysListBottom"
+            app:layout_constraintTop_toTopOf="@+id/guidelineAlarmDaysListTop"
+            tools:layout_editor_absoluteX="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp">
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.045"/>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.91"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/mondayButton"
+                        android:layout_width="28dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/button_day_unselected"
+                        android:onClick="mondayButtonClicked"
+                        android:text="MO"
+                        android:textColor="@color/colorRowTextAndIcon"
+                        android:textSize="13sp"
+                        app:layout_constraintEnd_toStartOf="@+id/tuesdayButton"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintHorizontal_chainStyle="spread_inside"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <Button
+                        android:id="@+id/tuesdayButton"
+                        android:layout_width="28dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorWidgetBackground"
+                        android:onClick="tuesdayButtonClicked"
+                        android:text="TU"
+                        android:textColor="@color/colorSelectedTextAndIcon"
+                        android:textSize="13sp"
+                        app:layout_constraintEnd_toStartOf="@+id/wednesdayButton"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/mondayButton"
+                        tools:layout_editor_absoluteY="0dp" />
+
+                    <Button
+                        android:id="@+id/wednesdayButton"
+                        android:layout_width="28dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/button_day_unselected"
+                        android:onClick="wednesdayButtonClicked"
+                        android:text="WE"
+                        android:textColor="@color/colorRowTextAndIcon"
+                        android:textSize="13sp"
+                        app:layout_constraintEnd_toStartOf="@+id/thursdayButton"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/tuesdayButton"
+                        tools:layout_editor_absoluteY="0dp" />
+
+                    <Button
+                        android:id="@+id/thursdayButton"
+                        android:layout_width="28dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/button_day_unselected"
+                        android:onClick="thursdayButtonClicked"
+                        android:text="TH"
+                        android:textColor="@color/colorRowTextAndIcon"
+                        android:textSize="13sp"
+                        app:layout_constraintEnd_toStartOf="@+id/fridayButton"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/wednesdayButton"
+                        tools:layout_editor_absoluteY="0dp" />
+
+                    <Button
+                        android:id="@+id/fridayButton"
+                        android:layout_width="28dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorWidgetBackground"
+                        android:onClick="fridayButtonClicked"
+                        android:text="FR"
+                        android:textColor="@color/colorSelectedTextAndIcon"
+                        android:textSize="13sp"
+                        app:layout_constraintEnd_toStartOf="@+id/saturdayButton"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/thursdayButton"
+                        tools:layout_editor_absoluteY="0dp" />
+
+                    <Button
+                        android:id="@+id/saturdayButton"
+                        android:layout_width="28dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorWidgetBackground"
+                        android:onClick="saturdayButtonClicked"
+                        android:text="SA"
+                        android:textColor="@color/colorSelectedTextAndIcon"
+                        android:textSize="13sp"
+                        app:layout_constraintEnd_toStartOf="@+id/sundayButton"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/fridayButton"
+                        tools:layout_editor_absoluteY="0dp" />
+
+                    <Button
+                        android:id="@+id/sundayButton"
+                        android:layout_width="28dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/button_day_unselected"
+                        android:onClick="sundayButtonClicked"
+                        android:text="SU"
+                        android:textColor="@color/colorRowTextAndIcon"
+                        android:textSize="13sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/saturdayButton"
+                        tools:layout_editor_absoluteY="0dp" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.045"/>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineMenuTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.01" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineMenuBottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.075" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineClockTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.185" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineClockBottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.31" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineSetTimeBlockTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.38" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineSetTimeBlockBottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.435" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineVolumeTextTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.495" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineVolumeTextBottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.515" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineVolumeSeekBarTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.54" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineVolumeSeekBarBottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.595" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineVolumeIncreaseModeTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.62" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineVolumeIncreaseModeBottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.675" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineAlarmModeTextTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.73" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineAlarmModeTextBottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.75" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineAlarmModeListTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.775" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineAlarmModeListBottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.83" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineAlarmDaysListTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.855" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineAlarmDaysListBottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.935" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineMainStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.015" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineMainEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.985" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
