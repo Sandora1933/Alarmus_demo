@@ -112,7 +112,7 @@ public class AlarmActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_alarm);
+        setContentView(R.layout.activity_alarm_new);
 
         // Request permission for Xiaomi devices (Show on lockScreen & Display Pop-Up)
 
