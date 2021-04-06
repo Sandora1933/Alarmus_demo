@@ -187,7 +187,7 @@
             <SeekBar
                 android:id="@+id/volumeSeekBar"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="match_parent"
                 android:paddingHorizontal="8dp" />
 
         </androidx.cardview.widget.CardView>
@@ -617,70 +617,70 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.54" />
+            app:layout_constraintGuide_percent="0.535" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineVolumeSeekBarBottom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.595" />
+            app:layout_constraintGuide_percent="0.59" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineVolumeIncreaseModeTop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.62" />
+            app:layout_constraintGuide_percent="0.61" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineVolumeIncreaseModeBottom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.675" />
+            app:layout_constraintGuide_percent="0.665" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineAlarmModeTextTop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.73" />
+            app:layout_constraintGuide_percent="0.72" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineAlarmModeTextBottom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.75" />
+            app:layout_constraintGuide_percent="0.74" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineAlarmModeListTop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.775" />
+            app:layout_constraintGuide_percent="0.76" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineAlarmModeListBottom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.83" />
+            app:layout_constraintGuide_percent="0.815" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineAlarmDaysListTop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.855" />
+            app:layout_constraintGuide_percent="0.835" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineAlarmDaysListBottom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.935" />
+            app:layout_constraintGuide_percent="0.915" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
