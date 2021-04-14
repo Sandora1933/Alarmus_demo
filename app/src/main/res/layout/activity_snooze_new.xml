@@ -1,0 +1,564 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorMainBackground">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:cardBackgroundColor="@color/colorWidgetBackground"
+        app:cardCornerRadius="6dp"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineMenuBottom"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineMainEnd"
+        app:layout_constraintStart_toStartOf="@+id/guidelineMainStart"
+        app:layout_constraintTop_toTopOf="@+id/guidelineMenuTop">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="30dp"
+                android:layout_marginRight="30dp"
+                android:fontFamily="@font/roboto"
+                android:text="STOP"
+                android:textColor="@color/colorSelectedTextAndIcon"
+                android:textSize="22sp"
+                android:onClick="stopClicked"/>
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineTextLeftMiddle"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineMainEnd"
+        app:layout_constraintStart_toStartOf="@+id/guidelineMainStart"
+        app:layout_constraintTop_toTopOf="@+id/guidelineTextLeftTop">
+
+        <TextView
+            android:id="@+id/secondsLeftDigitTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:fontFamily="@font/roboto"
+            android:text="7"
+            android:textColor="@color/colorRowTextAndIcon"
+            android:textSize="27sp" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineTextLeftBottom"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineMainEnd"
+        app:layout_constraintStart_toStartOf="@+id/guidelineMainStart"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="seconds left"
+            android:textColor="#676A72"
+            android:textSize="17sp" />
+
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/timeSnoozeCardView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:cardBackgroundColor="@color/colorWidgetBackground"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineTimeBlockEnd"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guidelineSnoozeListTop">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout4"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:onClick="btn5minSnoozeClicked"
+                android:padding="5dp"
+                app:layout_constraintBottom_toTopOf="@+id/guidelineSnooze5minBottom"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/btn5minTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/roboto"
+                    android:text="5"
+                    android:textColor="#676A72"
+                    android:textSize="40sp" />
+
+                <TextView
+                    android:id="@+id/btn5minValueTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/roboto"
+                    android:text="88 : 88"
+                    android:textColor="#676A72"
+                    android:textSize="40sp" />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout8"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:onClick="btn10minSnoozeClicked"
+                android:padding="5dp"
+                app:layout_constraintBottom_toTopOf="@+id/guidelineSnooze10minBottom"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/guidelineSnooze5minBottom">
+
+                <TextView
+                    android:id="@+id/btn10minTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/roboto"
+                    android:text="10"
+                    android:textColor="#676A72"
+                    android:textSize="40sp" />
+
+                <TextView
+                    android:id="@+id/btn10minValueTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/roboto"
+                    android:text="88 : 88"
+                    android:textColor="#676A72"
+                    android:textSize="40sp" />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout7"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:onClick="btn15minSnoozeClicked"
+                android:padding="5dp"
+                app:layout_constraintBottom_toTopOf="@+id/guidelineSnooze15minBottom"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/guidelineSnooze10minBottom">
+
+                <TextView
+                    android:id="@+id/btn15minTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/roboto"
+                    android:text="15"
+                    android:textColor="#676A72"
+                    android:textSize="40sp" />
+
+                <TextView
+                    android:id="@+id/btn15minValueTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/roboto"
+                    android:text="88 : 88"
+                    android:textColor="#676A72"
+                    android:textSize="40sp" />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout6"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:onClick="btn30minSnoozeClicked"
+                android:padding="5dp"
+                app:layout_constraintBottom_toTopOf="@+id/guidelineSnooze30minBottom"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/guidelineSnooze15minBottom">
+
+                <TextView
+                    android:id="@+id/btn30minTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/roboto"
+                    android:text="30"
+                    android:textColor="#676A72"
+                    android:textSize="40sp" />
+
+                <TextView
+                    android:id="@+id/btn30minValueTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/roboto"
+                    android:text="88 : 88"
+                    android:textColor="#676A72"
+                    android:textSize="40sp" />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout5"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:onClick="btn60minSnoozeClicked"
+                android:padding="5dp"
+                app:layout_constraintBottom_toTopOf="@+id/guidelineSnooze60minBottom"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/guidelineSnooze30minBottom">
+
+                <TextView
+                    android:id="@+id/btn60minTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/roboto"
+                    android:text="60"
+                    android:textColor="#676A72"
+                    android:textSize="40sp" />
+
+                <TextView
+                    android:id="@+id/btn60minValueTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/roboto"
+                    android:text="88 : 88"
+                    android:textColor="#676A72"
+                    android:textSize="40sp" />
+
+
+            </RelativeLayout>
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineSnooze5minBottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.18" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineSnooze10minBottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.36" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineSnooze15minBottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.54" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineSnooze30minBottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.72" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineSnooze60minBottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.90" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/timeSnoozeCardView"
+        app:layout_constraintTop_toTopOf="@+id/guidelineSnoozeListTop">
+
+        <TextView android:id="@+id/snooze5minTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SNOOZE"
+            android:textColor="@color/colorSelectedTextAndIcon"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/guidelineSnooze5minLeftBottom"
+            app:layout_constraintEnd_toStartOf="@+id/card5minLeft"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:onClick="snooze5minTextViewClicked"/>
+
+        <TextView android:id="@+id/snooze10minTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SNOOZE"
+            android:textColor="@color/colorSelectedTextAndIcon"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/guidelineSnooze10minLeftBottom"
+            app:layout_constraintEnd_toStartOf="@+id/card10minLeft"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guidelineSnooze5minLeftBottom"
+            android:onClick="snooze10minTextViewClicked"/>
+
+        <TextView android:id="@+id/snooze15minTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SNOOZE"
+            android:textColor="@color/colorSelectedTextAndIcon"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/guidelineSnooze15minLeftBottom"
+            app:layout_constraintEnd_toStartOf="@+id/card15minLeft"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guidelineSnooze10minLeftBottom"
+            android:onClick="snooze15minTextViewClicked"/>
+
+        <TextView android:id="@+id/snooze30minTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SNOOZE"
+            android:textColor="@color/colorSelectedTextAndIcon"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/guidelineSnooze15minLeftBottom"
+            app:layout_constraintEnd_toStartOf="@+id/card30minLeft"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guidelineSnooze30minLeftBottom"
+            android:onClick="snooze30minTextViewClicked"/>
+
+        <TextView android:id="@+id/snooze60minTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SNOOZE"
+            android:textColor="@color/colorSelectedTextAndIcon"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/guidelineSnooze60minLeftBottom"
+            app:layout_constraintEnd_toStartOf="@+id/card30minLeft"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guidelineSnooze30minLeftBottom"
+            android:onClick="snooze60minTextViewClicked"/>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card5minLeft"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:cardBackgroundColor="@color/colorWidgetBackground"
+            app:layout_constraintBottom_toTopOf="@+id/guidelineSnooze5minLeftBottom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guidelineCutCardsLeftStart"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card10minLeft"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:cardBackgroundColor="@color/colorWidgetBackground"
+            app:layout_constraintBottom_toTopOf="@+id/guidelineSnooze10minLeftBottom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guidelineCutCardsLeftStart"
+            app:layout_constraintTop_toTopOf="@+id/guidelineSnooze5minLeftBottom" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card15minLeft"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:cardBackgroundColor="@color/colorWidgetBackground"
+            app:layout_constraintBottom_toTopOf="@+id/guidelineSnooze15minLeftBottom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guidelineCutCardsLeftStart"
+            app:layout_constraintTop_toBottomOf="@+id/card10minLeft" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card30minLeft"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:cardBackgroundColor="@color/colorWidgetBackground"
+            app:layout_constraintBottom_toTopOf="@+id/guidelineSnooze30minLeftBottom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guidelineCutCardsLeftStart"
+            app:layout_constraintTop_toBottomOf="@+id/card15minLeft" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card60minLeft"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:cardBackgroundColor="@color/colorWidgetBackground"
+            app:layout_constraintBottom_toTopOf="@+id/guidelineSnooze60minLeftBottom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guidelineCutCardsLeftStart"
+            app:layout_constraintTop_toTopOf="@+id/guidelineSnooze30minLeftBottom" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineCutCardsLeftStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.92" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineSnooze5minLeftBottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.18" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineSnooze10minLeftBottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.36" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineSnooze15minLeftBottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.54" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineSnooze30minLeftBottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.72" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineSnooze60minLeftBottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.90" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineMainStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.015" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineMainEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.985" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineMenuTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.01" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineMenuBottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.075" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineTextLeftTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.215" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineTextLeftMiddle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.2527" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineTextLeftBottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.29" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineSnoozeListTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.41" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineTimeBlockEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.655" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineCutCardsStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.98" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

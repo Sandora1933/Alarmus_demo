@@ -93,6 +93,6 @@ public class InfoActivity extends AppCompatActivity {
     }
 
     public void emailButtonClicked(View view) {
-        Toast.makeText(this, "email button clicked", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(InfoActivity.this, SnoozeActivity.class));
     }
 }

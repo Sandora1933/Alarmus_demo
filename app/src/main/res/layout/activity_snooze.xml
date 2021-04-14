@@ -80,6 +80,8 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/timeSnoozeCardView"
+            app:cardBackgroundColor="@color/colorWidgetBackground"
+            app:cardCornerRadius="10dp"
             android:layout_width="236dp"
             android:layout_height="match_parent">
 
@@ -91,9 +93,10 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="5dp">
+                    android:padding="5dp"
+                    android:onClick="btn5minSnoozeClicked">
 
-                    <TextView
+                    <TextView android:id="@+id/btn5minTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="5"
@@ -103,7 +106,7 @@
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true" />
 
-                    <TextView
+                    <TextView android:id="@+id/btn5minValueTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="88 : 88"
@@ -119,9 +122,10 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="5dp">
+                    android:padding="5dp"
+                    android:onClick="btn10minSnoozeClicked">
 
-                    <TextView
+                    <TextView android:id="@+id/btn10minTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="10"
@@ -131,7 +135,7 @@
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true" />
 
-                    <TextView
+                    <TextView android:id="@+id/btn10minValueTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="88 : 88"
@@ -147,9 +151,10 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="5dp">
+                    android:padding="5dp"
+                    android:onClick="btn15minSnoozeClicked">
 
-                    <TextView
+                    <TextView android:id="@+id/btn15minTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="15"
@@ -159,7 +164,7 @@
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true" />
 
-                    <TextView
+                    <TextView android:id="@+id/btn15minValueTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="88 : 88"
@@ -175,9 +180,10 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="5dp">
+                    android:padding="5dp"
+                    android:onClick="btn30minSnoozeClicked">
 
-                    <TextView
+                    <TextView android:id="@+id/btn30minTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="30"
@@ -187,7 +193,7 @@
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true" />
 
-                    <TextView
+                    <TextView android:id="@+id/btn30minValueTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="88 : 88"
@@ -203,9 +209,10 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="5dp">
+                    android:padding="5dp"
+                    android:onClick="btn60minSnoozeClicked">
 
-                    <TextView
+                    <TextView android:id="@+id/btn60minTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="60"
@@ -215,7 +222,7 @@
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true" />
 
-                    <TextView
+                    <TextView android:id="@+id/btn60minValueTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="88 : 88"
@@ -231,6 +238,7 @@
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
+
 
     </LinearLayout>
 
