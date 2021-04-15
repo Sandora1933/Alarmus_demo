@@ -32,6 +32,7 @@ import androidx.core.app.NotificationCompat;
 
 import com.example.alarmus_demo.DataAccessManager;
 import com.example.alarmus_demo.NotificationHelper;
+import com.example.alarmus_demo.OnSwipeTouchListener;
 import com.example.alarmus_demo.R;
 import com.example.alarmus_demo.model.SongEntity;
 import com.google.gson.Gson;
@@ -43,8 +44,11 @@ import java.util.ArrayList;
 
 public class AlarmStartActivity extends AppCompatActivity {
 
+    float x1, x2, y1, y2;
+
     // layout
     RelativeLayout percentRelativeLayout;
+    RelativeLayout snoozeSwiperLayout;
     FrameLayout frameLayout;
     TextView textView;
 
@@ -84,8 +88,11 @@ public class AlarmStartActivity extends AppCompatActivity {
 
         // init views
         percentRelativeLayout = findViewById(R.id.percentRelativeLayout);
+        snoozeSwiperLayout = findViewById(R.id.snoozeSwiperLayout);
         frameLayout = findViewById(R.id.frameLayout);
         textView = findViewById(R.id.percentTextView);
+
+//        snoozeSwiperLayout.onTouchEvent(new MotionEvent())
 
         // Getting song
         Gson gson = new Gson();
@@ -247,6 +254,25 @@ public class AlarmStartActivity extends AppCompatActivity {
         }
 
         this.finish();
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                x1 = event.getX();
+                y1 = event.getY();
+                break;
+            case MotionEvent.ACTION_UP:
+                x2 = event.getX();
+                y2 = event.getY();
+                if (x1 < x2){
+                    Intent i = new Intent(AlarmStartActivity.this, SnoozeActivity.class);
+                    startActivity(i);
+                }
+        }
+
+        return false;
     }
 
 }
