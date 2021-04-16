@@ -347,36 +347,43 @@ public class SnoozeActivity extends AppCompatActivity {
         //finishAffinity();
 //        finish();
 //        System.exit(0);
+        setResult(RESULT_OK);
         finish();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void snooze5minTextViewClicked(View view) {
         setExactAlarmForOption(REQUEST_CODE_5MIN);
+        //finish();
+        setResult(RESULT_OK);
         finish();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void snooze10minTextViewClicked(View view) {
         setExactAlarmForOption(REQUEST_CODE_10MIN);
+        setResult(RESULT_OK);
         finish();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void snooze15minTextViewClicked(View view) {
         setExactAlarmForOption(REQUEST_CODE_15MIN);
+        setResult(RESULT_OK);
         finish();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void snooze30minTextViewClicked(View view) {
         setExactAlarmForOption(REQUEST_CODE_30MIN);
+        setResult(RESULT_OK);
         finish();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void snooze60minTextViewClicked(View view) {
         setExactAlarmForOption(REQUEST_CODE_60MIN);
+        setResult(RESULT_OK);
         finish();
     }
 

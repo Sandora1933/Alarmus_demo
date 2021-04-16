@@ -268,11 +268,23 @@ public class AlarmStartActivity extends AppCompatActivity {
                 y2 = event.getY();
                 if (x1 < x2){
                     Intent i = new Intent(AlarmStartActivity.this, SnoozeActivity.class);
-                    startActivity(i);
+                    startActivityForResult(i, 7);
+
+
+                    //startActivity(i);
                 }
         }
 
         return false;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 7 && resultCode == RESULT_OK){
+            asyncPlayer.stop();
+            finish();
+        }
+    }
 }

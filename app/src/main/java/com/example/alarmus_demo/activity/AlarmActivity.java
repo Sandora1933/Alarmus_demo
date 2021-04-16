@@ -20,6 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Property;
 import android.view.Display;
@@ -38,6 +39,7 @@ import com.example.alarmus_demo.AlarmController;
 import com.example.alarmus_demo.AlarmData;
 import com.example.alarmus_demo.AlertReceiver;
 import com.example.alarmus_demo.DataAccessManager;
+import com.example.alarmus_demo.NumericKeyBoardTransformationMethod;
 import com.example.alarmus_demo.R;
 import com.google.gson.Gson;
 
@@ -187,6 +189,8 @@ public class AlarmActivity extends AppCompatActivity {
         //TODO: organise into distinct method setUpWidgets()
 
         clockEditText.setText(alarmData.getTimeString());
+        clockEditText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+        clockEditText.setTransformationMethod(new NumericKeyBoardTransformationMethod());
         //clockEditText.setText(alarmController.getTimeString());
 
         setTimeSwitch.setChecked(alarmData.isActive());
