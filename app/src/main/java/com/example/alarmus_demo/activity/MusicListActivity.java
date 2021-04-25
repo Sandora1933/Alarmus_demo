@@ -157,6 +157,19 @@ public class MusicListActivity extends AppCompatActivity{
 
         ArrayList<SongEntity> receivedSongEntityList = new ArrayList<>();
 
+        // TODO: remove this govnokod (bad practice to add default melody in this method)
+
+        //String defaultSongPath = "android.resource://com.example.alarmus_demo/" + R.raw.default_ringtone;
+
+//        SongEntity defaultSong = new SongEntity("default_song", "singer", defaultSongPath,
+//                1, true, false);
+//        receivedSongEntityList.add(defaultSong);
+
+        // for default song
+        //activeSongNumber++;
+
+        // -------------------
+
         ContentResolver contentResolver = getContentResolver();
         Uri songUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         Cursor songCursor = contentResolver.query(songUri, null, null, null, null);
@@ -185,6 +198,8 @@ public class MusicListActivity extends AppCompatActivity{
     }
 
     private void setUpRecyclerView(){
+
+
         songRecyclerViewAdapter = new SongAdapter(this, songEntityList);
         songRecyclerViewManager = new LinearLayoutManager(this);
         //getMusicFromStorage();
@@ -292,7 +307,7 @@ public class MusicListActivity extends AppCompatActivity{
         else {
             Type listType = new TypeToken<ArrayList<SongEntity>>(){}.getType();
             songEntityList = gson.fromJson(songListJson, listType);
-            activeSongNumber = sharedPreferences.getInt("song_active_number", 0);
+            activeSongNumber = sharedPreferences.getInt("song_active_number", 1);
             Toast.makeText(this, "ac_song from loadlist " + activeSongNumber, Toast.LENGTH_SHORT).show();
             Toast.makeText(this, "data has been loaded again", Toast.LENGTH_SHORT).show();
         }

@@ -175,10 +175,12 @@ public class AlarmStartActivity extends AppCompatActivity {
                 uri = Uri.parse(firstPrioritySongEntityPath);
             }
             else{
-                uri = Settings.System.DEFAULT_RINGTONE_URI;
+                //uri = Settings.System.DEFAULT_RINGTONE_URI;
+                uri = Uri.parse("android.resource://com.example.alarmus_demo/" + R.raw.default_ringtone);
             }
 
             isPlaying = true;
+
 
             asyncPlayer.play(this, uri, false,
                     new AudioAttributes.Builder()
@@ -213,7 +215,8 @@ public class AlarmStartActivity extends AppCompatActivity {
                 uri = Uri.parse(firstPrioritySongEntityPath);
             }
             else{
-                uri = Settings.System.DEFAULT_RINGTONE_URI;
+                //uri = Settings.System.DEFAULT_RINGTONE_URI;
+                uri = Uri.parse("android.resource://com.example.alarmus_demo/" + R.raw.default_ringtone);
             }
 
             isPlaying = true;

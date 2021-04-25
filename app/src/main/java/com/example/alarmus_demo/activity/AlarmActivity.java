@@ -24,6 +24,7 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Property;
 import android.view.Display;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -99,6 +100,8 @@ public class AlarmActivity extends AppCompatActivity {
     int maxVolumePower;
     boolean[] isDayActiveArray; //Array of states (active or not) of days' buttons
     boolean isMoreVolumeButtonsActive;
+
+    boolean enterClickAllowed;
 
     SharedPreferences sharedPreferences;    //Storage
     AlarmController alarmController;
@@ -185,6 +188,7 @@ public class AlarmActivity extends AppCompatActivity {
 //        alarmData = alarmController.data;
 
         isTimeChangedByHand=false;
+        enterClickAllowed = false;
 
         //TODO: organise into distinct method setUpWidgets()
 
@@ -208,7 +212,7 @@ public class AlarmActivity extends AppCompatActivity {
         //Initial settings for clockEditText
         isTimeChangedByHand = true;
         cursorPosition = 0;
-        final String separator = " : ";
+        final String separator = ":";
 
         isMoreVolumeButtonsActive = false;
 
@@ -223,15 +227,61 @@ public class AlarmActivity extends AppCompatActivity {
         clockEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                clockEditText.setTextColor(getResources().getColor(R.color.colorSelectedTextAndIcon));
-                cursorPosition = 0;
+
+                if (hasFocus){
+                    clockEditText.setTextColor(getResources().getColor(R.color.colorSelectedTextAndIcon));
+                    //clockEditText.setText("02:00");
+                    cursorPosition = 0;
+                }
+                else{
+                    closeKeyboard();
+                    clockEditText.clearFocus();
+                    clockEditText.setTextColor(getResources().getColor(R.color.colorRowTextAndIcon));
+                }
+
+
+            }
+        });
+
+        clockEditText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                    (keyCode == KeyEvent.KEYCODE_ENTER) && enterClickAllowed){
+
+
+                    Toast.makeText(AlarmActivity.this, "enter allowed", Toast.LENGTH_SHORT).show();
+
+                    enterClickAllowed = false;
+
+                    closeKeyboard();
+                    clockEditText.clearFocus();
+                    clockEditText.setTextColor(getResources().getColor(R.color.colorRowTextAndIcon));
+
+                    return true;
+
+                }
+
+
+                return false;
             }
         });
 
         clockEditText.addTextChangedListener(new TextWatcher() {
+
+            boolean isHoursProblem = false; // false if first digit is 3-9 so it is surely 3-9 am
+            boolean isCase111Out = false;
+            boolean isCase22Out = false;
+            boolean isCase221Out = false;
+            boolean isCase21Out = false;
+            boolean isCase212Out = false;
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                clockEditText.setSelection(cursorPosition);
+                int pos = clockEditText.getText().toString().length() - cursorPosition - 1;
+                //Toast.makeText(AlarmActivity.this, "pos:" + pos, Toast.LENGTH_SHORT).show();
+                clockEditText.setSelection(5);
             }
 
             @Override
@@ -243,26 +293,201 @@ public class AlarmActivity extends AppCompatActivity {
                     String nString;
 
                     if (cursorPosition == 0){
-                        nString = inputSymbol + "0" + separator + "00";
+
+                        // Approve initial state
+                        isHoursProblem = false;
+                        isCase111Out = false;
+                        isCase22Out = false;
+                        isCase221Out = false;
+                        isCase21Out = false;
+                        isCase212Out = false;
+
+
+                        //nString = inputSymbol + "0" + separator + "00";
+
+                        if (inputSymbol == '1' || inputSymbol == '2'){
+                            isHoursProblem = true;
+                            Toast.makeText(AlarmActivity.this, "hours problem true", Toast.LENGTH_SHORT).show();
+                        }
+
+
+                        nString = " " + " " + separator + " " + inputSymbol;
                         clockEditText.setText(nString);
                     }
                     else if (cursorPosition == 1){
-                        nString = s.toString().charAt(cursorPosition) + String.valueOf(inputSymbol) + separator + "00";
-                        Toast.makeText(AlarmActivity.this, "charAt0 - " + s.toString().charAt(0), Toast.LENGTH_SHORT).show();
-                        clockEditText.setText(nString);
+
+                        if (!isHoursProblem){   // Case 1 - first digit [3-9]
+
+                            String inputSymbolStr = String.valueOf(inputSymbol);
+                            if (inputSymbolStr.matches("[6789]")){  // Case 1.2
+
+                                // Out 1.2
+                                Toast.makeText(AlarmActivity.this, "out 1.2", Toast.LENGTH_SHORT).show();
+                                nString = " " +
+                                        s.toString().charAt(5) +
+                                        separator + "0" + inputSymbol;
+                                clockEditText.setText(nString);
+
+                                closeKeyboard();
+                                clockEditText.clearFocus();
+                                clockEditText.setTextColor(getResources().getColor(R.color.colorRowTextAndIcon));
+                            }
+                            else {  // When it matches to [0-5] Case 1.1
+
+                                nString = " " + s.toString().charAt(5) + separator +
+                                        inputSymbol + " ";
+                                clockEditText.setText(nString);
+
+                                isCase111Out = true;
+
+                            }
+                        }
+                        else {  // Case 2 - First digit is [1-2]
+
+                            String inputSymbolStr = String.valueOf(inputSymbol);
+
+                            if (inputSymbolStr.matches("[012345]")){    // Case 2.1
+
+                                isCase21Out = true;
+
+                                nString = " " + String.valueOf(s.toString().charAt(5)) +
+                                        separator + String.valueOf(inputSymbol) + " ";
+                                clockEditText.setText(nString);
+
+
+                            }
+                            else {  // Case 2.2 -> |17:__|
+
+                                isCase22Out = true;
+
+                                //Toast.makeText(AlarmActivity.this, s.toString().charAt(5), Toast.LENGTH_SHORT).show();
+                                nString = s.toString().charAt(5) + inputSymbolStr + separator +
+                                        " " + " ";
+                                clockEditText.setText(nString);
+
+                            }
+
+                        }
+
+//                        nString = s.toString().charAt(cursorPosition) + String.valueOf(inputSymbol) + separator + "00";
+//                        Toast.makeText(AlarmActivity.this, "charAt0 - " + s.toString().charAt(0), Toast.LENGTH_SHORT).show();
+//                        clockEditText.setText(nString);
                     }
                     else if (cursorPosition == 2){
-                        nString = String.valueOf(s.toString().charAt(1)) + String.valueOf(s.toString().charAt(2)) + separator + inputSymbol + "0";
-                        clockEditText.setText(nString);
+
+                        // Out 1.1.1
+
+                        if (isCase111Out){
+                            nString = " " + s.toString().charAt(2) + separator +
+                                    s.toString().charAt(4) + inputSymbol;
+                            clockEditText.setText(nString);
+
+                            closeKeyboard();
+                            clockEditText.clearFocus();
+                            clockEditText.setTextColor(getResources().getColor(R.color.colorRowTextAndIcon));
+                        }
+                        else if (isCase22Out){
+
+                            String inputSymbolStr = String.valueOf(inputSymbol);
+
+                            if (inputSymbolStr.matches("[012345]")){    // Case 2.2.1
+
+                                isCase221Out = true;
+                                Toast.makeText(AlarmActivity.this, "2.2 out", Toast.LENGTH_SHORT).show();
+                                nString = String.valueOf(s.toString().charAt(1)) +
+                                        String.valueOf(s.toString().charAt(2)) +
+                                        separator + inputSymbolStr + " ";
+                                clockEditText.setText(nString);
+
+                            }
+                            else {  // Case 2.2.2
+
+                                // Out 2.2.2
+                                nString = String.valueOf(s.toString().charAt(1)) +
+                                        String.valueOf(s.toString().charAt(2)) +
+                                        separator + "0" + inputSymbolStr;
+                                clockEditText.setText(nString);
+
+                                closeKeyboard();
+                                clockEditText.clearFocus();
+                                clockEditText.setTextColor(getResources().getColor(R.color.colorRowTextAndIcon));
+                            }
+
+                        }
+                        else if (isCase21Out){
+
+                            String inputSymbolStr = String.valueOf(inputSymbol);
+
+                            if (inputSymbolStr.matches("[6789]")){  // Case 2.1.1
+
+                                // Out : 2.1.1
+
+                                nString = " " + String.valueOf(s.toString().charAt(2)) + separator +
+                                        String.valueOf(s.toString().charAt(4)) + inputSymbolStr;
+                                clockEditText.setText(nString);
+
+                                closeKeyboard();
+                                clockEditText.clearFocus();
+                                clockEditText.setTextColor(getResources().getColor(R.color.colorRowTextAndIcon));
+                            }
+                            else {  // Case 2.1.2
+
+                                isCase212Out = true;
+                                enterClickAllowed = true;
+
+                                nString = " " + String.valueOf(s.toString().charAt(2)) + separator +
+                                        String.valueOf(s.toString().charAt(4)) + String.valueOf(inputSymbol);
+                                clockEditText.setText(nString);
+
+                                // Wait for enter clicked, otherwise -> option 2.1.2.2
+                                // setOnkeyListener
+                                // TODO : if user clicks enter whenever he wants
+
+                            }
+
+                        }
+
+//                        nString = String.valueOf(s.toString().charAt(1)) + String.valueOf(s.toString().charAt(2)) + separator + inputSymbol + "0";
+//                        clockEditText.setText(nString);
                     }
                     else if (cursorPosition == 3){
-                        nString = String.valueOf(s.toString().charAt(1)) + String.valueOf(s.toString().charAt(2)) +
-                                separator + String.valueOf(s.toString().charAt(s.length() - 2)) + inputSymbol;
-                        clockEditText.setText(nString);
 
-                        closeKeyboard();
-                        clockEditText.clearFocus();
-                        clockEditText.setTextColor(getResources().getColor(R.color.colorRowTextAndIcon));
+                        if (isCase221Out){
+
+                            nString = String.valueOf(s.toString().charAt(1)) +
+                                    String.valueOf(s.toString().charAt(2)) +
+                                    separator +
+                                    String.valueOf(s.toString().charAt(4)) +
+                                    String.valueOf(inputSymbol);
+                            clockEditText.setText(nString);
+
+                            closeKeyboard();
+                            clockEditText.clearFocus();
+                            clockEditText.setTextColor(getResources().getColor(R.color.colorRowTextAndIcon));
+                        }
+                        else if (isCase212Out){
+
+                            if (clockEditText.hasFocus()){
+
+                                nString = String.valueOf(s.toString().charAt(2)) +
+                                        String.valueOf(s.toString().charAt(4)) + separator +
+                                        String.valueOf(s.toString().charAt(5)) + inputSymbol;
+                                clockEditText.setText(nString);
+
+                                closeKeyboard();
+                                clockEditText.clearFocus();
+                                clockEditText.setTextColor(getResources().getColor(R.color.colorRowTextAndIcon));
+                            }
+
+                        }
+
+//                        nString = String.valueOf(s.toString().charAt(1)) + String.valueOf(s.toString().charAt(2)) +
+//                                separator + String.valueOf(s.toString().charAt(s.length() - 2)) + inputSymbol;
+//                        clockEditText.setText(nString);
+
+//                        closeKeyboard();
+//                        clockEditText.clearFocus();
+//                        clockEditText.setTextColor(getResources().getColor(R.color.colorRowTextAndIcon));
                     }
 
                 }
@@ -315,7 +540,12 @@ public class AlarmActivity extends AppCompatActivity {
 
         Integer hour, minute;
 
-        String hourS = clockEditText.getText().toString().split(" : ")[0];
+        String hourS = clockEditText.getText().toString().split(":")[0];
+
+        if (hourS.charAt(0) == ' '){
+            hourS = String.valueOf(hourS.charAt(1));
+        }
+
         if (hourS.charAt(0) == '0'){
             hour = Integer.parseInt(String.valueOf(hourS.charAt(1)));
         }
@@ -323,7 +553,7 @@ public class AlarmActivity extends AppCompatActivity {
             hour = Integer.parseInt(hourS);
         }
 
-        String minuteS = clockEditText.getText().toString().split(" : ")[1];
+        String minuteS = clockEditText.getText().toString().split(":")[1];
         if (minuteS.charAt(0) == '0'){
             minute = Integer.parseInt(String.valueOf(minuteS.charAt(1)));
         }
@@ -397,6 +627,22 @@ public class AlarmActivity extends AppCompatActivity {
 
     //------------------------------------------
 
+    private void openKeyboard(){
+//        View view = this.getCurrentFocus();
+//        if (view != null){
+//            InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+//            imm.showSoftInput(view, 0);
+//        }
+//        else {
+//            Toast.makeText(this, "view is null", Toast.LENGTH_SHORT).show();
+//        }
+
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        imm.toggleSoftInputFromWindow(clockEditText.getApplicationWindowToken(), InputMethodManager.SHOW_FORCED, 0);
+        clockEditText.requestFocus();
+
+    }
+
     private void closeKeyboard(){
         View view = this.getCurrentFocus();
         if (view != null){
@@ -405,6 +651,14 @@ public class AlarmActivity extends AppCompatActivity {
 
         }
     }
+
+    //*********   Set time text view   ***********
+
+    public void setTimeTextViewClicked(View view) {
+        openKeyboard();
+    }
+
+    // **************************************
 
     //*********   Detecting volume increase change   ***********
 
@@ -596,12 +850,19 @@ public class AlarmActivity extends AppCompatActivity {
 //            Toast.makeText(this, clockEditText.getText().toString(), Toast.LENGTH_SHORT).show();
 
             String timeText = clockEditText.getText().toString();
-            String[] numbers = timeText.split(" : ");
+            String[] numbers = timeText.split(":");
 
             int hour, minute;
 
             try{
-                hour = Integer.parseInt(numbers[0]);
+
+                if (numbers[0].charAt(0) == ' '){
+                    hour = Integer.parseInt(String.valueOf(numbers[0].charAt(1)));
+                }
+                else {
+                    hour = Integer.parseInt(numbers[0]);
+                }
+
                 minute = Integer.parseInt(numbers[1]);
             }
             catch (Exception e){

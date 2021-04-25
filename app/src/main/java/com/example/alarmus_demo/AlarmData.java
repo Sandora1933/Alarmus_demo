@@ -90,7 +90,7 @@ public class AlarmData implements Parcelable {
     public int getVolumePower(){ return volumePower; }
 
     public String getTimeString(){
-        return ((Integer)(this.hour/10)).toString()+((Integer)(this.hour%10)).toString()+" : "+
+        return ((Integer)(this.hour/10)).toString()+((Integer)(this.hour%10)).toString()+":"+
                 ((Integer)(this.minute/10)).toString()+((Integer)(this.minute%10)).toString();
     }
 

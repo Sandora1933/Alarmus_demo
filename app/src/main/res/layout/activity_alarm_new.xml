@@ -128,13 +128,14 @@
             app:layout_constraintStart_toStartOf="@+id/cardView5"
             app:layout_constraintTop_toTopOf="@+id/guidelineSetTimeBlockTop">
 
-            <TextView
+            <TextView android:id="@+id/setTimeTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="SET TIME"
                 android:textColor="@color/colorSelectedTextAndIcon"
-                android:textSize="26sp" />
+                android:textSize="26sp"
+                android:onClick="setTimeTextViewClicked"/>
 
             <LinearLayout
                 android:layout_width="0dp"
