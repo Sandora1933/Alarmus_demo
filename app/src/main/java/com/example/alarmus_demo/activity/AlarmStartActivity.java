@@ -2,6 +2,7 @@ package com.example.alarmus_demo.activity;
 
 import android.annotation.SuppressLint;
 import android.app.KeyguardManager;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -57,6 +58,7 @@ public class AlarmStartActivity extends AppCompatActivity {
     int maxVolumePower;
 
     boolean isPlaying;
+    int mode;
 
     SharedPreferences sp;
     DataAccessManager dam;
@@ -155,7 +157,7 @@ public class AlarmStartActivity extends AppCompatActivity {
         });
 
         // Getting other data
-        int mode = dam.loadAlarmSelectedMode();
+        mode = dam.loadAlarmSelectedMode();
         int volumePower = dam.loadVolumePower();
         int maxVolumePower = dam.loadMaxVolumePower();
 
@@ -251,11 +253,16 @@ public class AlarmStartActivity extends AppCompatActivity {
     }
 
     public void stopButtonClicked(View view) {
+
+        //NotificationHelper helper = new NotificationHelper(this, mode);
+        NotificationManager manager = (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
+
         if (isPlaying){
             isPlaying = false;
             asyncPlayer.stop();
         }
 
+        manager.cancelAll();  // Cancel notification -> to stop vibration
         this.finish();
     }
 

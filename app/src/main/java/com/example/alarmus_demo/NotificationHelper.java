@@ -30,13 +30,19 @@ public class NotificationHelper extends ContextWrapper {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void createChannel(int mode){
 
+        long[] vibrationPattern = new long[20];
+        vibrationPattern[0] = 0;
+        for (int i = 1; i < 20; i++){
+            vibrationPattern[i] = 1000;
+        }
+
         if (mode == 0 || mode == 2){    //  Modes with vibration
             NotificationChannel channelWithVibration = new NotificationChannel(CHANNEL_VIBRO_ID,
                     CHANNEL_VIBRO_NAME, NotificationManager.IMPORTANCE_DEFAULT);
             channelWithVibration.enableLights(true);
             channelWithVibration.enableVibration(true);
             channelWithVibration.shouldVibrate();
-            channelWithVibration.setVibrationPattern(new long[] {0, 5000});
+            channelWithVibration.setVibrationPattern(vibrationPattern); //0 5000
             channelWithVibration.setLightColor(R.color.colorPrimary);
             channelWithVibration.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
 
