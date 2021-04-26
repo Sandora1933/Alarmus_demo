@@ -39,11 +39,19 @@ public class AlertReceiver extends BroadcastReceiver {
         }
 
         boolean isCurrentDayActive = dam.loadDay(currentDayActual);
-        if (isCurrentDayActive){
+        if (isCurrentDayActive || dam.loadIsNoneActive()){ // Option when none chosen but need to play once
+
+            if (dam.loadIsNoneActive()){
+                dam.saveIsActive(false);
+            }
+
             Intent i = new Intent(context, AlarmStartActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(i);
         }
+
+
+
 
     }
 }

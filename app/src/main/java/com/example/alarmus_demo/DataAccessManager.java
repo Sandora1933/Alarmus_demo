@@ -102,6 +102,16 @@ public class DataAccessManager {
         return sp.getBoolean("day" + day, false);
     }
 
+    public boolean loadIsNoneActive(){
+        for (int i = 0; i < 7; i++){
+            if (loadDay(i)){
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public boolean[] loadDays(){
         boolean[] days = new boolean[7];
 

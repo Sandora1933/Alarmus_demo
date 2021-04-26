@@ -569,6 +569,7 @@ public class AlarmActivity extends AppCompatActivity {
         dataAccessManager.saveIsActive(isActive);
         dataAccessManager.saveVolumePower(currentVolumePower);
         dataAccessManager.saveMaxVolumePower(maxVolumePower);
+        dataAccessManager.saveDays(alarmData.getDays());
 
     }
 
@@ -944,8 +945,16 @@ public class AlarmActivity extends AppCompatActivity {
         int aMode = alarmData.getAlarmSelectedMode();
         Toast.makeText(this, "was set for: " + alarmInfo + " with mode " + aMode, Toast.LENGTH_SHORT).show();
 
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, activateAlarmPendingIntent);
+        if (alarmData.isNoneOfDaysSet()){
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(),
+                    activateAlarmPendingIntent);
+        }
+        else {
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(),
+                    AlarmManager.INTERVAL_DAY, activateAlarmPendingIntent);
+        }
+
+
         //alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), activateAlarmPendingIntent);
     }
 

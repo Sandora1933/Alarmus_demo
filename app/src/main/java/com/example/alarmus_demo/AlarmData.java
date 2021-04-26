@@ -101,6 +101,17 @@ public class AlarmData implements Parcelable {
             return false;
     }
 
+    public boolean isNoneOfDaysSet(){
+
+        for (boolean day : days){
+            if (day){
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public boolean[] getDays(){
         return days;
     }
