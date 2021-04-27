@@ -597,6 +597,16 @@ public class AlarmActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+
+        if (alarmData.isNoneOfDaysSet()){
+            setTimeSwitch.setChecked(false);
+        }
+
+    }
+
     private void initViews(){
         clockEditText = findViewById(R.id.clockEditText);
         setTimeTextView = findViewById(R.id.setTimeTextView);
