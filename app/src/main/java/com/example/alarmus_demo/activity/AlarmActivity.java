@@ -14,6 +14,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
@@ -57,6 +58,8 @@ public class AlarmActivity extends AppCompatActivity {
     Switch setTimeSwitch;
 
     EditText clockEditText;
+
+    TextView setTimeTextView;
 
     //Views - Alarm volume panel
     TextView increaseVolumeTextView;
@@ -102,6 +105,8 @@ public class AlarmActivity extends AppCompatActivity {
     boolean isMoreVolumeButtonsActive;
 
     boolean enterClickAllowed;
+
+    Drawable switchThumbDrawable, switchTrackDrawable;
 
     SharedPreferences sharedPreferences;    //Storage
     AlarmController alarmController;
@@ -230,10 +235,29 @@ public class AlarmActivity extends AppCompatActivity {
 
                 if (hasFocus){
                     clockEditText.setTextColor(getResources().getColor(R.color.colorSelectedTextAndIcon));
+                    setTimeTextView.setTextColor(getResources().getColor(R.color.colorSelectedWidgetBackground));
+                    setTimeTextView.setClickable(false);
+
+                    // Remember drawables
+                    switchThumbDrawable = setTimeSwitch.getThumbDrawable();
+                    switchTrackDrawable = setTimeSwitch.getTrackDrawable();
+
+
+                    setTimeSwitch.setThumbDrawable(getResources().getDrawable(R.drawable.switch_thumb_not_active));
+                    //setTimeSwitch.setTrackDrawable(getResources().getDrawable(R.drawable.switch_track_not_active));
+                    setTimeSwitch.setClickable(false);
                     //clockEditText.setText("02:00");
                     cursorPosition = 0;
                 }
                 else{
+
+                    setTimeTextView.setTextColor(getResources().getColor(R.color.colorSelectedTextAndIcon));
+                    setTimeTextView.setClickable(true);
+
+                    setTimeSwitch.setThumbDrawable(switchThumbDrawable);
+                    //setTimeSwitch.setTrackDrawable(switchTrackDrawable);
+                    setTimeSwitch.setClickable(true);
+
                     closeKeyboard();
                     clockEditText.clearFocus();
                     clockEditText.setTextColor(getResources().getColor(R.color.colorRowTextAndIcon));
@@ -497,7 +521,7 @@ public class AlarmActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 if (isTimeChangedByHand){
                     cursorPosition++;
-                    setTimeSwitch.setChecked(false);
+                    //setTimeSwitch.setChecked(false);
                 }
                 isTimeChangedByHand = true;
 
@@ -575,6 +599,7 @@ public class AlarmActivity extends AppCompatActivity {
 
     private void initViews(){
         clockEditText = findViewById(R.id.clockEditText);
+        setTimeTextView = findViewById(R.id.setTimeTextView);
         increaseVolumeTextView = findViewById(R.id.increaseVolumeTextView);
 
         setTimeSwitch = findViewById(R.id.setTimeSwitch);
@@ -1008,8 +1033,13 @@ public class AlarmActivity extends AppCompatActivity {
         //alarmSelectedMode = 0;
         alarmData.setAlarmSelectedMode(0);
         setUpAlarmModePanel();
-        setTimeSwitch.setChecked(false);
+        //setTimeSwitch.setChecked(false);
+
+        // Turn off previous pendingIntent with with old mode
         switchOnOffClick(setTimeSwitch, false);
+
+        // Turn on new pendingIntent with needed mode
+        switchOnOffClick(setTimeSwitch, true);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -1017,8 +1047,13 @@ public class AlarmActivity extends AppCompatActivity {
         //alarmSelectedMode = 1;
         alarmData.setAlarmSelectedMode(1);
         setUpAlarmModePanel();
-        setTimeSwitch.setChecked(false);
+
+        //setTimeSwitch.setChecked(false);
+        // Turn off previous pendingIntent with with old mode
         switchOnOffClick(setTimeSwitch, false);
+
+        // Turn on new pendingIntent with needed mode
+        switchOnOffClick(setTimeSwitch, true);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -1026,8 +1061,13 @@ public class AlarmActivity extends AppCompatActivity {
         //alarmSelectedMode = 2;
         alarmData.setAlarmSelectedMode(2);
         setUpAlarmModePanel();
-        setTimeSwitch.setChecked(false);
+
+        //setTimeSwitch.setChecked(false);
+        // Turn off previous pendingIntent with with old mode
         switchOnOffClick(setTimeSwitch, false);
+
+        // Turn on new pendingIntent with needed mode
+        switchOnOffClick(setTimeSwitch, true);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -1035,8 +1075,12 @@ public class AlarmActivity extends AppCompatActivity {
         //alarmSelectedMode = 3;
         alarmData.setAlarmSelectedMode(3);
         setUpAlarmModePanel();
-        setTimeSwitch.setChecked(false);
+        //setTimeSwitch.setChecked(false);
+        // Turn off previous pendingIntent with with old mode
         switchOnOffClick(setTimeSwitch, false);
+
+        // Turn on new pendingIntent with needed mode
+        switchOnOffClick(setTimeSwitch, true);
     }
 
     //**********   Setting up alarm days views   *************
