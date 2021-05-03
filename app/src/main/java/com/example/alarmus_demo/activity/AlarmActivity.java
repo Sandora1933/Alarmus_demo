@@ -294,6 +294,8 @@ public class AlarmActivity extends AppCompatActivity {
 
         clockEditText.addTextChangedListener(new TextWatcher() {
 
+            boolean isFirstIsOne = false;   // false if 1 and true if 2 :)
+            boolean isSecondIsFourOrFive = false;
             boolean isHoursProblem = false; // false if first digit is 3-9 so it is surely 3-9 am
             boolean isCase111Out = false;
             boolean isCase22Out = false;
@@ -319,6 +321,8 @@ public class AlarmActivity extends AppCompatActivity {
                     if (cursorPosition == 0){
 
                         // Approve initial state
+                        isFirstIsOne = false;
+                        isSecondIsFourOrFive = false;
                         isHoursProblem = false;
                         isCase111Out = false;
                         isCase22Out = false;
@@ -331,6 +335,9 @@ public class AlarmActivity extends AppCompatActivity {
 
                         if (inputSymbol == '1' || inputSymbol == '2'){
                             isHoursProblem = true;
+
+                            isFirstIsOne = inputSymbol == '1';
+
                             Toast.makeText(AlarmActivity.this, "hours problem true", Toast.LENGTH_SHORT).show();
                         }
 
@@ -370,6 +377,15 @@ public class AlarmActivity extends AppCompatActivity {
 
                             String inputSymbolStr = String.valueOf(inputSymbol);
 
+                            if (inputSymbolStr.equals("4") || inputSymbolStr.equals("5")){
+                                isSecondIsFourOrFive = true;
+                                Toast.makeText(AlarmActivity.this, "2nd : " + inputSymbolStr, Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                isSecondIsFourOrFive = false;
+                                Toast.makeText(AlarmActivity.this, "2nd : not 4 or 5", Toast.LENGTH_SHORT).show();
+                            }
+
                             if (inputSymbolStr.matches("[012345]")){    // Case 2.1
 
                                 isCase21Out = true;
@@ -380,14 +396,26 @@ public class AlarmActivity extends AppCompatActivity {
 
 
                             }
-                            else {  // Case 2.2 -> |17:__|
+                            else {  // Case 2.2 -> |17:__| or | 2:07|
 
-                                isCase22Out = true;
+                                if (isFirstIsOne){
+                                    isCase22Out = true;
 
-                                //Toast.makeText(AlarmActivity.this, s.toString().charAt(5), Toast.LENGTH_SHORT).show();
-                                nString = s.toString().charAt(5) + inputSymbolStr + separator +
-                                        " " + " ";
-                                clockEditText.setText(nString);
+                                    //Toast.makeText(AlarmActivity.this, s.toString().charAt(5), Toast.LENGTH_SHORT).show();
+                                    nString = s.toString().charAt(5) + inputSymbolStr + separator +
+                                            " " + " ";
+                                    clockEditText.setText(nString);
+                                }
+                                else {  // Case 3.3 out | 2:07|
+
+                                    nString = " " + String.valueOf(s.toString().charAt(5)) + separator + "0" + inputSymbolStr;
+                                    clockEditText.setText(nString);
+
+                                    closeKeyboard();
+                                    clockEditText.clearFocus();
+                                    clockEditText.setTextColor(getResources().getColor(R.color.colorRowTextAndIcon));
+                                }
+
 
                             }
 
@@ -399,9 +427,20 @@ public class AlarmActivity extends AppCompatActivity {
                     }
                     else if (cursorPosition == 2){
 
-                        // Out 1.1.1
+                        // Out 3.2
 
-                        if (isCase111Out){
+                        if (isCase21Out && isSecondIsFourOrFive){
+                            Toast.makeText(AlarmActivity.this, "case 3.2", Toast.LENGTH_SHORT).show();
+
+                            nString = " " + s.toString().charAt(2) + separator +
+                                    s.toString().charAt(4) + inputSymbol;
+                            clockEditText.setText(nString);
+
+                            closeKeyboard();
+                            clockEditText.clearFocus();
+                            clockEditText.setTextColor(getResources().getColor(R.color.colorRowTextAndIcon));
+                        }
+                        else if (isCase111Out){  // Out 1.1.1
                             nString = " " + s.toString().charAt(2) + separator +
                                     s.toString().charAt(4) + inputSymbol;
                             clockEditText.setText(nString);
@@ -416,12 +455,26 @@ public class AlarmActivity extends AppCompatActivity {
 
                             if (inputSymbolStr.matches("[012345]")){    // Case 2.2.1
 
-                                isCase221Out = true;
-                                Toast.makeText(AlarmActivity.this, "2.2 out", Toast.LENGTH_SHORT).show();
-                                nString = String.valueOf(s.toString().charAt(1)) +
-                                        String.valueOf(s.toString().charAt(2)) +
-                                        separator + inputSymbolStr + " ";
+                                if (isSecondIsFourOrFive){  // Case 3.2.1 out
+
+                                // Out 3.2.1 | 2:53|
+                                nString = " " + String.valueOf(s.toString().charAt(2)) + separator +
+                                        String.valueOf(s.toString().charAt(4)) + inputSymbolStr;
                                 clockEditText.setText(nString);
+
+                                closeKeyboard();
+                                clockEditText.clearFocus();
+                                clockEditText.setTextColor(getResources().getColor(R.color.colorRowTextAndIcon));
+
+                                }
+                                else {
+                                    isCase221Out = true;
+                                    Toast.makeText(AlarmActivity.this, "2.2 out", Toast.LENGTH_SHORT).show();
+                                    nString = String.valueOf(s.toString().charAt(1)) +
+                                            String.valueOf(s.toString().charAt(2)) +
+                                            separator + inputSymbolStr + " ";
+                                    clockEditText.setText(nString);
+                                }
 
                             }
                             else {  // Case 2.2.2
