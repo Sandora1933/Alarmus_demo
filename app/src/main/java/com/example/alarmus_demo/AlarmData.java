@@ -28,7 +28,7 @@ public class AlarmData implements Parcelable {
 
     //Mode menu fields
     private Integer alarmSelectedMode;
-    private boolean[] days;
+    private boolean[] daysActive;
 
     public AlarmData(){
         hour = 0;
@@ -39,7 +39,7 @@ public class AlarmData implements Parcelable {
         volumeSelectedMode = VOL_INCREASE_MODE_NEVER;
 
         alarmSelectedMode = ALARM_SELECTED_MODE_SOUND_ONLY;
-        days = new boolean[]{true, true, true, true, true, false, false};
+        daysActive = new boolean[]{true, true, true, true, true, false, false};
     }
 
     //************ Parcelable implementation ***********
@@ -66,7 +66,7 @@ public class AlarmData implements Parcelable {
             alarmSelectedMode = in.readInt();
         }
 
-        days = in.createBooleanArray();
+        daysActive = in.createBooleanArray();
     }
 
     public static final Creator<AlarmData> CREATOR = new Creator<AlarmData>() {
@@ -96,14 +96,14 @@ public class AlarmData implements Parcelable {
 
     public boolean getDay(int day){
         if (day>=0 && day<=6)
-            return days[day];
+            return daysActive[day];
         else
             return false;
     }
 
     public boolean isNoneOfDaysSet(){
 
-        for (boolean day : days){
+        for (boolean day : daysActive){
             if (day){
                 return false;
             }
@@ -112,8 +112,8 @@ public class AlarmData implements Parcelable {
         return true;
     }
 
-    public boolean[] getDays(){
-        return days;
+    public boolean[] getDaysActive(){
+        return daysActive;
     }
     public Integer getAlarmSelectedMode(){
         return alarmSelectedMode;
@@ -156,12 +156,12 @@ public class AlarmData implements Parcelable {
 
     public void setDay(boolean value,int day){
         if (day>=0 && day<7){
-            days[day]=value;
+            daysActive[day]=value;
         }
     }
 
-    public void setDays(boolean[] isDayActiveArray){
-        days=isDayActiveArray;
+    public void setDaysActive(boolean[] isDayActiveArray){
+        daysActive =isDayActiveArray;
     }
 
     public void setAlarmSelectedMode(Integer newMode){
@@ -203,6 +203,6 @@ public class AlarmData implements Parcelable {
             dest.writeInt(alarmSelectedMode);
         }
 
-        dest.writeBooleanArray(days);
+        dest.writeBooleanArray(daysActive);
     }
 }

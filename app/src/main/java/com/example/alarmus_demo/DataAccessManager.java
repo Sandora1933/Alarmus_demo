@@ -5,9 +5,48 @@ import android.content.SharedPreferences;
 public class DataAccessManager {
 
     SharedPreferences sp;
+    //AlarmData alarmData;
 
     public DataAccessManager(SharedPreferences sp){
         this.sp = sp;
+    }
+
+    // gets alarmData object constructed from storage preferences
+    // This object is used to manipulate activity views
+    public AlarmData buildAlarmDataObject(){
+        AlarmData alarmData = new AlarmData();
+
+        alarmData.setHour(loadHour());
+        alarmData.setMinute(loadMinute());
+
+        if (loadIsActive()){
+            alarmData.setAsActive();
+        }
+        else {
+            alarmData.setAsNotActive();
+        }
+
+        alarmData.setVolumePower(loadVolumePower());
+        alarmData.setVolumeSelectedMode(loadVolumeSelectedMode());
+
+        alarmData.setAlarmSelectedMode(loadAlarmSelectedMode());
+        alarmData.setDaysActive(loadDays());
+
+        return alarmData;
+    }
+
+    // Saves new preferences to storage from alarmData object which was edited in Activity
+    public void saveAlarmDataObject(AlarmData alarmData){
+        saveHour(alarmData.getHour());
+        saveMinute(alarmData.getMinute());
+
+        saveIsActive(alarmData.isActive());
+
+        saveVolumePower(alarmData.getVolumePower());    // This will be edited in Activity for different device alarmVolume
+        saveVolumeSelectedMode(alarmData.getVolumeSelectedMode());
+
+        saveAlarmSelectedMode(alarmData.getAlarmSelectedMode());
+        saveDays(alarmData.getDaysActive());
     }
 
     // Saving methods
