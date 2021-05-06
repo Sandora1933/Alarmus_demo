@@ -599,7 +599,6 @@ public class AlarmActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        //saveAlarmDataPreferences();
 
         Integer hour, minute;
 
@@ -627,12 +626,25 @@ public class AlarmActivity extends AppCompatActivity {
         boolean isActive = setTimeSwitch.isChecked();
         int currentVolumePower = volumeSeekBar.getProgress();
 
-        dataAccessManager.saveHour(hour);
-        dataAccessManager.saveMinute(minute);
-        dataAccessManager.saveIsActive(isActive);
-        dataAccessManager.saveVolumePower(currentVolumePower);
         dataAccessManager.saveMaxVolumePower(maxVolumePower);
-        dataAccessManager.saveDays(alarmData.getDaysActive());
+
+        // Forming alarmData object to return to storage
+
+        alarmData.setHour(hour);
+        alarmData.setMinute(minute);
+
+        if (isActive){
+            alarmData.setAsActive();
+        }
+        else {
+            alarmData.setAsNotActive();
+        }
+
+        alarmData.setVolumePower(currentVolumePower);
+
+        // Return new alarmData object to storage
+
+        dataAccessManager.saveAlarmDataObject(alarmData);
 
     }
 
@@ -876,8 +888,6 @@ public class AlarmActivity extends AppCompatActivity {
         }
         else {
 
-            alarmData.setAsActive();
-
             String timeText = clockEditText.getText().toString();
             String[] numbers = timeText.split(":");
 
@@ -902,14 +912,14 @@ public class AlarmActivity extends AppCompatActivity {
 
             Toast.makeText(this, "" + hour + ":" + minute + " ready to set", Toast.LENGTH_SHORT).show();
 
-            dataAccessManager.saveHour(hour);
-            dataAccessManager.saveMinute(minute);
-            dataAccessManager.saveIsActive(true);
+            alarmData.setHour(hour);
+            alarmData.setMinute(minute);
+            alarmData.setAsActive();
 
             Calendar c = Calendar.getInstance();
 
-            c.set(Calendar.HOUR_OF_DAY, dataAccessManager.loadHour());
-            c.set(Calendar.MINUTE, dataAccessManager.loadMinute());
+            c.set(Calendar.HOUR_OF_DAY, alarmData.getHour());
+            c.set(Calendar.MINUTE, alarmData.getMinute());
             c.set(Calendar.SECOND, 0);
 
             setAlarm(c);
