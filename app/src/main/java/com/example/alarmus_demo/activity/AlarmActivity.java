@@ -55,9 +55,7 @@ public class AlarmActivity extends AppCompatActivity {
     //************  Views  ****************
 
     Switch setTimeSwitch;
-
     EditText clockEditText;
-
     TextView setTimeTextView;
 
     //Views - Alarm volume panel
@@ -75,8 +73,9 @@ public class AlarmActivity extends AppCompatActivity {
             saturdayButton, sundayButton;
     Button[] dayButtonArray; //Array for all these buttons (easier to go through)
 
-
     //**************   Constants   *****************
+
+    public static final int OVERLAY_REQUEST_CODE = 512;
 
     public static final int ALARM_SELECTED_MODE_SOUND_VIBRATE = 0;
     public static final int ALARM_SELECTED_MODE_SOUND_ONLY = 1;
@@ -90,7 +89,6 @@ public class AlarmActivity extends AppCompatActivity {
     public static final int VOL_INCREASE_MODE_60s = 4;
 
     private static final String APP_PREFERENCES = "alarm_data";
-    public static final String ALARM_DATA_KEY_PREFERENCES = "alarm_preferences";
 
     //**************   Variables   *****************
 
@@ -115,15 +113,12 @@ public class AlarmActivity extends AppCompatActivity {
     // To work with volume seek bar
     AudioManager audioManager;
 
-    public static final int OVERLAY_REQUEST_CODE = 512;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm_new);
 
         // Request permission for Xiaomi devices (Show on lockScreen & Display Pop-Up)
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!Settings.canDrawOverlays(this)) {
                 if ("xiaomi".equals(Build.MANUFACTURER.toLowerCase(Locale.ROOT))) {
@@ -186,7 +181,9 @@ public class AlarmActivity extends AppCompatActivity {
         maxVolumePower = audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM);
 
         volumeSeekBar.setMax(maxVolumePower);
-        volumeSeekBar.setProgress(alarmData.getVolumePower());
+
+        //volumeSeekBar.setProgress(alarmData.getVolumePower());
+        volumeSeekBar.setProgress(audioManager.getStreamVolume(AudioManager.STREAM_ALARM));
 
         // Set up volume-increase panel
         setUpVolumeIncreasePanel();
@@ -213,7 +210,7 @@ public class AlarmActivity extends AppCompatActivity {
         isMoreVolumeButtonsActive = false;
 
         // ------------------------------
-        // Overriding interfaces
+        // Setting interfaces
         // ------------------------------
 
         clockEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -303,6 +300,8 @@ public class AlarmActivity extends AppCompatActivity {
 
                     char inputSymbol = s.charAt(start);
                     String nString;
+
+                    //TODO: Optimization (Remove repeated code)
 
                     if (cursorPosition == 0){
 
@@ -510,8 +509,6 @@ public class AlarmActivity extends AppCompatActivity {
 
                         }
 
-//                        nString = String.valueOf(s.toString().charAt(1)) + String.valueOf(s.toString().charAt(2)) + separator + inputSymbol + "0";
-//                        clockEditText.setText(nString);
                     }
                     else if (cursorPosition == 3){
 
@@ -544,13 +541,6 @@ public class AlarmActivity extends AppCompatActivity {
 
                         }
 
-//                        nString = String.valueOf(s.toString().charAt(1)) + String.valueOf(s.toString().charAt(2)) +
-//                                separator + String.valueOf(s.toString().charAt(s.length() - 2)) + inputSymbol;
-//                        clockEditText.setText(nString);
-
-//                        closeKeyboard();
-//                        clockEditText.clearFocus();
-//                        clockEditText.setTextColor(getResources().getColor(R.color.colorRowTextAndIcon));
                     }
 
                 }
@@ -1002,11 +992,14 @@ public class AlarmActivity extends AppCompatActivity {
         alarmData.setAlarmSelectedMode(0);
         setUpAlarmModePanel();
 
-        // Turn off previous pendingIntent with with old mode
-        switchOnOffClick(setTimeSwitch, false);
+        if (alarmData.isActive()){
+            // Turn off previous pendingIntent with with old mode
+            switchOnOffClick(setTimeSwitch, false);
 
-        // Turn on new pendingIntent with needed mode
-        switchOnOffClick(setTimeSwitch, true);
+            // Turn on new pendingIntent with needed mode
+            switchOnOffClick(setTimeSwitch, true);
+        }
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -1014,11 +1007,13 @@ public class AlarmActivity extends AppCompatActivity {
         alarmData.setAlarmSelectedMode(1);
         setUpAlarmModePanel();
 
-        // Turn off previous pendingIntent with with old mode
-        switchOnOffClick(setTimeSwitch, false);
+        if (alarmData.isActive()){
+            // Turn off previous pendingIntent with with old mode
+            switchOnOffClick(setTimeSwitch, false);
 
-        // Turn on new pendingIntent with needed mode
-        switchOnOffClick(setTimeSwitch, true);
+            // Turn on new pendingIntent with needed mode
+            switchOnOffClick(setTimeSwitch, true);
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -1026,11 +1021,13 @@ public class AlarmActivity extends AppCompatActivity {
         alarmData.setAlarmSelectedMode(2);
         setUpAlarmModePanel();
 
-        // Turn off previous pendingIntent with with old mode
-        switchOnOffClick(setTimeSwitch, false);
+        if (alarmData.isActive()){
+            // Turn off previous pendingIntent with with old mode
+            switchOnOffClick(setTimeSwitch, false);
 
-        // Turn on new pendingIntent with needed mode
-        switchOnOffClick(setTimeSwitch, true);
+            // Turn on new pendingIntent with needed mode
+            switchOnOffClick(setTimeSwitch, true);
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -1038,19 +1035,20 @@ public class AlarmActivity extends AppCompatActivity {
         alarmData.setAlarmSelectedMode(3);
         setUpAlarmModePanel();
 
-        // Turn off previous pendingIntent with with old mode
-        switchOnOffClick(setTimeSwitch, false);
+        if (alarmData.isActive()){
+            // Turn off previous pendingIntent with with old mode
+            switchOnOffClick(setTimeSwitch, false);
 
-        // Turn on new pendingIntent with needed mode
-        switchOnOffClick(setTimeSwitch, true);
+            // Turn on new pendingIntent with needed mode
+            switchOnOffClick(setTimeSwitch, true);
+        }
     }
 
     //**********   Setting up alarm days views   *************
 
     private void setUpAlarmDaysPanel(){
 
-        dataAccessManager.saveDays(alarmData.getDaysActive());
-        isDayActiveArray = dataAccessManager.loadDays();
+        isDayActiveArray = alarmData.getDaysActive();
 
         for (int i = 0; i < isDayActiveArray.length; i++){
             if (isDayActiveArray[i]){
@@ -1071,114 +1069,92 @@ public class AlarmActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void mondayButtonClicked(View view) {
 
-        boolean previousState = dataAccessManager.loadDay(0);
-        if (previousState){
+        if (alarmData.getDay(0)){
             alarmData.setDay(false, 0);
         }
-        else{
+        else {
             alarmData.setDay(true, 0);
         }
 
-        // Probably high weight -> do saving in onStop()
         setUpAlarmDaysPanel();
-        setTimeSwitch.setChecked(false);
-        switchOnOffClick(setTimeSwitch, false);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void tuesdayButtonClicked(View view) {
 
-        boolean previousState = dataAccessManager.loadDay(1);
-        if (previousState){
+        if (alarmData.getDay(1)){
             alarmData.setDay(false, 1);
         }
-        else{
+        else {
             alarmData.setDay(true, 1);
         }
 
         setUpAlarmDaysPanel();
-        setTimeSwitch.setChecked(false);
-        switchOnOffClick(setTimeSwitch, false);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void wednesdayButtonClicked(View view) {
 
-        boolean previousState = dataAccessManager.loadDay(2);
-        if (previousState){
+        if (alarmData.getDay(2)){
             alarmData.setDay(false, 2);
         }
-        else{
+        else {
             alarmData.setDay(true, 2);
         }
 
         setUpAlarmDaysPanel();
-        setTimeSwitch.setChecked(false);
-        switchOnOffClick(setTimeSwitch, false);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void thursdayButtonClicked(View view) {
 
-        boolean previousState = dataAccessManager.loadDay(3);
-        if (previousState){
+        if (alarmData.getDay(3)){
             alarmData.setDay(false, 3);
         }
-        else{
+        else {
             alarmData.setDay(true, 3);
         }
 
         setUpAlarmDaysPanel();
-        setTimeSwitch.setChecked(false);
-        switchOnOffClick(setTimeSwitch, false);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void fridayButtonClicked(View view) {
 
-        boolean previousState = dataAccessManager.loadDay(4);
-        if (previousState){
+        if (alarmData.getDay(4)){
             alarmData.setDay(false, 4);
         }
-        else{
+        else {
             alarmData.setDay(true, 4);
         }
 
         setUpAlarmDaysPanel();
-        setTimeSwitch.setChecked(false);
-        switchOnOffClick(setTimeSwitch, false);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void saturdayButtonClicked(View view) {
 
-        boolean previousState = dataAccessManager.loadDay(5);
-        if (previousState){
+        if (alarmData.getDay(5)){
             alarmData.setDay(false, 5);
         }
-        else{
+        else {
             alarmData.setDay(true, 5);
         }
 
         setUpAlarmDaysPanel();
-        setTimeSwitch.setChecked(false);
-        switchOnOffClick(setTimeSwitch, false);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void sundayButtonClicked(View view) {
 
-        boolean previousState = dataAccessManager.loadDay(6);
-        if (previousState){
+        if (alarmData.getDay(6)){
             alarmData.setDay(false, 6);
         }
-        else{
+        else {
             alarmData.setDay(true, 6);
         }
 
         setUpAlarmDaysPanel();
-        setTimeSwitch.setChecked(false);
-        switchOnOffClick(setTimeSwitch, false);
     }
 
     //Animation for moving for volume buttons
@@ -1287,82 +1263,6 @@ public class AlarmActivity extends AppCompatActivity {
             set.playTogether(buttonListAnimator);
             set.start();
         }
-
-    }
-
-    // TODO: Remove this stuff
-    //********** Loading AlarmData preferences **********
-
-    //Called when app is firstly launched
-    public void setDefaultAlarmDataPreferences(){
-        alarmData = new AlarmData();
-    }
-
-    //Loading from sharedPreferences
-    public void loadAlarmDataPreferences(){
-        //we have fields in this activity and assign them with values from storage
-
-        String alarmDataJson = sharedPreferences.getString(ALARM_DATA_KEY_PREFERENCES, "null");
-
-        if (!alarmDataJson.equals("null")){
-            Gson gson = new Gson();
-            alarmData = gson.fromJson(alarmDataJson, AlarmData.class);
-        }
-        else {
-            Toast.makeText(this, "sharedPref is null: Strange stuff", Toast.LENGTH_SHORT).show();
-        }
-
-    }
-
-    
-
-    //Called when activity onStop() or onDestroy()
-    public void saveAlarmDataPreferences(){
-        //TODO: Scan views and update alarmData variable then save it to storage
-
-        Integer hour, minute;
-
-        String hourS = clockEditText.getText().toString().split(" : ")[0];
-        if (hourS.charAt(0) == '0'){
-            hour = Integer.parseInt(String.valueOf(hourS.charAt(1)));
-        }
-        else {
-            hour = Integer.parseInt(hourS);
-        }
-
-        String minuteS = clockEditText.getText().toString().split(" : ")[1];
-        if (minuteS.charAt(0) == '0'){
-            minute = Integer.parseInt(String.valueOf(minuteS.charAt(1)));
-        }
-        else {
-            minute = Integer.parseInt(minuteS);
-        }
-
-        boolean isActive = setTimeSwitch.isChecked();
-
-        //volumePower - do some stuff with Bar
-        int volumePower = volumeSeekBar.getProgress();
-        //volumeIncreaseMode exists
-
-        //alarmSelectedMode exists
-        //Days exists
-
-        //Saving to sharedPreferences
-        AlarmData updatedAlarmData = new AlarmData();
-        updatedAlarmData.setHour(hour);
-        updatedAlarmData.setMinute(minute);
-        if (isActive) { updatedAlarmData.setAsActive(); }
-        else { updatedAlarmData.setAsNotActive(); }
-        updatedAlarmData.setVolumePower(volumePower);
-
-        //Saving
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        Gson gson = new Gson();
-
-        String alarmDataJson = gson.toJson(alarmData);
-        editor.putString(ALARM_DATA_KEY_PREFERENCES, alarmDataJson);
-        editor.apply();
-        Toast.makeText(this, "alarm-pref saved to storage", Toast.LENGTH_SHORT).show();
 
     }
 

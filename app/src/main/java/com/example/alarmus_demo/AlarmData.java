@@ -23,7 +23,6 @@ public class AlarmData implements Parcelable {
 
     //Volume menu fields
     private int volumePower;
-    private int maxVolumePower;     // Needed to send to Receiver through storage
     private int volumeSelectedMode;
 
     //Mode menu fields

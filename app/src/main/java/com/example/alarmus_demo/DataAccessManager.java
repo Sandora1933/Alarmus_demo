@@ -26,7 +26,7 @@ public class DataAccessManager {
             alarmData.setAsNotActive();
         }
 
-        alarmData.setVolumePower(loadVolumePower());
+        alarmData.setVolumePower(loadVolumePower());    // Remove
         alarmData.setVolumeSelectedMode(loadVolumeSelectedMode());
 
         alarmData.setAlarmSelectedMode(loadAlarmSelectedMode());
