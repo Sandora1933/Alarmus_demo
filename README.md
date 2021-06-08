@@ -24,15 +24,15 @@
 4. Espresso
 
 ## Download apk 
-### Link
+![Alarmus.apk](app-debug.apk)
 
 ## Screenshots
-![](alarmus_main1.jpg)
-![](alarmus_main3.jpg)<br><br>
-![](alarmus_music_list.jpg)
-![](alarmus_articles.jpg)<br><br>
-![](alarmus_snooze.jpg)
-![](alarmus_start_mode.jpg)
+![](images/alarmus_main1.jpg)
+![](images/alarmus_main3.jpg)<br><br>
+![](images/alarmus_music_list.jpg)
+![](images/alarmus_articles.jpg)<br><br>
+![](images/alarmus_snooze.jpg)
+![](images/alarmus_start_mode.jpg)
 
 
 
