@@ -7,7 +7,7 @@
 ## Features
 * Comfortable user interface for setting alarm and manipulating settings
 * Setting gradually increasing mode for (15s, 30s, 45s, 60s)
-* Variety of alarm modes (Only sound, only vibrations, both and without vibration and sound)
+* Variety of alarm modes (Only sound, only vibration, both and without vibration and sound)
 * Uploading music from inner storage, searching particular song funtionality
 * Exciting articles about latest sleep research studies and how to improve sleeping quality
 * Adjusting music volume power when playing
