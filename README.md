@@ -1,5 +1,5 @@
 # Alarmus
-## The first musical alarm clock or "the alarm clock of a healthy person"
+### The first musical alarm clock or "the alarm clock of a healthy person"
 
 ## More detailed information
 ### [Information page](https://telegra.ph/Alarmus-06-07)
